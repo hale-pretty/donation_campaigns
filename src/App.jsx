@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="gt-container">
+      <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="
+            M140,90 
+            C140,40 60,40 60,100 
+            C60,160 140,160 140,110
+            L110,110
+            L165,110
+            L140,110
+            L140,170"
+          fill="none"
+          stroke="#077712"
+          stroke-width="4"
+          stroke-dasharray="500"
+          stroke-dashoffset="500"
+        >
+          <animate
+            attributeName="stroke-dashoffset"
+            from="500"
+            to="0"
+            // dur="2.5s"
+            dur="3.5s"
+            repeatCount="indefinite"
+          />
+        </path>
+      </svg>
+      <h1>Cobra Global Tech</h1>
+    </div>
+  );
+};
 
-export default App
+export default App;
