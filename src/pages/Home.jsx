@@ -1,0 +1,1 @@
+// Application pages or views, Example component
