@@ -29,7 +29,7 @@ const App = () => {
           />
         </path>
       </svg>
-      <h1>Cobra Global Tech</h1>
+      <h1>CGT</h1>
     </div>
   );
 };
