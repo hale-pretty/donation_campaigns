@@ -8,18 +8,8 @@ const Profile = () => {
   };
 
   const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
+    <button>
+      <div>
         Upload
       </div>
     </button>
@@ -58,20 +48,12 @@ const Profile = () => {
               <p>
                 <strong>Name:</strong> {profile.name}
               </p>
-              <p>
-                <strong>Intro:</strong> {profile.intro}
-              </p>
-              <p>
-                <strong>Points:</strong> {profile.point}
-              </p>
             </div>
           </div>
         </div>
       ) : (
         <LogoLoading/>
       )}
-      <Button>Edit Profile</Button>
-      <Button>Setting</Button>
       <Button danger onClick={handleLogout}>
         Logout
       </Button>

@@ -1,7 +1,3 @@
-body {
-  background-color: var(--gray-text-color);
-}
-
 .profile-container{
   display: flex;
   background-color: var(--white-body-color);

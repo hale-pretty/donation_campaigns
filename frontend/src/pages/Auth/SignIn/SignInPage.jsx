@@ -22,7 +22,7 @@ const SignInPage = () => {
         <div style={{ textAlign: "center", marginBottom: "1rem" }}>
           <h2>Login</h2>
           <span>
-            Hey, please enter your user name and password to login!
+            Please enter your user name and password to login!
           </span>
         </div>
         <Form
@@ -31,6 +31,18 @@ const SignInPage = () => {
           onFinish={onFinish}
           scrollToFirstError
         >
+           <Form.Item
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: "Please input your name!",
+                whitespace: true,
+              },
+            ]}
+          >
+            <Input name="name" placeholder="Name" />
+          </Form.Item>
 
           <Form.Item
             name="password"
