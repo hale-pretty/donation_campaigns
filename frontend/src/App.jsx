@@ -1,16 +1,16 @@
+import { BrowserRouter } from "react-router-dom";
+// import { Provider } from 'react-redux';
+import AppBar from './components/AppBar/AppBar';
+import Router from './pages/router';
+
 const App = () => {
   return (
-    <div>
-      <div>🎁 Holiday Gift Guides: Explore ready to ship gifts.</div>
-      <div>
-        <span>CGT</span>
-        <span>Search </span>
-        <span>Login / Sign up</span>
-        <span>Start a campaign</span>
-        <span></span>
-        <div className='ro'> </div>
-      </div>
-    </div>
+    // <Provider>
+      <BrowserRouter>
+        <AppBar />
+        <Router />
+      </BrowserRouter>
+    // </Provider>
   );
 };
 

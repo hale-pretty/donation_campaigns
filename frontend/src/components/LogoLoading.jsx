@@ -15,16 +15,16 @@ const LogoLoading = () => {
             L140,170"
           fill="none"
           stroke="#077712"
-          stroke-width="4"
-          stroke-dasharray="500"
-          stroke-dashoffset="500"
+          strokeWidth="4"
+          strokeDasharray="500"
+          strokeDashoffset="500"
         >
           <animate
             attributeName="stroke-dashoffset"
             from="500"
             to="0"
-            // dur="2.5s"
-            dur="3.5s"
+            dur="2.5s"
+            // dur="3.5s"
             repeatCount="indefinite"
           />
         </path>

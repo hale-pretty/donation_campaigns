@@ -4,10 +4,10 @@
     "module": "commonjs",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-      "baseUrl": "./",
-      "paths": {
-          "~/*": ["./src/*"],
-      } 
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["./src/*"],
+    } 
   },
   "include": ["src/**/*"]
 }

@@ -1,14 +1,218 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+/*=============== VARIABLES CSS ===============*/
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* White Theme Colors */
+  --white-first-color: rgba(255, 255, 255, 1); /* Trắng thuần */
+  --white-first-color-light: rgba(156, 74, 74, 0.95); /* Trắng nhạt */
+  --white-first-color-alt: rgba(245, 245, 245, 1); /* Xám rất nhạt */
+  --white-title-color: rgba(26, 26, 26, 1); /* Màu đen gần tuyệt đối */
+  --white-text-color: rgba(77, 77, 77, 1); /* Xám đậm cho văn bản */
+  --white-text-color-light: rgba(
+    128,
+    128,
+    128,
+    1
+  ); /* Xám vừa cho văn bản nhẹ hơn */
+  --white-body-color: rgba(250, 250, 250, 1); /* Nền màu trắng gần thuần */
+  --white-container-color: rgba(
+    230,
+    230,
+    230,
+    1
+  ); /* Xám nhạt cho các khối container */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Gray Theme Colors */
+  --gray-first-color: rgba(153, 153, 153, 1); /* Xám trung bình */
+  --gray-first-color-light: rgba(180, 180, 180, 1); /* Xám sáng hơn */
+  --gray-first-color-alt: rgba(128, 128, 128, 1); /* Xám đậm */
+  --gray-title-color: rgb(69, 64, 64); /* Xám đậm gần đen cho tiêu đề */
+  --gray-text-color: rgba(102, 102, 102, 1); /* Xám trung bình cho văn bản */
+  --gray-text-color-light: rgba(
+    153,
+    153,
+    153,
+    1
+  ); /* Xám sáng cho văn bản nhẹ */
+  --gray-body-color: rgba(240, 240, 240, 1); /* Nền màu xám rất nhạt */
+  --gray-container-color: rgba(200, 200, 200, 1); /* Xám nhạt cho container */
+  /* Màu nhạt hơn màu ở trên */
+  --gray-container: rgba(212, 212, 212); /* Xám nhạt cho container */
+  --gray-body: rgba(235, 235, 233);
 }
+
+body {
+  background-color: var(--gray-body);
+  color: var(--white-text-color);
+  padding-top: 55px;
+  font-family: 'SF Pro Text', sans-serif;
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--white-title-color);
+}
+
+.container {
+  background-color: var(--white-container-color);
+}
+
+.poppins {
+  font-family: "Poppins", sans-serif; /* Áp dụng font Poppins cho các phần tử có class poppins */
+}
+.nav-link {
+  margin-left: 10px;
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  position: relative; /* Để sử dụng hiệu ứng dưới dạng đường viền gạch chân */
+  transition: color 0.3s ease; /* Hiệu ứng chuyển đổi màu mượt */
+}
+
+.nav-link:hover {
+  color: black; /* Giữ màu đen khi hover */
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -2px;
+  background-color: var(--gray-text-color); /* Màu của đường viền khi hover */
+  transition: width 0.3s ease, transform 0.3s ease; /* Tạo hiệu ứng cho đường viền */
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  transform: scaleX(1.05); /* Hiệu ứng mở rộng khi hover */
+}
+
+.nav-link.login {
+  border: 1px solid var(--white-text-color-light); /* Độ dày và màu viền */
+  padding: 5px 10px; /* Tạo khoảng trống bên trong viền */
+  /* margin-right: 20px; */
+  background-color: var(--gray-text-color);
+  border-radius: 15px; /* Bo góc viền */
+  color: white;
+  min-width: max-content;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-link.login:hover {
+  background-color: white;
+  color: black;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); /* Thêm bóng khi hover */
+}
+
+.nav-link.login::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -2px;
+}
+
+/*=============== SCROLL BAR ===============*/
+::-webkit-scrollbar {
+  width: .6rem;
+  background-color: var(--gray-first-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--gray-body-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gray-container);
+}
+
+.app-bar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: var(--white-first-color);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: center; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+.app-bar-title {
+  display: flex;
+  align-items: center;
+}
+
+.MenuOutlined {
+  display: none; 
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.app-bar-title.list {
+  display: flex;
+  gap: 1rem;
+}
+
+.close-btn {
+  display: none;
+}
+
+.logger{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  order: 3;
+  margin-left: 5px;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1150px) {
+  .app-bar-title.list {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100%;
+    backdrop-filter: blur(16px);
+    width: 40%;
+    background-color: var(--white-body-color);
+    display: grid;
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0rem 3rem;
+    transition: right .4s;
+    align-content: space-evenly
+  }
+
+  .nav-link{
+    color: black;
+    width: 12%;
+  }
+
+  .app-bar-title.list.active {
+    right: 0;
+  }
+
+  .MenuOutlined {
+    display: block; 
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+  }
+  
+}
+
