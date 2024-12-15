@@ -9,7 +9,7 @@ export default defineConfig({
     alias: [{ find: '~', replacement: '/src' }],
   },
   build: {
-    outDir: '../dist', 
+    outDir: 'dist', 
   },
   server: {
     host: true,
