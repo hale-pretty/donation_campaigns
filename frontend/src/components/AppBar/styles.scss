@@ -1,0 +1,19 @@
+@use "swiper/css";
+@use "swiper/css/free-mode";
+@use "swiper/css/navigation";
+@use "swiper/css/thumbs";
+@use "swiper/css/autoplay";
+
+.app-bar-container {
+  background-size: cover;
+  background-position: center center;
+  height: 100vh;
+  transition: background-image 0.5s ease-in-out;
+}
+
+.swiper-container {
+  bottom: 0;
+  position: absolute;
+  width: 100vw;
+  padding: 10px;
+}

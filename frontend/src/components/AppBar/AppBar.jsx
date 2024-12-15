@@ -1,23 +1,68 @@
 import { Link } from "react-router-dom";
-import { Avatar, Divider, Input } from "antd";
+import { Avatar, Button, Divider, Input } from "antd";
 import logo from "~/assets/images/Logo-without-text.jpg";
 import { useState } from "react";
 import { getFirstCharacter } from "~/utils/helper";
 import { MenuOutlined, CloseOutlined, SearchOutlined } from "@ant-design/icons";
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
+import "./styles.scss";
+
+const cardSliderImages = [
+  {
+    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/uxu9blwsopkn1reoff55.jpg",
+    title: "Card 1",
+  },
+  {
+    url: "https://c3.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/mke3jw4io5f1ssfwhvip.jpg",
+    title: "Card 2",
+  },
+  {
+    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/czfrjfvuamsm2bxrfm5i.jpg",
+    title: "Card 3",
+  },
+  {
+    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/btafkmxzhjf1luvnppvi.jpg",
+    title: "Card 4",
+  },
+  {
+    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/uxu9blwsopkn1reoff55.jpg",
+    title: "Card 1",
+  },
+  {
+    url: "https://c3.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/mke3jw4io5f1ssfwhvip.jpg",
+    title: "Card 2",
+  },
+  {
+    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/czfrjfvuamsm2bxrfm5i.jpg",
+    title: "Card 3",
+  },
+  {
+    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/btafkmxzhjf1luvnppvi.jpg",
+    title: "Card 4",
+  },
+];
+
+const navLinks = [
+  { path: "/campaign", label: "Campaign" },
+  { path: "/donation", label: "Donation" },
+];
+
+const quickFilter = [
+  { label: "All campaigns" },
+  { label: "Just Launched" },
+  { label: "Shipping soon" },
+  { label: "Ending soon" },
+];
 
 const AppBar = () => {
-  const navLinks =  [
-    { path: "/campaign", label: "Campaign" },
-    { path: "/donation", label: "Donation" },
-  ]
+  const [activeBg, setActiveBg] = useState(cardSliderImages[1].url);
 
-  const quickFilter =  [
-    { label: "All campaigns" },
-    { label: "Just Launched" },
-    { label: "Shipping soon" },
-    { label: "Ending soon" },
-  ]
+  const handleSlideChange = (swiper) => {
+    const currentIndex = swiper.realIndex;
+    const newBg = cardSliderImages[currentIndex]?.url;
+    setActiveBg(newBg);
+  };
 
   const [navMenu, setNavMenu] = useState(false);
   const [search, setSearch] = useState(false);
@@ -29,82 +74,147 @@ const AppBar = () => {
   let logger = false;
 
   return (
-    <div className="app-bar">
+    <div>
       <div
-        className="app-bar-title"
-        style={{ cursor: "pointer" }}
-        onClick={handleLogoClick}
+        className="app-bar-container"
+        style={{ backgroundImage: `url(${activeBg})` }}
       >
-        <Avatar src={logo} alt="logo" />
-        <strong className="ml-2">CGT</strong>
-      </div>
+        <div className="app-bar">
+          <div
+            className="app-bar-title"
+            style={{ cursor: "pointer" }}
+            onClick={handleLogoClick}
+          >
+            <Avatar src={logo} alt="logo" />
+            <strong className="ml-2">CGT</strong>
+          </div>
 
-      <div className="d-flex">
-        <div className="btn-search">
-          <SearchOutlined style={{fontSize: '24px', alignContent: 'center'}} onClick={() => setSearch(true)}/>
-        </div>
-        <div className={`menu-search list ${search ? "active" : ""}`}>
-          <div className="d-flex align-items-center p-3" style={{ gap: '15px'}}>
-            <SearchOutlined onClick={() => setSearch(false)}/>
-            <Input  
-              autoFocus={true}
-              bordered={false}
-              type="text"
+          <div className="btn-search">
+            <SearchOutlined
+              style={{ fontSize: "24px", alignContent: "center" }}
+              onClick={() => setSearch(true)}
             />
-            <span style={{cursor: 'pointer'}} onClick={() => setSearch(false)}>CANCEL</span>
           </div>
-          <Divider className="m-0"/>
-          <div className="p-3">
-            <div style={{ fontWeight: '600'}}>QUICK FILTER</div>
-            {quickFilter.map(q => {
-              return (
-                <div key={q.label} className="border_filters" >
-                  {q.label}
-                </div>
-              )
-            })}
+          <div className={`menu-search list ${search ? "active" : ""}`}>
+            <div
+              className="d-flex align-items-center p-3"
+              style={{ gap: "15px" }}
+            >
+              <SearchOutlined onClick={() => setSearch(false)} />
+              <Input autoFocus={true} bordered={false} type="text" />
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => setSearch(false)}
+              >
+                CANCEL
+              </span>
+            </div>
+            <Divider className="m-0" />
+            <div className="p-3">
+              <div style={{ fontWeight: "600" }}>QUICK FILTER</div>
+              {quickFilter.map((q) => {
+                return (
+                  <div key={q.label} className="border_filters">
+                    {q.label}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-        <MenuOutlined
-          className="MenuOutlined"
-          onClick={() => setNavMenu(true)}
-        />
-
-        <div className={`app-bar-title list ${navMenu ? "active" : ""}`}>
-          {!search && navLinks.map((link) => (
-            <Link
-              onClick={() => setNavMenu(false)}
-              key={link.label}
-              className="nav-link"
-              to={link.path}
-            >
-              {link.label}
-            </Link>
-          ))}
-          {logger && (
-            <Link
-              onClick={() => setNavMenu(false)}
-              key="profile"
-              className="nav-link"
-              to="/profile"
-            >
-              Profile
-            </Link>
-          )}
-          <CloseOutlined
-            className="close-btn"
-            onClick={() => setNavMenu(false)}
+          <MenuOutlined
+            className="MenuOutlined"
+            onClick={() => setNavMenu(true)}
           />
-          {!search &&
-          <div className="logger">
-            <Link className="nav-logo" to="/profile">
-              <Avatar style={{ verticalAlign: "middle" }} size="large">
-                {getFirstCharacter("Ngan Huynh")}
-              </Avatar>
-            </Link>
+
+          <div className={`app-bar-title list ${navMenu ? "active" : ""}`}>
+            {!search &&
+              navLinks.map((link) => (
+                <Link
+                  onClick={() => setNavMenu(false)}
+                  key={link.label}
+                  className="nav-link"
+                  to={link.path}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            {logger && (
+              <Link
+                onClick={() => setNavMenu(false)}
+                key="profile"
+                className="nav-link"
+                to="/profile"
+              >
+                Profile
+              </Link>
+            )}
+            <CloseOutlined
+              className="close-btn"
+              onClick={() => setNavMenu(false)}
+            />
+            {!search && (
+              <div className="logger">
+                <Link className="nav-logo" to="/profile">
+                  <Avatar style={{ verticalAlign: "middle" }} size="large">
+                    {getFirstCharacter("Ngan Huynh")}
+                  </Avatar>
+                </Link>
+              </div>
+            )}
           </div>
-          }
         </div>
+
+        {!search && (
+          <div className="swiper-container">
+            <h1>
+              {cardSliderImages.find((c) => c.url == activeBg).title}
+              <div>
+                <Button
+                  style={{
+                    height: "50px",
+                    fontWeight: 600,
+                    backgroundColor: "#cbff36",
+                  }}
+                >
+                  SEE CAMPAIGN
+                </Button>
+              </div>
+            </h1>
+            <Swiper
+              loop={true}
+              spaceBetween={10}
+              slidesPerView={5}
+              freeMode={true}
+              watchSlidesProgress={true}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              onSlideChange={handleSlideChange}
+              modules={[FreeMode, Navigation, Thumbs, Autoplay]}
+            >
+              {cardSliderImages.map((item) => (
+                <SwiperSlide
+                  key={item.url}
+                  onClick={() => setActiveBg(item.url)}
+                >
+                  <div
+                    style={{
+                      backgroundImage: `url(${item.url})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      height: "150px",
+                      borderRadius: "10px",
+                      cursor: "pointer",
+                      border:
+                        activeBg === item.url ? "2px solid #cbff36" : "none",
+                    }}
+                  ></div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
       </div>
     </div>
   );
