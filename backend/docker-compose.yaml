@@ -12,6 +12,7 @@ services:
       - "5432:5432"  # Expose PostgreSQL on port 5432
     volumes:
       - ./postgres-data:/var/lib/postgresql/data  # Mount a local directory for data persistence
+      - ./init-scripts:/docker-entrypoint-initdb.d
 
 volumes:
   db_data:

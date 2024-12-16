@@ -7,7 +7,8 @@
     "start-prod": "node dist/index.js",
     "start": "ts-node src/index.ts",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "migrate": "node dist/migration.db.js"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +31,8 @@
     "apollo-server-express": "^3.13.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "graphql": "^16.9.0"
+    "graphql": "^16.9.0",
+    "liquibase": "^4.28.1",
+    "pg": "^8.13.1"
   }
 }
