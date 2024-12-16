@@ -14,7 +14,6 @@ Installation
 Clone the repository:
 
 git clone <repository_url>
-cd corba-website
 
 Install dependencies:
 
