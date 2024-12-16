@@ -7,7 +7,6 @@
 .app-bar-container {
   background-size: cover;
   background-position: center center;
-  height: 100vh;
   transition: background-image 0.5s ease-in-out;
 }
 
@@ -16,4 +15,20 @@
   position: absolute;
   width: 100vw;
   padding: 10px;
+}
+
+.swiper-slide-container {
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 1;
+  transform: translateX(0);
+  background-size: cover;
+  background-position: center center;
+  height: 150px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &.slide-out {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
 }

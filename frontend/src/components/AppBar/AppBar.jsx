@@ -72,12 +72,15 @@ const AppBar = () => {
   };
 
   let logger = false;
+  const isHomePage = location.pathname === "/";
 
   return (
     <div>
-      <div
+      <div 
         className="app-bar-container"
-        style={{ backgroundImage: `url(${activeBg})` }}
+        style={{ backgroundImage: isHomePage ? `url(${activeBg})` : '',
+        height: isHomePage ? '100vh' : ''
+      }}
       >
         <div className="app-bar">
           <div
@@ -164,10 +167,11 @@ const AppBar = () => {
           </div>
         </div>
 
-        {!search && (
+        {isHomePage && !search && (
           <div className="swiper-container">
-            <h1>
-              {cardSliderImages.find((c) => c.url == activeBg).title}
+            <h1 className="title-swiper">
+              {cardSliderImages.find((c) => c.url == activeBg)?.title}
+            </h1>
               <div>
                 <Button
                   style={{
@@ -179,7 +183,6 @@ const AppBar = () => {
                   SEE CAMPAIGN
                 </Button>
               </div>
-            </h1>
             <Swiper
               loop={true}
               spaceBetween={10}
@@ -199,15 +202,10 @@ const AppBar = () => {
                   onClick={() => setActiveBg(item.url)}
                 >
                   <div
+                    className={`swiper-slide-container ${navMenu ? "slide-out" : ""}`}
                     style={{
                       backgroundImage: `url(${item.url})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      height: "150px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                      border:
-                        activeBg === item.url ? "2px solid #cbff36" : "none",
+                      border: activeBg === item.url ? "2px solid #cbff36" : "none",
                     }}
                   ></div>
                 </SwiperSlide>
