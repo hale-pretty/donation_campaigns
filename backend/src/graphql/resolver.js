@@ -1,3 +1,8 @@
+import db from "../models/index.js";
+import bcrypt from "bcrypt";
+import 'dotenv/config';
+import jwt from "jsonwebtoken";
+
 const resolvers = {
   Query: {
         users() {
