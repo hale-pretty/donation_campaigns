@@ -1,3 +1,6 @@
+import { DataTypes } from 'sequelize';
+import sequelize from '../db/sequelize';
+
 const History = sequelize.define("DonateHistory", {
     id: {
         primaryKey: true,
@@ -29,4 +32,4 @@ const History = sequelize.define("DonateHistory", {
         }
     },
 })
-return History;
+export { History };
