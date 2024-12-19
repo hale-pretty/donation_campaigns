@@ -1,4 +1,7 @@
- const User = sequelize.define("Users", {
+import { DataTypes } from 'sequelize';
+import sequelize from '../db/sequelize';
+
+const User = sequelize.define("Users", {
         id: {
             primaryKey: true,
             type: DataTypes.INTEGER,
