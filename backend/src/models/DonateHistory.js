@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/sequelize';
 
-const History = sequelize.define("DonateHistory", {
+const DonateHistory = sequelize.define("DonateHistory", {
     id: {
         primaryKey: true,
         type: DataTypes.INTEGER,
@@ -32,4 +32,4 @@ const History = sequelize.define("DonateHistory", {
         }
     },
 })
-export { History };
+export { DonateHistory };
