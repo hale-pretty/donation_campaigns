@@ -1,4 +1,4 @@
-import db from "../models/index.js";
+import db from "../db/sequelize.js";
 import bcrypt from "bcrypt";
 import 'dotenv/config';
 import jwt from "jsonwebtoken";
