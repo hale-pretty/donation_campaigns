@@ -1,11 +1,13 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
 import { resolvers } from './graphql/resolver.js';
 import { sequelize } from './db/sequelize.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { context } from './authContext.js';
 
 dotenv.config();
 
@@ -24,7 +26,7 @@ const server = new ApolloServer({ typeDefs, resolvers });
     await sequelize.authenticate();
     console.log('Database connected successfully.');
     await server.start();
-    server.applyMiddleware({ app });
+    app.use("/graphql", expressMiddleware(server, { context }));
     app.listen({ port }, () =>
       console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
     );
