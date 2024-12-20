@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../../db/sequelize';
 
-const User = sequelize.define('User', {
+const Users = sequelize.define('Users', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -16,8 +16,12 @@ const User = sequelize.define('User', {
     allowNull: false,
     unique: true,
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   tableName: 'users',
 });
 
-export { User };
+export { Users };
