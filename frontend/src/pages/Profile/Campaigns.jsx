@@ -1,4 +1,4 @@
-import images from "../../images/base64";
+import images from "../../../src/assets/images/base64";
 import svg from "./svg";
 import { 
     CampaignsCtn,
