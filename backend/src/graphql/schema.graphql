@@ -18,3 +18,30 @@ type User {
 	email: String!
 	campaigns: [Campaign]
 }
+
+type Query {
+	campaigns: [Campaign]
+	campaign(id: Int!): Campaign
+}
+
+type Mutation {
+	createCampaign(
+		title: String!
+		description: String!
+		goalAmount: Int!
+		endDate: String!
+		image: String
+		userId: Int!
+	): Campaign
+
+	updateCampaign(
+		id: Int!
+		title: String
+		description: String
+		goalAmount: Int
+		endDate: String
+		image: String
+	): Campaign
+
+	deleteCampaign(id: Int!): Boolean
+}
