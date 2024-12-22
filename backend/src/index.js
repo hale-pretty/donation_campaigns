@@ -6,7 +6,7 @@ import { sequelize } from './db/sequelize.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { configContainer } from './storage';
+// import { configContainer } from './storage/index.js';
 
 dotenv.config();
 
@@ -23,7 +23,7 @@ const server = new ApolloServer({ typeDefs, resolvers });
 (async () => {
   try {
     await sequelize.authenticate();
-    await configContainer();
+    // await configContainer();
     console.log('Database connected successfully.');
     await server.start();
     server.applyMiddleware({ app });
