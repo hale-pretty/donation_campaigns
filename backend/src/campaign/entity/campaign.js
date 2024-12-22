@@ -39,8 +39,8 @@ const Campaign = sequelize.define('Campaign', {
         msg: 'Goal amount must be a valid number.',
       },
       min: {
-        args: [0],
-        msg: 'Goal amount cannot be negative.',
+        args: [1000],
+        msg: 'Goal amount must be at least 1000.',
       },
     },
   },

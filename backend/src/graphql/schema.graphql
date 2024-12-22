@@ -8,7 +8,6 @@ type Campaign {
 	endDate: String!
 	status: String!
 	image: String
-	userId: Int!
 	user: User
 }
 
