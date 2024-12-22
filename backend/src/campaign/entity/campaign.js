@@ -11,20 +11,52 @@ const Campaign = sequelize.define('Campaign', {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: {
+        msg: 'Title cannot be empty.',
+      },
+      len: {
+        args: [3, 255],
+        msg: 'Title must be between 3 and 255 characters.',
+      },
+    },
   },
   description: {
     type: DataTypes.TEXT,
     allowNull: false,
+    validate: {
+      notEmpty: {
+        msg: 'Description cannot be empty.',
+      },
+    },
   },
   goalAmount: {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: 'goal_amount',
+    validate: {
+      isInt: {
+        msg: 'Goal amount must be a valid number.',
+      },
+      min: {
+        args: [0],
+        msg: 'Goal amount cannot be negative.',
+      },
+    },
   },
   raisedAmount: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
     field: 'raised_amount',
+    validate: {
+      isInt: {
+        msg: 'Raised amount must be a valid number.',
+      },
+      min: {
+        args: [0],
+        msg: 'Raised amount cannot be negative.',
+      },
+    },
   },
   startDate: {
     type: DataTypes.DATE,
@@ -35,6 +67,16 @@ const Campaign = sequelize.define('Campaign', {
     type: DataTypes.DATE,
     allowNull: false,
     field: 'end_date',
+    validate: {
+      isDate: {
+        msg: 'End date must be a valid date.',
+      },
+      isBeforeEndDate(value) {
+        if (value < this.start_date) {
+          throw new Error('End date must be before the start date.');
+        }
+      },
+    },
   },
   status: {
     type: DataTypes.STRING,
