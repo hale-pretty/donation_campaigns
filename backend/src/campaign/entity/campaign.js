@@ -42,6 +42,11 @@ const Campaign = sequelize.define('Campaign', {
         args: [1000],
         msg: 'Goal amount must be at least 1000.',
       },
+      isLargeEnough(value) {
+        if (value < this.raised_amount) {
+          throw new Error('Goal amount must be larger than the raised amount.');
+        }
+      }
     },
   },
   raisedAmount: {
