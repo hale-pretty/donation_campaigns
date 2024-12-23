@@ -18,22 +18,18 @@ const resolvers = {
   },
   Mutation: {
     createCampaign: handleResolverError(async (_, args) => {
-      const { createReadStream, filename } = await args.image;
-
-      const stream = createReadStream();
-      const chunks = [];
-      for await (const chunk of stream) {
-        chunks.push(chunk);
-      }
-      const fileBuffer = Buffer.concat(chunks);
-
-      const imageUrl = await uploadImage(fileBuffer, filename);
+      const imageUrl = await uploadImage(args.image);
       args.image = imageUrl;
       return await Campaign.create(args);
     }),
     updateCampaign: handleResolverError(async (_, { id, ...updateFields }) => {
       const campaign = await Campaign.findByPk(id);
       if (!campaign) throw new Error('Campaign not found');
+
+      if (updateFields.image) {
+        const imageUrl = await uploadImage(updateFields.image);
+        updateFields.image = imageUrl;
+      }
       return await campaign.update(updateFields);
     }),
     deleteCampaign: handleResolverError(async (_, { id }) => {
