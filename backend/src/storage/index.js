@@ -1,36 +1,36 @@
-// import { BlobServiceClient } from '@azure/storage-blob';
-// import dotenv from 'dotenv';
+import { BlobServiceClient } from '@azure/storage-blob';
+import dotenv from 'dotenv';
 
-// dotenv.config();
+dotenv.config();
 
-// const IMAGE_CONTAINER_NAME = "campaign-images";
-// const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const IMAGE_CONTAINER_NAME = "campaign-images";
+const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
-// const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING)
+const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING)
 
-// const configContainer = async () => {
-//     console.log(`Creating container: ${IMAGE_CONTAINER_NAME}`)
-//     const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME)
-//     await containerClient.createIfNotExists()
-//     // set access policy
-//     await containerClient.setAccessPolicy("container")
-//     console.log(`Public access enabled for container: ${IMAGE_CONTAINER_NAME}`);
-// }
+const configContainer = async () => {
+    console.log(`Creating container: ${IMAGE_CONTAINER_NAME}`)
+    const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME)
+    await containerClient.createIfNotExists()
+    // set access policy
+    await containerClient.setAccessPolicy("container")
+    console.log(`Public access enabled for container: ${IMAGE_CONTAINER_NAME}`);
+}
 
-// const uploadImage = async (fileBuffer, fileName) => {
-//     const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME);
-//     const timestamp = Date.now();
-//     const newFileName = `${timestamp}-${fileName}`
-//     const blockBlobClient = containerClient.getBlockBlobClient(newFileName)
-//     await blockBlobClient.upload(fileBuffer, fileBuffer.length)
-//     console.log(`Image '${newFileName}' uploaded successfully.`);
-//     return blockBlobClient.url
-// }
+const uploadImage = async (fileBuffer, fileName) => {
+    const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME);
+    const timestamp = Date.now();
+    const newFileName = `${timestamp}-${fileName}`
+    const blockBlobClient = containerClient.getBlockBlobClient(newFileName)
+    await blockBlobClient.upload(fileBuffer, fileBuffer.length)
+    console.log(`Image '${newFileName}' uploaded successfully.`);
+    return blockBlobClient.url
+}
 
-// const getUrl = (fileName) => {
-//     const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME);
-//     const blockBlobClient = containerClient.getBlockBlobClient(fileName)
-//     return blockBlobClient.url
-// }
+const getUrl = (fileName) => {
+    const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME);
+    const blockBlobClient = containerClient.getBlockBlobClient(fileName)
+    return blockBlobClient.url
+}
 
-// export {configContainer, uploadImage, getUrl}
+export {configContainer, uploadImage, getUrl}
