@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "db:migrate": "node ./migrations/runMigration.js"
+    "db:migrate": "node ./migrations/runMigration.js",
+    "start:prod": "npm run db:migrate && npm run start"
   },
   "keywords": [],
   "author": "",
