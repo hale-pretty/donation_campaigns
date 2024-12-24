@@ -6,7 +6,9 @@ import { sequelize } from './db/sequelize.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { configContainer } from './storage';
+import { configContainer } from './storage/index.js';
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
+
 
 dotenv.config();
 
@@ -15,9 +17,11 @@ const __dirname = dirname(__filename);
 const typeDefs = readFileSync(join(__dirname, 'graphql', 'schema.graphql'), 'utf-8');
 
 const app = express();
+app.use(graphqlUploadExpress());
+
 const port = Number.parseInt(process.env.PORT) || 4000;
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers, uploads: true});
 
 // Start the server
 (async () => {
