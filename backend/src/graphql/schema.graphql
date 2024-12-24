@@ -1,3 +1,17 @@
+# schema.graphql
+
+type Donation {
+  id: Int!
+  userId: Int!
+  campaignId: Int!
+  createdAt: String!
+}
+
 type Query {
-  hello: String
+  getDonationsByUser(): [Donation!]!
+  getDonationsByCampaign(campaignId: Int!): [Donation!]!
+}
+
+type Mutation {
+  createDonation(campaignId: Int!, amount: Int!): Donation!
 }

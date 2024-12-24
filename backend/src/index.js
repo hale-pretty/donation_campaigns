@@ -6,7 +6,9 @@ import { sequelize } from './db/sequelize.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { configContainer } from './storage';
+import { configContainer } from './storage/index.js';
+import { createDonation } from './donation/service/index.js';
+import { createUser } from './user/service/index.js';
 
 dotenv.config();
 
@@ -27,6 +29,18 @@ const server = new ApolloServer({ typeDefs, resolvers });
     console.log('Database connected successfully.');
     await server.start();
     server.applyMiddleware({ app });
+
+    const campaign = {
+      id: 1,
+      status: "open",
+      endDate: new Date("2024-12-25"),
+  }
+
+    createDonation(1, campaign, 20000)
+      .then((donation) => console.log("Donation created:", donation))
+      .catch((error) => console.error("Failed to create donation:", error));
+
+
     app.listen({ port }, () =>
       console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
     );

@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import { sequelize } from '../../db/sequelize';
-import { User } from '../../user/entity/user';
+import { sequelize } from '../../db/sequelize.js';
+import { User } from '../../user/entity/user.js';
 
 const Donation = sequelize.define('Donation', {
   id: {
@@ -14,16 +14,23 @@ const Donation = sequelize.define('Donation', {
     references: {
         model: User,
         key: 'id',
-      }
+      },
+    field: 'user_id',
   },
   campaignId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'campaign_id',
+  },
+  amount: {
+    type: DataTypes.BIGINT,
+    allowNull: falses
   },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: Sequelize.NOW,
+    field: 'created_at'
   },
 }, {
   tableName: 'donations',
