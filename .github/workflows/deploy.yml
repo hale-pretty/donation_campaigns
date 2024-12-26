@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - hale/azure-webapp
+      - main
 
 env:
   NODE_VERSION: '20.x'                # set this to the Node.js version to use
