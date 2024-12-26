@@ -4,8 +4,6 @@ on:
       - hale/azure-webapp
 
 env:
-  AZURE_WEBAPP_NAME: MY_WEBAPP_NAME   # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: './backend' # set this to the backend folder or build output directory
   NODE_VERSION: '20.x'                # set this to the Node.js version to use
 
 jobs:
@@ -49,4 +47,4 @@ jobs:
       with:
         app-name: "donation-wecamp"
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        package: .
