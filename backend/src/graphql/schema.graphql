@@ -1,3 +1,69 @@
 type Query {
   hello: String
 }
+
+type User {
+    id: Int
+    username: String
+    email: String
+    donate_history: [Donation]
+    avatar: String
+    profile_image: String
+    my_campaigns: [Campaign]
+    lastname: String
+    firstname: String
+    country: String
+    city: String
+    about_me: String
+    short_description: String
+}
+
+type UserPublic {
+    city: String
+    country: String
+    id: Int
+    username: String
+    avatar: String
+    profile_image: String
+    my_campaigns: [Campaign]
+    lastname: String
+    firstname: String
+    about_me: String
+    short_description: String
+    contributions_counter: Int
+    campaigns_counter: Int
+    comments_counter: Int
+}
+
+input UserInput {
+    user_id: Int!
+    email: String
+    avatar: String
+    profile_image: String
+    city: String
+    country: String
+    short_description: String
+    about_me: String
+    password: String
+}
+
+type Login {
+    token: String
+    error: String
+}
+
+type Register {
+    data: User
+    error: String
+}
+
+type Query {
+    user: User
+    user_by_id(user_id: Int!): UserPublic
+}
+
+type Mutation {
+    register(username: String!, password: String!, email: String!): Register
+    login(username: String!, password: String!): Login
+    update_profile(input: UserInput!): DefaultResponse
+}
