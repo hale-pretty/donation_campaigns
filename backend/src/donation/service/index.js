@@ -18,7 +18,8 @@ const createDonation = async (userId, campaignId, amount) => {
             {
                 userId: userId,
                 campaignId: campaign.id,
-                amount
+                amount: amount,
+                createdAt
             },
             { transaction }
         )
@@ -41,6 +42,7 @@ const getDonationsByUser = async (userId) => {
             }
         })
         console.log(`donations for user ${userId}:`, donations)
+        return donations
     } catch (error) {
         console.log(`error fetching donations for user ${userId}:`, error)
         throw error
@@ -54,6 +56,7 @@ const getDonationsByCampaign = async (campaignId) => {
                 campaignId: campaignId
             }
         })
+        return donations
         console.log(`donations for campaign ${campaignId}:`, donations)
     } catch (error) {
         console.log(`error fetching donations for campaign ${campaignId} :`, error)
@@ -65,7 +68,7 @@ const getCampaign = (campaignId) => {
     return {
         "id": campaignId,
         "status": "open",
-        "endDate": Date.now()
+        "endDate": new Date("2024-12-31")
     }
 }
 

@@ -7,8 +7,6 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { configContainer } from './storage/index.js';
-import { createDonation } from './donation/service/index.js';
-import { createUser } from './user/service/index.js';
 
 dotenv.config();
 

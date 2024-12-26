@@ -22,9 +22,9 @@ const resolvers = {
     },
   },
   Mutation: {
-    createDonation: async (_, { campaignId }) => {
+    createDonation: async (_, { campaignId, amount }) => {
       try {
-        const donation = await createDonation(1, campaignId);
+        const donation = await createDonation(1, campaignId, amount);
         return donation;
       } catch (error) {
         console.error('Error creating donation:', error);
