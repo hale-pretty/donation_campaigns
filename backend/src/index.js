@@ -30,17 +30,6 @@ const server = new ApolloServer({ typeDefs, resolvers });
     await server.start();
     server.applyMiddleware({ app });
 
-    const campaign = {
-      id: 1,
-      status: "open",
-      endDate: new Date("2024-12-25"),
-  }
-
-    createDonation(1, campaign, 20000)
-      .then((donation) => console.log("Donation created:", donation))
-      .catch((error) => console.error("Failed to create donation:", error));
-
-
     app.listen({ port }, () =>
       console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
     );

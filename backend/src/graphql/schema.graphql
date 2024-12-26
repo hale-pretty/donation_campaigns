@@ -1,15 +1,18 @@
 # schema.graphql
 
+scalar Long
+
 type Donation {
   id: Int!
   userId: Int!
   campaignId: Int!
   createdAt: String!
+  amount: Long!
 }
 
 type Query {
-  getDonationsByUser(): [Donation!]!
-  getDonationsByCampaign(campaignId: Int!): [Donation!]!
+  getDonationsByUser: [Donation]
+  getDonationsByCampaign(campaignId: Int!): [Donation]
 }
 
 type Mutation {

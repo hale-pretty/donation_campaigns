@@ -24,7 +24,7 @@ const Donation = sequelize.define('Donation', {
   },
   amount: {
     type: DataTypes.BIGINT,
-    allowNull: falses
+    allowNull: false
   },
   createdAt: {
     type: DataTypes.DATE,

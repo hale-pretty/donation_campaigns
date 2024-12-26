@@ -1,8 +1,9 @@
 import { sequelize } from '../../db/sequelize.js';
 import { Donation } from '../entity/donation.js'
 
-const createDonation = async (userId, campaign, amount) => {
+const createDonation = async (userId, campaignId, amount) => {
     const currentDate = new Date()
+    const campaign = getCampaign(campaignId)
     if (campaign.status != "open" || campaign.endDate < currentDate) {
         throw new Error("campaign is not opened for donation")
     }
@@ -32,7 +33,7 @@ const createDonation = async (userId, campaign, amount) => {
     }
 }
 
-const getDonationByUser = async (userId) => {
+const getDonationsByUser = async (userId) => {
     try {
         const donations = await Donation.findAll({
             where: {
@@ -41,12 +42,12 @@ const getDonationByUser = async (userId) => {
         })
         console.log(`donations for user ${userId}:`, donations)
     } catch (error) {
-        console.log("error fetching donations:", error)
+        console.log(`error fetching donations for user ${userId}:`, error)
         throw error
     }
 }
 
-const getDonationByCampaign = async (campaignId) => {
+const getDonationsByCampaign = async (campaignId) => {
     try {
         const donations = await Donation.findAll({
             where: {
@@ -55,9 +56,17 @@ const getDonationByCampaign = async (campaignId) => {
         })
         console.log(`donations for campaign ${campaignId}:`, donations)
     } catch (error) {
-        console.log("error fetching donations:", error)
+        console.log(`error fetching donations for campaign ${campaignId} :`, error)
         throw error
     }
 }
 
-export { createDonation, getDonationByUser, getDonationByCampaign }
+const getCampaign = (campaignId) => {
+    return {
+        "id": campaignId,
+        "status": "open",
+        "endDate": Date.now()
+    }
+}
+
+export { createDonation, getDonationsByUser, getDonationsByCampaign }
