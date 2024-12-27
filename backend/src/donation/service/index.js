@@ -56,8 +56,8 @@ const getDonationsByCampaign = async (campaignId) => {
                 campaignId: campaignId
             }
         })
-        return donations
         console.log(`donations for campaign ${campaignId}:`, donations)
+        return donations
     } catch (error) {
         console.log(`error fetching donations for campaign ${campaignId} :`, error)
         throw error
