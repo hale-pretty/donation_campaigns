@@ -1,6 +1,7 @@
 # schema.graphql
 
 scalar Long
+scalar Upload
 
 type Donation {
   id: Int!
@@ -10,11 +11,53 @@ type Donation {
   amount: Long!
 }
 
+type Campaign {
+	id: Int!
+	title: String!
+	description: String!
+	goalAmount: Int!
+	raisedAmount: Int
+	startDate: String!
+	endDate: String!
+	status: String!
+	image: String!
+	user: User
+}
+
+type User {
+	id: Int!
+	name: String!
+	email: String!
+	campaigns: [Campaign]
+}
+
 type Query {
   getDonationsByUser: [Donation]
   getDonationsByCampaign(campaignId: Int!): [Donation]
+  campaigns: [Campaign]
+  campaign(id: Int!): Campaign
 }
 
 type Mutation {
-  createDonation(campaignId: Int!, amount: Int!): Donation!
+	createCampaign(
+		title: String!
+		description: String!
+		goalAmount: Int!
+		endDate: String!
+		image: Upload!
+		userId: Int!
+	): Campaign
+
+	updateCampaign(
+		id: Int!
+		title: String
+		description: String
+		goalAmount: Int
+		endDate: String
+		image: Upload
+	): Campaign
+
+	deleteCampaign(id: Int!): Boolean
+
+	createDonation(campaignId: Int!, amount: Int!): Donation!
 }
