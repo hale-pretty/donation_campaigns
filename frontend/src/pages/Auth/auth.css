@@ -6,3 +6,11 @@
   gap: 20px;
   align-items: center;
 }
+
+.register-page-container{
+  padding: 0.5rem 2rem;
+  margin: 2rem;
+  border-radius: 1rem;
+  display: flex;
+  height: 60vh;
+}

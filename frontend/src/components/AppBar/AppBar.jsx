@@ -1,62 +1,20 @@
-import { Link } from "react-router-dom";
-import { Avatar, Button, Divider, Input } from "antd";
+import { Link, useLocation } from "react-router-dom";
+import { Avatar, Button, Divider, Input} from "antd";
 import logo from "~/assets/images/Logo-without-text.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getFirstCharacter } from "~/utils/helper";
 import { MenuOutlined, CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 import "./styles.scss";
-
-const cardSliderImages = [
-  {
-    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/uxu9blwsopkn1reoff55.jpg",
-    title: "Card 1",
-  },
-  {
-    url: "https://c3.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/mke3jw4io5f1ssfwhvip.jpg",
-    title: "Card 2",
-  },
-  {
-    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/czfrjfvuamsm2bxrfm5i.jpg",
-    title: "Card 3",
-  },
-  {
-    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/btafkmxzhjf1luvnppvi.jpg",
-    title: "Card 4",
-  },
-  {
-    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/uxu9blwsopkn1reoff55.jpg",
-    title: "Card 1",
-  },
-  {
-    url: "https://c3.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/mke3jw4io5f1ssfwhvip.jpg",
-    title: "Card 2",
-  },
-  {
-    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/czfrjfvuamsm2bxrfm5i.jpg",
-    title: "Card 3",
-  },
-  {
-    url: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/btafkmxzhjf1luvnppvi.jpg",
-    title: "Card 4",
-  },
-];
-
-const navLinks = [
-  { path: "/campaign", label: "Campaign" },
-  { path: "/donation", label: "Donation" },
-];
-
-const quickFilter = [
-  { label: "All campaigns" },
-  { label: "Just Launched" },
-  { label: "Shipping soon" },
-  { label: "Ending soon" },
-];
+import SearchDropdown from "./SearchDropdown";
+import { cardSliderImages, navLinks, popularSearches, quickFilter } from "../dummy";
 
 const AppBar = () => {
-  const [activeBg, setActiveBg] = useState(cardSliderImages[1].url);
+  const [activeBg, setActiveBg] = useState(cardSliderImages[2].url);
+  const [search, setSearch] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
+  const location = useLocation();
 
   const handleSlideChange = (swiper) => {
     const currentIndex = swiper.realIndex;
@@ -65,43 +23,52 @@ const AppBar = () => {
   };
 
   const [navMenu, setNavMenu] = useState(false);
-  const [search, setSearch] = useState(false);
 
   const handleLogoClick = () => {
     window.location.pathname = "/";
   };
 
   let logger = false;
+
   const isHomePage = location.pathname === "/";
+
+  useEffect(() => {
+    if (!isHomePage) {
+      setActiveBg(null);
+    }
+  }, [location.pathname]);
 
   return (
     <div>
-      <div 
+      <div
         className="app-bar-container"
-        style={{ backgroundImage: isHomePage ? `url(${activeBg})` : '',
-        height: isHomePage ? '100vh' : ''
-      }}
+        style={{
+          backgroundImage: isHomePage ? `url(${activeBg})` : "",
+          height: isHomePage ? "100vh" : "",
+        }}
       >
         <div className="app-bar">
-          <div
-            className="app-bar-title"
-            style={{ cursor: "pointer" }}
-            onClick={handleLogoClick}
-          >
+          <div className="app-bar-title" onClick={handleLogoClick}>
             <Avatar src={logo} alt="logo" />
             <strong className="ml-2">CGT</strong>
           </div>
-
-          <div className="btn-search">
-            <SearchOutlined
-              style={{ fontSize: "24px", alignContent: "center" }}
-              onClick={() => setSearch(true)}
+          <div className="nav-link"
+            onMouseEnter={() => setIsHovered(true)}
+            // onMouseLeave={() => setIsHovered(false)}
+            >
+            Explore
+          </div>
+          <SearchDropdown isHovered={isHovered}/>
+          <div className="d-flex align-items-center">
+            <SearchOutlined className="SearchOutlined" onClick={() => setSearch(true)}/>
+            <MenuOutlined
+              className="MenuOutlined"
+              onClick={() => setNavMenu(true)}
             />
           </div>
+
           <div className={`menu-search list ${search ? "active" : ""}`}>
-            <div
-              className="d-flex align-items-center p-3"
-              style={{ gap: "15px" }}
+            <div className="d-flex align-items-center p-3 gap-3"
             >
               <SearchOutlined onClick={() => setSearch(false)} />
               <Input autoFocus={true} bordered={false} type="text" />
@@ -123,15 +90,20 @@ const AppBar = () => {
                 );
               })}
             </div>
+            <div>
+              <h6 className="text-muted mb-3">POPULAR SEARCH TERMS</h6>
+              <ul className="list-unstyled">
+                {popularSearches.map((term, index) => (
+                  <div key={index} className="border_filters">
+                  {term}
+                  </div>
+                ))}
+              </ul>
+            </div>
           </div>
-          <MenuOutlined
-            className="MenuOutlined"
-            onClick={() => setNavMenu(true)}
-          />
 
           <div className={`app-bar-title list ${navMenu ? "active" : ""}`}>
-            {!search &&
-              navLinks.map((link) => (
+            {navLinks.map((link) => (
                 <Link
                   onClick={() => setNavMenu(false)}
                   key={link.label}
@@ -155,7 +127,6 @@ const AppBar = () => {
               className="close-btn"
               onClick={() => setNavMenu(false)}
             />
-            {!search && (
               <div className="logger">
                 <Link className="nav-logo" to="/profile">
                   <Avatar style={{ verticalAlign: "middle" }} size="large">
@@ -163,36 +134,36 @@ const AppBar = () => {
                   </Avatar>
                 </Link>
               </div>
-            )}
           </div>
         </div>
 
-        {isHomePage && !search && (
+        {isHomePage && (
           <div className="swiper-container">
             <h1 className="title-swiper">
               {cardSliderImages.find((c) => c.url == activeBg)?.title}
             </h1>
-              <div>
-                <Button
-                  style={{
-                    height: "50px",
-                    fontWeight: 600,
-                    backgroundColor: "#cbff36",
-                  }}
-                >
-                  SEE CAMPAIGN
-                </Button>
-              </div>
+            <div>
+              <Button
+                style={{
+                  height: "50px",
+                  fontWeight: 600,
+                  backgroundColor: "#cbff36",
+                  marginBottom: "10px",
+                }}
+              >
+                SEE CAMPAIGN
+              </Button>
+            </div>
             <Swiper
               loop={true}
               spaceBetween={10}
-              slidesPerView={5}
+              slidesPerView={2}
               freeMode={true}
               watchSlidesProgress={true}
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-              }}
+              // autoplay={{
+              //   delay: 3000,
+              //   disableOnInteraction: false,
+              // }}
               onSlideChange={handleSlideChange}
               modules={[FreeMode, Navigation, Thumbs, Autoplay]}
             >
@@ -202,10 +173,11 @@ const AppBar = () => {
                   onClick={() => setActiveBg(item.url)}
                 >
                   <div
-                    className={`swiper-slide-container ${navMenu ? "slide-out" : ""}`}
+                    className={`swiper-slide-container`}
                     style={{
                       backgroundImage: `url(${item.url})`,
-                      border: activeBg === item.url ? "2px solid #cbff36" : "none",
+                      border:
+                        activeBg === item.url ? "2px solid #cbff36" : "none",
                     }}
                   ></div>
                 </SwiperSlide>
