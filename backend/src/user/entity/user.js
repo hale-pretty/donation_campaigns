@@ -68,6 +68,12 @@ const User = (sequelize, DataTypes) => {
         comments_counter: {
             type: DataTypes.INTEGER,
         },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: Sequelize.NOW,
+            field: 'created_at'
+        },
     })
 }
 
