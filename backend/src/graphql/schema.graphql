@@ -20,8 +20,8 @@ type Campaign {
 	startDate: String!
 	endDate: String!
 	status: String!
-	image: String!
-	user: User
+	image: String
+	userId: Int!
 }
 
 type User {
@@ -44,7 +44,7 @@ type Mutation {
 		description: String!
 		goalAmount: Int!
 		endDate: String!
-		image: Upload!
+		image: Upload
 		userId: Int!
 	): Campaign
 

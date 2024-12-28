@@ -37,8 +37,8 @@ const resolvers = {
   },
   Mutation: {
     createCampaign: handleResolverError(async (_, args) => {
-      const imageUrl = await uploadImage(args.image);
-      args.image = imageUrl;
+      // const imageUrl = await uploadImage(args.image);
+      // args.image = imageUrl;
       return await Campaign.create(args);
     }),
     updateCampaign: handleResolverError(async (_, { id, ...updateFields }) => {
