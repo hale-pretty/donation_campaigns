@@ -1,4 +1,8 @@
-module.exports = (sequelize, DataTypes) => {
+
+import { Sequelize, DataTypes } from 'sequelize';
+import { sequelize } from '../../db/sequelize.js';
+
+const User = (sequelize, DataTypes) => {
     return sequelize.define("User", {
         id: {
             type: DataTypes.INTEGER,
@@ -66,3 +70,5 @@ module.exports = (sequelize, DataTypes) => {
         },
     })
 }
+
+export { User };
