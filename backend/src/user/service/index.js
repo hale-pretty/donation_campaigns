@@ -9,7 +9,7 @@ export const getAuthUser = async (user_context) => {
         return user_context;
     } else {
         return User.findOne({ where: { id: user_context.user_info.id } })
-            .then((records) => records);
+            .then((records) => records)
             .catch((err) => err);
     }
 };
@@ -23,7 +23,7 @@ export const getPublicUser = async (user_id) => {
     .catch((err) => err);
 };
 
-export const register = async (user_info) {
+export const register = async (user_info) => {
     const transaction = await sequelize.transaction();
     const hashedPw = await bcrypt.hash(args.password, 10);
     try {
@@ -46,7 +46,7 @@ export const register = async (user_info) {
     }
 };
 
-export const login = async login(username, password) {
+export const login = async (username, password) => {
     return await User.findOne({ where: { "username": username }})
     .then(async (records) => {
         if (records === null) {
