@@ -35,7 +35,7 @@
 }
 
 .app-bar {
-  background-color: var(--white-first-color);
+  background-color: var(--white-body-color);
   display: flex;
   justify-content: space-between; 
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -45,20 +45,28 @@
 }
 
 .hover_search {
+  left: 0;
   background-color: var(--white-body-color);
   position: absolute;
   border-radius: .5rem;
   z-index: 100;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  // box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
   width: 100%;
-  margin-top: 5px;
   padding: 20px;
+}
+
+.header-left-app-bar {
+  display: flex;
+    align-items: center;
+    grid-gap: 1rem;
+    flex-shrink: 0;
 }
 
 .app-bar-title {
   display: flex;
   align-items: center;
-  cursor: pointer;
+  cursor: pointer;  
+  white-space: nowrap;
 }
 
 .menu-search {
@@ -150,6 +158,14 @@
   display: flex;
 }
 
+.SearchDropdown .Input-Search-Dropdown {
+  background: #f1f1f1;
+  padding: 5px 16px;
+    align-items: center;
+    grid-gap: 4px;
+    flex-shrink: 0;
+    border-radius: 8px;
+}
 .SearchDropdown .Input-Search-Dropdown .ant-input-group-addon {
   padding: 0;
   font-size: large;
