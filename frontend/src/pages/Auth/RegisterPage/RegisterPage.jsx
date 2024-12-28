@@ -6,36 +6,28 @@ const RegisterPage = () => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    console.log(values)
+    console.log(values);
   };
 
   return (
     <div className="register-page-container">
-      <img src={logo} alt="logo image" className="logo-register-page"/>
+      <img src={logo} alt="logo image" className="logo-register-page" />
       <div>
         <div style={{ textAlign: "center", marginBottom: "1rem" }}>
-          <h2>Register Page !</h2>
+          <h2>Register Page!</h2>
           <span>
-            Hi get started by entering your phone number and password!
+            Hi, get started by entering your phone number and password!
           </span>
         </div>
-        <Form
-          form={form}
-          name="register"
-          onFinish={onFinish}
-          scrollToFirstError
-        >
+        <Form form={form} name="register" onFinish={onFinish} scrollToFirstError>
           <Form.Item
             name="email"
             rules={[
-              {
-                required: true,
-                message: "Please input your email!",
-              },
+              { required: true, message: "Please input your email!" },
               {
                 pattern: /^[a-zA-Z0-9._%+-]+@(gmail\.com|email\.com)$/,
                 message: "Email must end with gmail.com or email.com",
-              }
+              },
             ]}
           >
             <Input placeholder="Email" />
@@ -67,7 +59,7 @@ const RegisterPage = () => {
             <Input.Password placeholder="Confirm Password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{width: '100%'}}>
+            <Button className="w-100" type="primary" htmlType="submit">
               Register
             </Button>
           </Form.Item>

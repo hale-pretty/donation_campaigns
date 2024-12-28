@@ -1,6 +1,6 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { Divider, Input } from "antd";
+import { Button, Divider, Input } from "antd";
 import { categories, popularSearches, quickFilter } from "../dummy";
 
 const SearchDropdown = (props) => {
@@ -20,6 +20,8 @@ const SearchDropdown = (props) => {
           bordered={false}
           addonBefore={<SearchOutlined className="p-0" />}
           placeholder="Search crowdfunding..."
+          onClick={() => setIsHovered(true)}
+          onChange={() => setIsHovered(true)}
         />
       </div>
       {isHovered && (
@@ -29,10 +31,10 @@ const SearchDropdown = (props) => {
           <Divider className="m-0" />
           <div className="d-flex flex-wrap gap-2 mb-4 mt-4">
             {categories.map((category, index) => (
-              <button key={index} className="button-category btn">
+              <Button key={index} className="button-category btn">
                 <span>{category.icon}</span>
                 <span>{category.text}</span>
-              </button>
+              </Button>
             ))}
           </div>
 

@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 import "./styles.scss";
 import SearchDropdown from "./SearchDropdown";
-import { cardSliderImages, popularSearches, quickFilter } from "../dummy";
+import { cardSliderImages, categories, popularSearches, quickFilter } from "../dummy";
 
 const AppBar = () => {
   const [activeBg, setActiveBg] = useState(cardSliderImages[2].url);
@@ -53,8 +53,7 @@ const AppBar = () => {
               <Avatar src={logo} alt="logo" />
               <strong className="ml-2">CGT</strong>
             </div>
-            <span
-              className="nav-link"
+            <span className="nav-link explore"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
@@ -77,24 +76,33 @@ const AppBar = () => {
             <div className="d-flex align-items-center p-3 gap-3">
               <SearchOutlined onClick={() => setSearch(false)} />
               <Input autoFocus={true} bordered={false} type="text" />
-              <span
-                style={{ cursor: "pointer" }}
-                onClick={() => setSearch(false)}
-              >
+              <span onClick={() => setSearch(false)}>
                 CANCEL
               </span>
             </div>
             <Divider className="m-0" />
-            <div className="p-3">
-              <div style={{ fontWeight: "600" }}>QUICK FILTER</div>
-              {quickFilter.map((q) => {
-                return (
-                  <div key={q.label} className="border_filters">
-                    {q.label}
-                  </div>
-                );
-              })}
+            <div className="d-flex flex-wrap gap-2 m-4">
+              {categories.map((category, index) => (
+                <Button key={index} className="button-category btn">
+                  <span>{category.icon}</span>
+                  <span>{category.text}</span>
+                </Button>
+              ))}
             </div>
+            <div className="m-4 d-flex justify-content-between">
+            <div>
+              <h6 className="text-muted mb-3">QUICK FILTERS</h6>
+              <ul className="list-unstyled">
+                {quickFilter.map((q) => {
+                  return (
+                    <div key={q.label} className="border_filters">
+                      {q.label}
+                    </div>
+                  );
+                })}
+              </ul>
+            </div>
+
             <div>
               <h6 className="text-muted mb-3">POPULAR SEARCH TERMS</h6>
               <ul className="list-unstyled">
@@ -105,6 +113,7 @@ const AppBar = () => {
                 ))}
               </ul>
             </div>
+          </div>
           </div>
 
           <div className={`app-bar-title list ${navMenu ? "active" : ""}`}>
@@ -156,13 +165,13 @@ const AppBar = () => {
             <Swiper
               loop={true}
               spaceBetween={10}
-              slidesPerView={2}
+              slidesPerView={4}
               freeMode={true}
               watchSlidesProgress={true}
-              // autoplay={{
-              //   delay: 3000,
-              //   disableOnInteraction: false,
-              // }}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
               onSlideChange={handleSlideChange}
               modules={[FreeMode, Navigation, Thumbs, Autoplay]}
             >

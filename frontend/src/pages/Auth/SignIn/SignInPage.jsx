@@ -1,5 +1,7 @@
 import { Button, Divider, Form, Input } from "antd";
 import "../../Auth/auth.css";
+import logo from "~/assets/images/Logo-without-text.jpg";
+
 const SignInPage = () => {
   const [form] = Form.useForm();
 
@@ -8,18 +10,10 @@ const SignInPage = () => {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "white",
-        padding: ".5rem 2rem",
-        margin: ".5rem 2rem",
-        borderRadius: "1rem",
-        maxWidth: "400px",
-        minWidth: "300px",
-      }}
-    >
-      <div>
-        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+    <div className="register-page-container">
+          <img src={logo} alt="logo image" className="logo-register-page" />
+          <div>
+            <div style={{ textAlign: "center", marginBottom: "1rem" }}>
           <h2>Login</h2>
           <span>
             Please enter your user name and password to login!
