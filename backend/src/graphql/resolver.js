@@ -1,4 +1,4 @@
-import { getAuthUser, getPublicUser, register, login } from "../donation/service/index.js"
+import { getAuthUser, getPublicUser, register, login } from "../user/service/index.js"
 
 export const resolvers = {
     Query: {
