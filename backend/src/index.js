@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
+import { expressMiddleware } from '@apollo/server/express4';
 import { resolvers } from './graphql/resolver.js';
 import { sequelize } from './db/sequelize.js';
 import { readFileSync } from 'fs';
