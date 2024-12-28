@@ -28,7 +28,6 @@ const createDonation = async (userId, campaignId, amount) => {
                 userId: userId,
                 campaignId: campaign.id,
                 amount: amount,
-                createdAt
             },
             { transaction }
         )
