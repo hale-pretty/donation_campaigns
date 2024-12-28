@@ -3,10 +3,13 @@ import { BrowserRouter } from "react-router-dom";
 import AppBar from "./components/AppBar/AppBar";
 import Router from "./pages/router";
 import { ConfigProvider } from "antd";
+import { Provider } from 'react-redux';
+import store from "./store";
 
 const App = () => {
   return (
-    <ConfigProvider
+    <Provider store={store}>
+      <ConfigProvider
       theme={{
         token: {
           colorPrimary: "#4caf50",
@@ -50,6 +53,7 @@ const App = () => {
         <Router />
       </BrowserRouter>
     </ConfigProvider>
+    </Provider>
   );
 };
 

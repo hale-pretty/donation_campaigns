@@ -1,7 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate} from "react-router-dom";
 import { Avatar, Button, Divider, Input } from "antd";
 import logo from "~/assets/images/Logo-without-text.jpg";
-import { useEffect, useState } from "react";
+import svg from "~/pages/Profile/svg";
+import { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { getFirstCharacter } from "~/utils/helper";
 import { MenuOutlined, CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,12 +11,34 @@ import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 import "./styles.scss";
 import SearchDropdown from "./SearchDropdown";
 import { cardSliderImages, popularSearches, quickFilter } from "../dummy";
+import { userActions } from "~/store/user.slice";
+import {
+  AccountButton,
+  AvatarCtn,
+  AccountButtonCtn,
+  AccountButtonDropdown,
+  Circle3D
+} from "~/components/styles";
+import useOutsideBlur from "~/customHooks/useOutsideBlur";
+import fake_data from "~/fake_database";
 
 const AppBar = () => {
-  const [activeBg, setActiveBg] = useState(cardSliderImages[2].url);
   const [search, setSearch] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation();
+  const [activeBg, setActiveBg] = useState(cardSliderImages[1].url);
+  const [dropdownIsActive, setDropdownIsActive] = useState(false);
+  // const auth_user_info = useSelector(state => (state.user.hasOwnProperty("info") ? state.user.info : {}));
+  const auth_user_info = ''
+  const dropdownRef = useRef(null);
+  const dispatch = useDispatch();
+  useOutsideBlur(dropdownRef, () => setDropdownIsActive(false));
+  const navigate = useNavigate();
+  const handleNavigate = (e, path) => {
+      e.preventDefault();
+      setDropdownIsActive(!dropdownIsActive);
+      navigate(`/individuals/${auth_user_info.id}${path}`);
+  }
 
   const handleSlideChange = (swiper) => {
     const currentIndex = swiper.realIndex;
@@ -37,6 +61,14 @@ const AppBar = () => {
       setActiveBg(null);
     }
   }, [location.pathname]);
+
+  (async () => {
+    // const token = getCookie("token");
+    // const queryResponse = await graphql_api.getAuthUser(token);
+    // dispatch(userActions.update_auth_user({ ...queryResponse, token: token }));
+    dispatch(userActions.update_auth_user({ ...fake_data.user, token: fake_data.token }));
+  })();
+  // }, []);
 
   return (
     <div>
@@ -129,10 +161,47 @@ const AppBar = () => {
             <Button style={{ borderColor: "green", padding: "10px" }}>
               START A CAMPAIGN
             </Button>
+          <MenuOutlined
+            className="MenuOutlined"
+            onClick={() => setNavMenu(true)}
+          />
+              <AccountButtonCtn ref={dropdownRef}>
+              <AccountButton onClick={() => setDropdownIsActive(!dropdownIsActive)}>
+                  <Circle3D position={{ bottom: "5px", right: "-8px" }}>{svg.bell()}</Circle3D>
+                  <h3>{auth_user_info.firstname} {auth_user_info.lastname}</h3>
+                  { auth_user_info.avatar === null
+                  ? <Avatar style={{ verticalAlign: "middle" }} size="large">
+                    {getFirstCharacter(`${auth_user_info.firstname} ${auth_user_info.lastname}`)}
+                  </Avatar>
+                  : <AvatarCtn>
+                      <img src={auth_user_info.avatar} />
+                  </AvatarCtn>}
+              </AccountButton>
+              <AccountButtonDropdown  className={dropdownIsActive ? "active" : ""}>
+                  <div onClick={(e) => handleNavigate(e,"/campaigns")}>My campaigns<Circle3D position={{ right: "0px" }}><p>{5}</p></Circle3D></div>
+                  <div onClick={(e) => handleNavigate(e,"/contributions")}>My contributions</div>
+                  <div onClick={(e) => handleNavigate(e,"")}>Profile</div>
+                  <div onClick={(e) => handleNavigate(e,"/edit/profile")}>Settings</div>
+                  <div>Log Out</div>
+              </AccountButtonDropdown>
+          </AccountButtonCtn>
+          <div className={`app-bar-title list ${navMenu ? "active" : ""}`}>
+            {logger && (
+              <Link
+                onClick={() => setNavMenu(false)}
+                key="profile"
+                className="nav-link"
+                to="/profile"
+              >
+                Profile
+              </Link>
+            )}
             <CloseOutlined
               className="close-btn"
               onClick={() => setNavMenu(false)}
             />
+            
+            
           </div>
         </div>
 
@@ -185,8 +254,9 @@ const AppBar = () => {
           </div>
         )}
       </div>
+      </div>
     </div>
   );
-};
+}
 
 export default AppBar;
