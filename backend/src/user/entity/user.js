@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../../db/sequelize';
+import { sequelize } from '../../db/sequelize.js';
 
 const User = sequelize.define('User', {
   id: {
@@ -18,6 +18,7 @@ const User = sequelize.define('User', {
   },
 }, {
   tableName: 'users',
+  timestamps: false,
 });
 
 export { User };
