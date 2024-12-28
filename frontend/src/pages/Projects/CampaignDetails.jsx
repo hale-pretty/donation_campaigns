@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import graphql_api from "../../graphql";
+// import graphql_api from "../../graphql";
 import { useEffect, useState } from "react";
 import { 
     CampaignSection,
