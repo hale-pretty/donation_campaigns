@@ -9,7 +9,6 @@ import { fileURLToPath } from 'url';
 import { configContainer } from './storage/index.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 
-
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
