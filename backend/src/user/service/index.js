@@ -8,7 +8,7 @@ export const getAuthUser = async (user_context) => {
     if (user_context instanceof Error) {
         return user_context;
     } else {
-        return await User.findOne({ where: { id: user_context.user_info.id } })
+        return User.findOne({ where: { id: user_context.user_info.id } })
             .then((records) => records);
             .catch((err) => err);
     }
@@ -27,7 +27,7 @@ export const register = async (user_info) {
     const transaction = await sequelize.transaction();
     const hashedPw = await bcrypt.hash(args.password, 10);
     try {
-        const newUser = await User.create(
+        User.create(
             { username: user_info.username, password: hashedPw, email: user_info.email },
             { transaction }
         )
