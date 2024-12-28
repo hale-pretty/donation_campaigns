@@ -1,9 +1,11 @@
-import db from "../models/index.cjs";
+import { sequelize } from '../../db/sequelize.js';
+import { User } from '../entity/user.js';
 import bcrypt from "bcrypt";
 import 'dotenv/config';
 import jwt from "jsonwebtoken";
 import { Kind } from 'graphql/language/index.js';
 import { GraphQLScalarType } from 'graphql';
+
 
 export const resolvers = {
     Query: {
