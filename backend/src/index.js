@@ -32,7 +32,7 @@ const server = new ApolloServer({ typeDefs, resolvers });
     console.log('Database connected successfully.');
     await server.start();
     server.applyMiddleware({ app });
-    app.use("/graphql", expressMiddleware(apolloServer, { context }));
+    app.use("/graphql", expressMiddleware(server, { context }));
     app.listen({ port }, () =>
       console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
     );
