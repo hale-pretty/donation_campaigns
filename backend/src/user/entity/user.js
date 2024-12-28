@@ -70,8 +70,7 @@ const User = sequelize.define("User", {
     createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
-        field: 'created_at'
+        defaultValue: Sequelize.NOW
     },
 })
 
