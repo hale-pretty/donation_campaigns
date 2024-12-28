@@ -1,9 +1,5 @@
 scalar Date
 
-type Query {
-  hello: String
-}
-
 type User {
     id: Int
     username: String
@@ -60,8 +56,12 @@ type Register {
 }
 
 type Query {
-    user: User
-    user_by_id(user_id: Int!): UserPublic
+    getAuthUser: User
+    getPublicUser(user_id: Int!): UserPublic
+}
+
+type DefaultResponse {
+  message: String
 }
 
 type Mutation {
