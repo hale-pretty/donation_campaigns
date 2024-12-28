@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 async function runMigration(file) {
-  const filePath = resolve(__dirname, 'models', file);
+  const filePath = resolve(__dirname, 'sql', file);
   const sql = fs.readFileSync(filePath, 'utf-8');
 
   try {
