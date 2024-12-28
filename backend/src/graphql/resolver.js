@@ -2,7 +2,7 @@ import { getAuthUser, getPublicUser, register, login } from "../user/service/ind
 
 export const resolvers = {
     Query: {
-        getAuthUser: (_, __, { user }) => {
+        getAuthUser: async (_, __, { user }) => {
               try {
                 return await getAuthUser(user);
               } catch (error) {
