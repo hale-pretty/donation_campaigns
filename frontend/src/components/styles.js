@@ -14,7 +14,6 @@ const AccountButtonCtn = styled.div`
     position: relative;
     display: flex;
     max-width: 200px;
-    
     margin-left: auto;
     gap: 10px;
     height: 100%;
@@ -40,6 +39,8 @@ const AccountButton = styled.div`
 
     & > h3 {
         text-align: right;
+        font-size: 20px;
+        margin: 0px;
     }
 `;
 
@@ -54,7 +55,7 @@ const anm_fadein = keyframes`
 `;
 
 const AccountButtonDropdown = styled(AccountButton)`
-    top: 30px;
+    top: 35px;
     display: none;
     max-height: none;
     flex-direction: column;
