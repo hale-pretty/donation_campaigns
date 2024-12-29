@@ -1,33 +1,44 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 
 /*=============== VARIABLES CSS ===============*/
 :root {
   --white-first-color: rgba(255, 255, 255, 1); 
-  --white-first-color-alt: rgba(245, 245, 245, 1);
-  --white-title-color: rgba(26, 26, 26, 1);
-  --white-text-color: rgba(77, 77, 77, 1); 
-  --white-text-color-light: rgba(128,128,128,1  ); 
+  --black-title-color: rgba(26, 26, 26, 1);
+  --gray-text-color: rgba(77, 77, 77, 1); 
   --white-body-color: rgba(250, 250, 250, 1); 
-  --white-container-color: rgba(230,230,230,1);
 
-  /* Gray Theme Colors */
   --gray-first-color: rgba(153, 153, 153, 1); 
-  --gray-first-color-light: rgba(180, 180, 180, 1); 
-  --gray-first-color-alt: rgba(128, 128, 128, 1); 
   --gray-title-color: rgb(69, 64, 64); 
-  --gray-text-color: rgba(102, 102, 102, 1); 
-  --gray-text-color-light: rgba(153,153,153,1); 
   --gray-body-color: rgba(240, 240, 240, 1); 
-  --gray-container-color: rgba(200, 200, 200, 1); 
   --gray-container: rgba(212, 212, 212); 
-  --gray-body: rgba(235, 235, 233);
+  --gray-border: #bebdc0;
+
+  --main-color: #4caf50;
+  --main-900: #1b5e20;  /* Darkest */
+  --main-800: #2e7d32;
+  --main-700: #388e3c;
+  --main-600: #43a047;
+  --main-500: #4caf50;  /* Original */
+  --main-400: #66bb6a;
+  --main-300: #81c784;
+  --main-200: #a5d6a7;
+  --main-100: #c8e6c9;
+  --main-50: #e8f5e9;   /* Lightest */
 }
 
 body {
   color: var(--white-text-color);
   font-family: 'SF Pro Text', sans-serif;
   margin: 0;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--main-400);
+
+  &:hover {
+    color: var(--main-700);
+  }
 }
 
 h1,
@@ -36,13 +47,11 @@ h3 {
   color: var(--white-title-color);
 }
 
-.container {
-  background-color: var(--white-container-color);
+.ant-input-outlined:hover{
+  border-color: var(--main-color);
+  box-shadow: 0 0 0 1px var(--main-100)
 }
 
-.poppins {
-  font-family: "Poppins", sans-serif;
-}
 .nav-link {
   margin-left: 10px;
   text-decoration: none;
@@ -73,7 +82,7 @@ h3 {
 }
 
 .nav-link.login {
-  border: 1px solid var(--white-text-color-light);
+  border: 1px solid rgba(128,128,128,1  );
   padding: 5px 10px; 
   background-color: var(--gray-text-color);
   border-radius: 15px;
@@ -111,6 +120,7 @@ h3 {
   background-color: var(--gray-container);
 }
 
+
 .app-bar {
   position: relative;
   top: 0;
@@ -144,7 +154,8 @@ h3 {
   width: 100%;
   background-color: var(--white-body-color);
   -webkit-backdrop-filter: blur(16px);
-  transition: top .4s; 
+  transition: top .4s;
+  display: none;
 }
 
 .menu-search.list.active {
