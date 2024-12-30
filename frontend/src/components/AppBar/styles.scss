@@ -10,10 +10,16 @@
   transition: background-image 0.5s ease-in-out;
 }
 
+.title-swiper{
+  color: var(--white-body-color);
+}
+
 .swiper-container {
   bottom: 0;
   position: absolute;
   width: 99vw;
+  padding: 20px;
+  padding-right: 0;
 }
 
 .swiper-slide-container {
@@ -30,4 +36,215 @@
     opacity: 0;
     transform: translateX(-100%);
   }
+}
+
+.app-bar {
+  background-color: var(--white-body-color);
+  display: flex;
+  justify-content: space-between; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  align-items: center;
+  gap: 20px;
+}
+
+.hover_search {
+  left: 0;
+  background-color: var(--white-body-color);
+  position: absolute;
+  border-radius: .5rem;
+  z-index: 100;
+  // box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  width: 100%;
+  padding: 20px;
+}
+
+.header-left-app-bar {
+  display: flex;
+    align-items: center;
+    grid-gap: 1rem;
+    flex-shrink: 0;
+}
+
+.app-bar-title {
+  display: flex;
+  align-items: center;
+  cursor: pointer;  
+  white-space: nowrap;
+}
+
+.menu-search {
+  align-items: center;
+  cursor: pointer;
+}
+
+.menu-search.list {
+  // position: fixed;
+  position: absolute;
+  top: -100%;
+  height: 100%;
+  left: 0;
+  backdrop-filter: blur(16px);
+  width: 100%;
+  background-color: var(--white-body-color);
+  -webkit-backdrop-filter: blur(16px);
+  transition: top .4s; 
+}
+
+.menu-search.list.active {
+  top: 0;
+  left: 0;
+  z-index: 200;
+}
+
+.border_filters {
+  position: relative; 
+  display: flex; 
+  cursor: pointer; 
+  width: fit-content;
+  color: black;
+  line-height: 2;
+}
+
+.border_filters::after {
+  content: ""; 
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: .8px; 
+  width: 0;
+  background-color: black; 
+  transition: width 0.3s ease-in-out;
+}
+
+.border_filters:hover::after {
+  width: 100%; 
+}
+
+.MenuOutlined {
+  display: none; 
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.app-bar-title.list {
+  display: flex;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.close-btn {
+  display: none;
+}
+
+.logger{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  order: 3;
+  margin-left: 5px;
+}
+
+.btn-search {
+  margin-right: 10  px;
+  align-content: center;
+}
+
+.SearchOutlined{
+  display: none;
+  font-size: 24px;
+}
+
+.button-category{
+  border-radius: 50rem;
+  background-color: #dedede;
+  gap: .5rem;
+  align-items: center;
+  display: flex;
+}
+
+.SearchDropdown .Input-Search-Dropdown {
+  background: #f1f1f1;
+  padding: 5px 16px;
+    align-items: center;
+    grid-gap: 4px;
+    flex-shrink: 0;
+    border-radius: 8px;
+}
+.SearchDropdown .Input-Search-Dropdown .ant-input-group-addon {
+  padding: 0;
+  font-size: large;
+}
+
+.button-category:hover{
+  background-color: lightgrey;
+}
+
+.form-control:focus{
+  border-color: none !important;
+  box-shadow: none !important;
+}
+
+.text-muted{
+  font-weight: 600;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 770px) {
+  .app-bar-title.list {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100%;
+    backdrop-filter: blur(16px);
+    width: 60%;
+    background-color: var(--white-body-color);
+    display: grid;
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0rem 2rem;
+    transition: right .4s;
+    align-content: space-evenly,
+  }
+
+  .SearchDropdown,
+  .explore{
+    display: none;
+  }
+
+  .app-bar-title .ant-avatar >img {
+    display: none;
+  }
+
+  .MenuOutlined {
+    display: block; 
+    margin: 0 15px;
+  }
+
+  .SearchOutlined{
+    display: block;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+  }
+  .swiper-slide{
+    width: 30% !important;
+  }
+
+  .nav-link{
+    color: black;
+    width: 12%;
+  }
+
+  .app-bar-title.list.active {
+    right: 0;
+    z-index: 10;
+    justify-items: center;
+  }
+ 
 }
