@@ -27,10 +27,7 @@ const resolvers = {
       if (!auth) throw new Error('Unauthorized');
       const imageUrl = await uploadImage(args.image);
       args.image = imageUrl;
-<<<<<<< HEAD
-=======
       args.userId = auth.id;
->>>>>>> 2f588b3 (Add basic user API register, login)
       return await Campaign.create(args);
     }),
     updateCampaign: handleResolverError(async (_, { id, ...updateFields }, { auth }) => {
