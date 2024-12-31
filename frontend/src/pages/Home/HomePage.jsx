@@ -2,98 +2,129 @@ import { Button } from "antd";
 import { ArrowLeftOutlined, ArrowRightOutlined, BookOutlined } from '@ant-design/icons';
 import "./home.css";
 import { useEffect, useState } from "react";
-
-const dummyCampaign = [
-  {
-    title: "Summer Splash Sale",
-    description:
-      "Dive into amazing deals this summer! Up to 50% off on select items.",
-    startDate: "2024-06-01",
-    endDate: "2024-06-30",
-    imageUrl:
-      "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/uxu9blwsopkn1reoff55.jpg",
-  },
-  {
-    title: "Back-to-School Bonanza",
-    description:
-      "Get everything you need for the new school year with discounts up to 40%.",
-    startDate: "2024-08-01",
-    endDate: "2024-08-15",
-    imageUrl: "https://c3.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/mke3jw4io5f1ssfwhvip.jpg",
-  },
-  {
-    title: "Black Friday Mega Deals",
-    description:
-      "Don’t miss the biggest sale of the year! Limited-time offers on all categories.",
-    startDate: "2024-11-29",
-    endDate: "2024-11-30",
-    imageUrl: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/czfrjfvuamsm2bxrfm5i.jpg",
-  },
-  {
-    title: "Holiday Cheer Giveaway",
-    description:
-      "Celebrate the season of giving with exciting prizes and discounts. Enter to win today!",
-    startDate: "2024-12-10",
-    endDate: "2024-12-25",
-    imageUrl: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/btafkmxzhjf1luvnppvi.jpg",
-  },
-  {
-    title: "Black Friday Mega Deals",
-    description:
-      "Don’t miss the biggest sale of the year! Limited-time offers on all categories.",
-    startDate: "2024-11-29",
-    endDate: "2024-11-30",
-    imageUrl: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/czfrjfvuamsm2bxrfm5i.jpg",
-  },
-  {
-    title: "Holiday Cheer Giveaway",
-    description:
-      "Celebrate the season of giving with exciting prizes and discounts. Enter to win today!",
-    startDate: "2024-12-10",
-    endDate: "2024-12-25",
-    imageUrl: "https://c0.iggcdn.com/indiegogo-media-prod-cld/image/upload/c_fit,g_center,q_auto,f_auto,w_1279/btafkmxzhjf1luvnppvi.jpg",
-  },
-];
-
+import { dummyCampaign } from "~/components/dummy";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [datas, setDatas] = useState(dummyCampaign.slice((currentPage - 1) * 4,currentPage * 4))
+  const [currentPage, setCurrentPage] = useState(1);
+  const [datas, setDatas] = useState(dummyCampaign.slice((currentPage - 1) * 4,currentPage * 4)); 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const navigate = useNavigate()
 
   useEffect(() => {
-    setDatas(dummyCampaign.slice((currentPage - 1) * 4, currentPage * 4))
-  }, [currentPage])
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      setDatas(dummyCampaign); 
+    } else {
+      setDatas(dummyCampaign.slice((currentPage - 1) * 4, currentPage * 4)); 
+    }
+    console.log(dummyCampaign)
+    console.log(dummyCampaign, dummyCampaign.slice(4, 8))
+  }, [currentPage, isMobile]);
+
+  const getCampaignStatus = (startDate, endDate) => {
+    const now = new Date();
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const daysUntilEnd = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+
+    if (now < start) {
+      return "PRELAUNCH";
+    } else if (daysUntilEnd <= 7 && daysUntilEnd > 0) {
+      return "ENDING SOON";
+    }
+    return null;
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
 
   return (
     <div className="popular_campaign">
       <div className="heading_campaign">
-        <h1>Popular Campaigns</h1>
+        <h1 className="pb-3">Popular Campaigns</h1>
         <div className="btn-heading">
-          <Button icon={<ArrowLeftOutlined />} onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}/>
-          <Button icon={<ArrowRightOutlined/>}  onClick={() => setCurrentPage(currentPage + 1)} disabled={dummyCampaign.length / (4 * currentPage) < 1}/>
+          {!isMobile && (
+            <>
+              <Button
+                icon={<ArrowLeftOutlined />}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              <Button
+                icon={<ArrowRightOutlined />}
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={dummyCampaign.length / (4 * currentPage) < 1}
+              />
+            </>
+          )}
         </div>
       </div>
 
-      <div className="campaign_cards">
+      <div className={`campaign_cards ${isMobile ? "scrollable" : ""}`}>
         {datas.map((c) => {
+          const status = getCampaignStatus(c.startDate, c.endDate);
           return (
             <div key={c.imageUrl} className="campaign_item">
-            <div className="card">
-              <img src={c.imageUrl} className="card_image" alt="Card Image" />
-              <div className="overlay">
-                <div className="head_campaign d-lg-flex">
-                  <Button className="text-uppercase">ending soon</Button>
-                  <Button icon={<BookOutlined />}/>
+              <div className="card">
+                <img src={c.imageUrl} className="card_image" alt={c.title} />
+                <div className="overlay">
+                  <div className={`head_campaign ${status ? 'justify-content-center' : 'justify-content-end'}`}>
+                    {status && (
+                      <Button className={`text-uppercase ${status.toLowerCase()}`}>
+                        {status}
+                      </Button>
+                    )}
+                    <Button icon={<BookOutlined />} />
+                  </div>
+                  <div className="w-100 p-4 text-center">
+                    <Button className="view-details-btn text-uppercase" 
+                      onClick={() => navigate(`/campaign/${c.title}`)}
+                    >
+                      view campaign
+                    </Button>
+                  </div>
                 </div>
-                <div className="w-100 p-4 text-center">
-                  <Button className="view-details-btn text-uppercase">view campaign</Button>
+              </div>
+              <div className="body_campaign">
+                <h5>{c.title}</h5>
+                <div className="campaign-info">
+                  <p className="category">{c.category}</p>
+                  <div className="price-info">
+                    <span className="starting-at">STARTING AT</span>
+                    <div className="price">
+                      {formatCurrency(c.startingAt)}
+                      {c.discount > 0 && (
+                        <>
+                          <span className="original-price">{formatCurrency(c.originalPrice)}</span>
+                          <span className="discount">({c.discount}% OFF)</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="campaign-stats">
+                    <span>{formatCurrency(c.raised)} raised</span>
+                    <span>{c.funded}% funded</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="body_campaign">
-              <h5>{c.description}</h5>
-            </div>
-          </div>
           );
         })}
       </div>
