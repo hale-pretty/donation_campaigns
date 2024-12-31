@@ -10,19 +10,43 @@ type Campaign {
 	endDate: String!
 	status: String!
 	image: String!
-	userId: Int!
+	user: User
 }
 
 type User {
 	id: Int!
-	name: String!
+	username: String!
 	email: String!
-	campaigns: [Campaign]
+  firstName: String!
+  lastName: String!
+  avatarUrl: String
+  bio: String,
+	# campaigns: [Campaign]
+}
+
+input UserRegisterRequest {
+  username: String!
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+}
+
+input UpdateUserRequest {
+  firstName: String
+  lastName: String
+  bio: String
+  password: String
+}
+
+type LoginResponse {
+  token: String!
 }
 
 type Query {
 	campaigns: [Campaign]
 	campaign(id: Int!): Campaign
+  getCurrentUser: User
 }
 
 type Mutation {
@@ -32,7 +56,6 @@ type Mutation {
 		goalAmount: Int!
 		endDate: String!
 		image: Upload!
-		userId: Int!
 	): Campaign
 
 	updateCampaign(
@@ -45,4 +68,12 @@ type Mutation {
 	): Campaign
 
 	deleteCampaign(id: Int!): Boolean
+
+  register(request: UserRegisterRequest): User
+
+  login(username: String!, password: String!): LoginResponse
+
+  addAvatar(image: Upload!): User
+
+  updateUser(request: UpdateUserRequest): User
 }
