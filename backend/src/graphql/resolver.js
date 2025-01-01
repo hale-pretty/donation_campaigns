@@ -20,6 +20,7 @@ const resolvers = {
     createCampaign: handleResolverError(async (_, args) => {
       const imageUrl = await uploadImage(args.image);
       args.image = imageUrl;
+      args.status = 'open';
       return await Campaign.create(args);
     }),
     updateCampaign: handleResolverError(async (_, { id, ...updateFields }) => {

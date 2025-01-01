@@ -10,7 +10,7 @@ type Campaign {
 	endDate: String!
 	status: String!
 	image: String!
-	user: User
+	userId: Int!
 }
 
 type User {
