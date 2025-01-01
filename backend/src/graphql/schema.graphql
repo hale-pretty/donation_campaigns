@@ -1,3 +1,79 @@
+scalar Upload
+
+type Campaign {
+	id: Int!
+	title: String!
+	description: String!
+	goalAmount: Int!
+	raisedAmount: Int
+	startDate: String!
+	endDate: String!
+	status: String!
+	image: String!
+	userId: Int!
+}
+
+type User {
+	id: Int!
+	username: String!
+	email: String!
+  firstName: String!
+  lastName: String!
+  avatarUrl: String
+  bio: String,
+	# campaigns: [Campaign]
+}
+
+input UserRegisterRequest {
+  username: String!
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+}
+
+input UpdateUserRequest {
+  firstName: String
+  lastName: String
+  bio: String
+  password: String
+}
+
+type LoginResponse {
+  token: String!
+}
+
 type Query {
-  hello: String
+	campaigns: [Campaign]
+	campaign(id: Int!): Campaign
+  getCurrentUser: User
+}
+
+type Mutation {
+	createCampaign(
+		title: String!
+		description: String!
+		goalAmount: Int!
+		endDate: String!
+		image: Upload!
+	): Campaign
+
+	updateCampaign(
+		id: Int!
+		title: String
+		description: String
+		goalAmount: Int
+		endDate: String
+		image: Upload
+	): Campaign
+
+	deleteCampaign(id: Int!): Boolean
+
+  register(request: UserRegisterRequest): User
+
+  login(username: String!, password: String!): LoginResponse
+
+  addAvatar(image: Upload!): User
+
+  updateUser(request: UpdateUserRequest): User
 }
