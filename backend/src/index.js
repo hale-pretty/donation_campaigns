@@ -13,7 +13,6 @@ import { configContainer } from './storage/index.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 import { authMiddleware } from './user/auth/middleware.js';
 
-
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);

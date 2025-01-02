@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS donations (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    campaign_id INTEGER NOT NULL,
+    amount BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id)
+);
