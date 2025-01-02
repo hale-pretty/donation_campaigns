@@ -15,8 +15,8 @@ type Campaign {
 	id: Int!
 	title: String!
 	description: String!
-	goalAmount: Int!
-	raisedAmount: Int
+	goalAmount: Long!
+	raisedAmount: Long
 	startDate: String!
 	endDate: String!
 	status: String!
@@ -66,23 +66,23 @@ type Mutation {
 	createCampaign(
 		title: String!
 		description: String!
-		goalAmount: Int!
+		goalAmount: Long!
 		endDate: String!
-		image: Upload!
+		image: Upload
 	): Campaign
 
 	updateCampaign(
 		id: Int!
 		title: String
 		description: String
-		goalAmount: Int
+		goalAmount: Long
 		endDate: String
 		image: Upload
 	): Campaign
 
 	deleteCampaign(id: Int!): Boolean
 
-	createDonation(campaignId: Int!, amount: Int!): Donation!
+	createDonation(campaignId: Int!, amount: Long!): Donation!
   register(request: UserRegisterRequest): User
 
   login(username: String!, password: String!): LoginResponse

@@ -12,6 +12,7 @@ const createDonation = async (userId, campaignId, amount) => {
         throw new Error(`Failed to fetch campaign: ${error.message}`);
     }
     
+    // Check constraints
     const currentDate = new Date()
     if (campaign.status != "open" || campaign.endDate < currentDate) {
         throw new Error("campaign is not opened for donation")
@@ -23,6 +24,7 @@ const createDonation = async (userId, campaignId, amount) => {
     const transaction = await sequelize.transaction()
     
     try {
+        // Create donation
         const newDonation = await Donation.create(
             {
                 userId: userId,
@@ -31,8 +33,17 @@ const createDonation = async (userId, campaignId, amount) => {
             },
             { transaction }
         )
+
+        // Update campaign
+        campaign.raisedAmount = Number.parseInt(campaign.raisedAmount) + Number.parseInt(amount)
+        if (campaign.raisedAmount >= campaign.goalAmount ) {
+            campaign.status = "closed"
+        }
+        await campaign.save({ transaction })
+        
         await transaction.commit()
         console.log("donation created successfully:", newDonation);
+        console.log("campaign updated successfully:", campaign)
         return newDonation
         
     } catch (error) {

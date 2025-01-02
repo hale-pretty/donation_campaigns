@@ -44,8 +44,8 @@ const resolvers = {
   Mutation: {
     createCampaign: handleResolverError(async (_, args, { auth }) => {
       if (!auth) throw new Error('Unauthorized');
-      const imageUrl = await uploadImage(args.image);
-      args.image = imageUrl;
+      // const imageUrl = await uploadImage(args.image);
+      // args.image = imageUrl;
       args.userId = auth.id;
       args.status = 'open';
       return await Campaign.create(args);
