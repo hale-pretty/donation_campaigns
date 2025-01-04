@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS campaigns (
   start_date DATE NOT NULL DEFAULT CURRENT_DATE,
   end_date DATE NOT NULL,
   status VARCHAR(50) NOT NULL,
-  image TEXT,
-  user_id SERIAL NOT NULL,
+  user_id INT NOT NULL,
   CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

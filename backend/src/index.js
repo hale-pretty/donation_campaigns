@@ -8,7 +8,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { configContainer } from './storage/index.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
-
+import './cronJob.js';
 
 dotenv.config();
 

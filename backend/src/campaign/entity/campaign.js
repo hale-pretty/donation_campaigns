@@ -1,6 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../../db/sequelize.js';
 import { User } from '../../user/entity/user.js';
+import { CampaignImage } from './campaign_image.js';
+import { models } from '../../db/models.js';
 
 const Campaign = sequelize.define('Campaign', {
   id: {
@@ -86,10 +88,6 @@ const Campaign = sequelize.define('Campaign', {
   status: {
     type: DataTypes.STRING,
   },
-  image: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -105,7 +103,10 @@ const Campaign = sequelize.define('Campaign', {
   timestamps: false,
 });
 
-Campaign.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Campaign.associate = (models) => {
+  Campaign.hasMany(models.CampaignImage, { foreignKey: 'campaignId', as: 'images' });
+  Campaign.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+};
 User.hasMany(Campaign, { foreignKey: 'userId', as: 'campaigns' });
 
 export { Campaign };

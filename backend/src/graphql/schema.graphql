@@ -9,8 +9,14 @@ type Campaign {
 	startDate: String!
 	endDate: String!
 	status: String!
-	image: String!
+	images: [CampaignImage!]!
 	user: User
+}
+
+type CampaignImage {
+	id: ID!
+	campaignId: ID!
+	imageUrl: String!
 }
 
 type User {
@@ -31,7 +37,7 @@ type Mutation {
 		description: String!
 		goalAmount: Int!
 		endDate: String!
-		image: Upload!
+		images: [Upload!]!
 		userId: Int!
 	): Campaign
 
@@ -41,7 +47,7 @@ type Mutation {
 		description: String
 		goalAmount: Int
 		endDate: String
-		image: Upload
+		images: [Upload!]!
 	): Campaign
 
 	deleteCampaign(id: Int!): Boolean

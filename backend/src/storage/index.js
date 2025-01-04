@@ -27,7 +27,9 @@ const uploadImage = async (file) => {
     const fileBuffer = Buffer.concat(chunks);
 
     const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME);
-    const blockBlobClient = containerClient.getBlockBlobClient(filename)
+    const timestamp = Date.now();
+    const newFileName = `${timestamp}-${filename}`
+    const blockBlobClient = containerClient.getBlockBlobClient(newFileName)
     await blockBlobClient.upload(fileBuffer, fileBuffer.length)
 
     console.log(`Image '${filename}' uploaded successfully.`);
