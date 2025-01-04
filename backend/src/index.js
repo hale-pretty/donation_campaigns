@@ -15,6 +15,9 @@ import { authMiddleware } from './user/auth/middleware.js';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { pubsub } from './realtime/pubsub.js';
+import http from 'http'; // Import the http module
+import { makeExecutableSchema } from '@graphql-tools/schema'; // Import makeExecutableSchema
+
 
 dotenv.config();
 
@@ -25,9 +28,16 @@ const typeDefs = readFileSync(join(__dirname, 'graphql', 'schema.graphql'), 'utf
 const app = express();
 app.use(graphqlUploadExpress());
 
+const httpServer = http.createServer(app);
+
 const port = Number.parseInt(process.env.PORT) || 4000;
 
-const server = new ApolloServer({ typeDefs, resolvers, uploads: true });
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
+
+const server = new ApolloServer({ schema, uploads: true });
 
 // Start the server
 (async () => {
@@ -44,14 +54,14 @@ const server = new ApolloServer({ typeDefs, resolvers, uploads: true });
         context: authMiddleware,
       }) // Apollo middleware for Express
     );
-    app.listen({ port }, () =>
+    httpServer.listen({ port }, () =>
       console.log(`Server ready at http://localhost:${port}/graphql`)
     );
     const wsServer = new WebSocketServer({
-      server: app,
+      server: httpServer,
       path: '/graphql',
     })
-    useServer({ schema: { typeDefs, resolvers }, pubsub }, wsServer);
+    useServer({ schema, pubsub }, wsServer);  // GraphQL subscriptions
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }

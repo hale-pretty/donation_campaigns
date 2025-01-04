@@ -6,6 +6,7 @@ import { handleResolverError } from "../util/handleResolverError.js";
 import { uploadImage } from "../storage/index.js";
 import { withFilter } from "graphql-subscriptions";
 import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
+import { pubsub } from '../realtime/pubsub.js'
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -103,7 +104,7 @@ const resolvers = {
   Subscription: {
     donationAdded: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator('DONATION_ADDED'),
+        () => pubsub.asyncIterableIterator('DONATION_ADDED'),
         (payload, variables) =>
           payload.donationAdded.newDonation.campaignId === variables.campaignId
       ),
