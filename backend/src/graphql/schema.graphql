@@ -1,15 +1,26 @@
+# schema.graphql
+
+scalar Long
 scalar Upload
+
+type Donation {
+  id: Int!
+  userId: Int!
+  campaignId: Int!
+  createdAt: String!
+  amount: Long!
+}
 
 type Campaign {
 	id: Int!
 	title: String!
 	description: String!
-	goalAmount: Int!
-	raisedAmount: Int
+	goalAmount: Long!
+	raisedAmount: Long
 	startDate: String!
 	endDate: String!
 	status: String!
-	image: String!
+	image: String
 	userId: Int!
 }
 
@@ -44,8 +55,10 @@ type LoginResponse {
 }
 
 type Query {
-	campaigns: [Campaign]
-	campaign(id: Int!): Campaign
+  getDonationsByUser: [Donation]
+  getDonationsByCampaign(campaignId: Int!): [Donation]
+  campaigns: [Campaign]
+  campaign(id: Int!): Campaign
   getCurrentUser: User
 }
 
@@ -53,22 +66,23 @@ type Mutation {
 	createCampaign(
 		title: String!
 		description: String!
-		goalAmount: Int!
+		goalAmount: Long!
 		endDate: String!
-		image: Upload!
+		image: Upload
 	): Campaign
 
 	updateCampaign(
 		id: Int!
 		title: String
 		description: String
-		goalAmount: Int
+		goalAmount: Long
 		endDate: String
 		image: Upload
 	): Campaign
 
 	deleteCampaign(id: Int!): Boolean
 
+	createDonation(campaignId: Int!, amount: Long!): Donation!
   register(request: UserRegisterRequest): User
 
   login(username: String!, password: String!): LoginResponse

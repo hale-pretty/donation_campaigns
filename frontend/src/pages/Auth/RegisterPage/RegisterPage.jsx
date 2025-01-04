@@ -1,12 +1,32 @@
 import { Button, Form, Input } from "antd";
 import "../../Auth/auth.css";
 import logo from "~/assets/images/Logo-without-text.jpg";
+import { useMutation } from '@apollo/client';
+import { REGISTER_USER } from '~/graphql/mutations';
 
 const RegisterPage = () => {
   const [form] = Form.useForm();
 
+  const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER);
+
   const onFinish = async (values) => {
-    console.log(values);
+    try {
+      const { confirm, ...otherFieldValue } = values;
+      const userData = {
+        firstName: "John",
+        lastName: "Doe",
+        username: "johndoe1",
+        ...otherFieldValue
+      };
+    
+      console.log(userData);
+      await registerUser({ variables: { request: userData } });
+      alert('User registered successfully!');
+
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert('Error registering user!');
+    }
   };
 
   return (

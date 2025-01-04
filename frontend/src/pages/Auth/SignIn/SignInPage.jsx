@@ -1,12 +1,28 @@
 import { Button, Divider, Form, Input } from "antd";
 import "../../Auth/auth.css";
 import logo from "~/assets/images/Logo-without-text.jpg";
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '~/graphql/mutations';
 
 const SignInPage = () => {
   const [form] = Form.useForm();
 
+  const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER);
+
   const onFinish = async (values) => {
-   console.log(values)
+    try {
+      const { name, password } = values;
+      const userData = {
+        username: name,
+        password: password
+      }
+      const result = await loginUser({ variables: { ...userData } });
+      const token = result.data.login.token;
+      alert('User login successfully!');
+    } catch (error) {
+      console.error('Error logging in user:', error);
+      alert('Error logging in user!');
+    }
   };
 
   return (
