@@ -1,6 +1,7 @@
 import { sequelize } from '../../db/sequelize.js';
 import { Donation } from '../entity/donation.js'
 import { Campaign } from '../../campaign/entity/campaign.js'; 
+import { pubsub } from '../../realtime/pubsub.js'
 
 const createDonation = async (userId, campaignId, amount) => {
 
@@ -44,6 +45,15 @@ const createDonation = async (userId, campaignId, amount) => {
         await transaction.commit()
         console.log("donation created successfully:", newDonation);
         console.log("campaign updated successfully:", campaign)
+        
+        // Publish the new donation and updated total to subscribers
+        pubsub.publish('DONATION_ADDED', {
+            donationAdded: {
+                newDonation,
+                totalRaised: campaign.raisedAmount
+            }
+        })
+        
         return newDonation
         
     } catch (error) {
