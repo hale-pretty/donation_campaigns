@@ -1,9 +1,10 @@
 import { BrowserRouter } from "react-router-dom";
-// import { Provider } from 'react-redux';
+import { Provider } from 'react-redux'; 
+import { ConfigProvider } from "antd";
 import AppBar from "./components/AppBar/AppBar";
 import Router from "./pages/router";
-import { ConfigProvider } from "antd";
 import FooterComponents from "./components/AppBar/Footer";
+import { store } from "./redux/store";
 
 const App = () => {
   return (
@@ -46,11 +47,13 @@ const App = () => {
         },
       }}
     >
-      <BrowserRouter>
-        <AppBar />
-        <Router />
-        <FooterComponents />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <AppBar />
+          <Router />
+          <FooterComponents />
+        </BrowserRouter>
+      </Provider>
     </ConfigProvider>
   );
 };

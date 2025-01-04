@@ -28,8 +28,6 @@ const HomePage = () => {
     } else {
       setDatas(dummyCampaign.slice((currentPage - 1) * 4, currentPage * 4)); 
     }
-    console.log(dummyCampaign)
-    console.log(dummyCampaign, dummyCampaign.slice(4, 8))
   }, [currentPage, isMobile]);
 
   const getCampaignStatus = (startDate, endDate) => {
