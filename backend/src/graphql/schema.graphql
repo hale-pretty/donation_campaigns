@@ -54,6 +54,15 @@ type LoginResponse {
   token: String!
 }
 
+type DonationUpdate {
+  newDonation: Donation
+  totalRaised: Long!
+}
+
+type Subscription {
+  donationAdded(campaignId: Int!): DonationUpdate
+}
+
 type Query {
   getDonationsByUser: [Donation]
   getDonationsByCampaign(campaignId: Int!): [Donation]

@@ -4,6 +4,7 @@ import { User } from "../user/entity/user.js";
 import { createUser, login, uploadAvatar, updateUser } from "../user/service/index.js";
 import { handleResolverError } from "../util/handleResolverError.js";
 import { uploadImage } from "../storage/index.js";
+import { withFilter } from "graphql-subscriptions";
 import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
 
 const resolvers = {
@@ -98,6 +99,15 @@ const resolvers = {
       return await updateUser(auth.id, request);
     }),
 
+  },
+  Subscription: {
+    donationAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator('DONATION_ADDED'),
+        (payload, variables) =>
+          payload.donationAdded.newDonation.campaignId === variables.campaignId
+      ),
+    },
   },
 };
 

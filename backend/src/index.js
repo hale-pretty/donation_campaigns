@@ -12,6 +12,9 @@ import { fileURLToPath } from 'url';
 import { configContainer } from './storage/index.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 import { authMiddleware } from './user/auth/middleware.js';
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import { pubsub } from './realtime/pubsub.js';
 
 dotenv.config();
 
@@ -44,6 +47,11 @@ const server = new ApolloServer({ typeDefs, resolvers, uploads: true });
     app.listen({ port }, () =>
       console.log(`Server ready at http://localhost:${port}/graphql`)
     );
+    const wsServer = new WebSocketServer({
+      server: app,
+      path: '/graphql',
+    })
+    useServer({ schema: { typeDefs, resolvers }, pubsub }, wsServer);
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
