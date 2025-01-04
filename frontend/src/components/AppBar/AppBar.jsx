@@ -28,7 +28,7 @@ const AppBar = () => {
     window.location.pathname = "/";
   };
 
-  let logger = false;
+  let logger = true;
 
   const isHomePage = location.pathname === "/";
 
@@ -135,7 +135,9 @@ const AppBar = () => {
                 </span>
               </div>
             )}
-            <Button style={{ borderColor: "green", padding: "10px" }}>
+            <Button style={{ borderColor: "green", padding: "10px" }} onClick={() => 
+              console.log(window.location.pathname = '/create_campaign')
+            }>
               START A CAMPAIGN
             </Button>
             <CloseOutlined

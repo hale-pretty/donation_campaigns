@@ -1,9 +1,12 @@
 import HomePage from "~/pages/Home/HomePage";
 import authRouters from "./auth.jsx";
 import CrowdfundingUI from "~/pages/Campaign/DetailCampaign.jsx";
+import NotFound from "../pages/NotFound";
+import pagesCampaigns from "./campains.jsx";
 
 const pagesData = [
   ...authRouters,
+  ...pagesCampaigns,
   {
     path: "",
     element: <HomePage />,
@@ -14,6 +17,11 @@ const pagesData = [
     element: <CrowdfundingUI />,
     title: "Campaign"
   },
+  {
+    path: "*",
+    element: <NotFound />,
+    title: "Not Found"
+  }
 ];
 
 export default pagesData;
