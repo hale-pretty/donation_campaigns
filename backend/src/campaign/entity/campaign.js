@@ -107,6 +107,10 @@ export const Campaign = (sequelize, DataTypes) => {
 	)
 
 	Campaign.associate = (models) => {
+		Campaign.belongsTo(models.User, {
+			foreignKey: 'userId',
+			as: 'user',
+		})
 		Campaign.hasMany(models.CampaignImage, {
 			foreignKey: 'campaignId',
 			as: 'images',

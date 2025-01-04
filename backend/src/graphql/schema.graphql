@@ -1,5 +1,3 @@
-# schema.graphql
-
 scalar Long
 scalar Upload
 
@@ -20,8 +18,8 @@ type Campaign {
 	startDate: String!
 	endDate: String!
 	status: String!
+	user: User!
 	images: [CampaignImage!]!
-	user: User
 }
 
 type CampaignImage {

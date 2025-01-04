@@ -21,15 +21,11 @@ const resolvers = {
 	Upload: GraphQLUpload,
 	Query: {
 		campaigns: async () => {
-      console.log(models)
-			console.log(models.Campaign.associations)
-			console.log(models.User.associations)
-			console.log(models.CampaignImage.associations)
 			return await models.Campaign.findAll({
-				// include: [
-				// 	{ model: 'User', as: 'user' },
-				// 	{ model: 'CampaignImage', as: 'images' },
-				// ],
+				include: [
+					{ model: models.User, as: 'user' },
+					{ model: models.CampaignImage, as: 'images' },
+				],
 			})
 		},
 		// campaign: handleResolverError(async (_, { id }) => {
