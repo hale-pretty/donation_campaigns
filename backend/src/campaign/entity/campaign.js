@@ -33,7 +33,7 @@ const Campaign = sequelize.define('Campaign', {
     },
   },
   goalAmount: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     allowNull: false,
     field: 'goal_amount',
     validate: {
@@ -52,7 +52,7 @@ const Campaign = sequelize.define('Campaign', {
     },
   },
   raisedAmount: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     defaultValue: 0,
     field: 'raised_amount',
     validate: {

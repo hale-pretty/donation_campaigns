@@ -6,3 +6,45 @@
   gap: 20px;
   align-items: center;
 }
+
+
+.register-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 89vh;
+}
+
+.logo-register-page {
+  width: 120px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.register-page-container > div {
+  width: 100%;
+  max-width: 400px; 
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .register-page-container {
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .logo-register-page {
+    width: 80px;
+    margin-bottom: 15px;
+  }
+
+  .register-page-container > div {
+    width: 100%;
+    padding: 15px;
+  }
+}

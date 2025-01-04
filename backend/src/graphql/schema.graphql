@@ -1,11 +1,22 @@
+# schema.graphql
+
+scalar Long
 scalar Upload
+
+type Donation {
+  id: Int!
+  userId: Int!
+  campaignId: Int!
+  createdAt: String!
+  amount: Long!
+}
 
 type Campaign {
 	id: Int!
 	title: String!
 	description: String!
-	goalAmount: Int!
-	raisedAmount: Int
+	goalAmount: Long!
+	raisedAmount: Long
 	startDate: String!
 	endDate: String!
 	status: String!
@@ -21,21 +32,47 @@ type CampaignImage {
 
 type User {
 	id: Int!
-	name: String!
+	username: String!
 	email: String!
-	campaigns: [Campaign]
+  firstName: String!
+  lastName: String!
+  avatarUrl: String
+  bio: String,
+	# campaigns: [Campaign]
+}
+
+input UserRegisterRequest {
+  username: String!
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+}
+
+input UpdateUserRequest {
+  firstName: String
+  lastName: String
+  bio: String
+  password: String
+}
+
+type LoginResponse {
+  token: String!
 }
 
 type Query {
-	campaigns: [Campaign]
-	campaign(id: Int!): Campaign
+  getDonationsByUser: [Donation]
+  getDonationsByCampaign(campaignId: Int!): [Donation]
+  campaigns: [Campaign]
+  campaign(id: Int!): Campaign
+  getCurrentUser: User
 }
 
 type Mutation {
 	createCampaign(
 		title: String!
 		description: String!
-		goalAmount: Int!
+		goalAmount: Long!
 		endDate: String!
 		images: [Upload!]!
 		userId: Int!
@@ -45,10 +82,19 @@ type Mutation {
 		id: Int!
 		title: String
 		description: String
-		goalAmount: Int
+		goalAmount: Long
 		endDate: String
 		images: [Upload!]!
 	): Campaign
 
 	deleteCampaign(id: Int!): Boolean
+
+	createDonation(campaignId: Int!, amount: Long!): Donation!
+  register(request: UserRegisterRequest): User
+
+  login(username: String!, password: String!): LoginResponse
+
+  addAvatar(image: Upload!): User
+
+  updateUser(request: UpdateUserRequest): User
 }
