@@ -16,7 +16,7 @@ const RegisterPage = () => {
         <div style={{ textAlign: "center", marginBottom: "1rem" }}>
           <h2>Register Page!</h2>
           <span>
-            Hi, get started by entering your phone number and password!
+            Hi, get started by entering your username and password!
           </span>
         </div>
         <Form form={form} name="register" onFinish={onFinish} scrollToFirstError>
