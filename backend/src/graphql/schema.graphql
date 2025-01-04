@@ -1,5 +1,3 @@
-# schema.graphql
-
 scalar Long
 scalar Upload
 
@@ -32,7 +30,6 @@ type User {
   lastName: String!
   avatarUrl: String
   bio: String,
-	# campaigns: [Campaign]
 }
 
 input UserRegisterRequest {
@@ -52,6 +49,15 @@ input UpdateUserRequest {
 
 type LoginResponse {
   token: String!
+}
+
+type DonationUpdate {
+  newDonation: Donation
+  totalRaised: Long!
+}
+
+type Subscription {
+  donationAdded(campaignId: Int!): DonationUpdate
 }
 
 type Query {
