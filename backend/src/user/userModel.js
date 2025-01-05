@@ -40,10 +40,10 @@ export const User = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       as: 'campaigns',
     })
-    // User.hasMany(models.Donation, {
-    //   foreignKey: 'userId',
-    //   as: 'donations',
-    // })
+    User.hasMany(models.Donation, {
+      foreignKey: 'userId',
+      as: 'donations',
+    })
   }
 
 	return User
