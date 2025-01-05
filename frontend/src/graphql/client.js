@@ -2,12 +2,12 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 
 const uploadLink = createUploadLink({
-  uri: import.meta.env.VITE_GRAPHQL_ENDPOINT,
+  uri: "http://localhost:4000/graphql",
   headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    "Access-Control-Allow-Origin": "*",
+    "Authorization": `Bearer ${localStorage.getItem('token')}`,
+    "apollo-require-preflight": "true",
   },
-  credentials: 'include'
+  credentials: 'include',
 });
 
 const client = new ApolloClient({
