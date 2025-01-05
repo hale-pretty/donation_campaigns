@@ -4,6 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 const { TextArea } = Input;
 import { campaignTags, categoriesCreateCampign } from '~/components/dummy';
 import { useState } from 'react';
+import dayjs from 'dayjs';
 
 const CampaignForm = () => {
   const [form] = Form.useForm();
@@ -136,22 +137,24 @@ const CampaignForm = () => {
           Tags must have at least 1 campaign tag
         </Typography.Text>
       </Form.Item>
-
+      
       <Form.Item
-        label={
-          <div>
-            Campaign Description
-            <div>
-              <Typography.Text type="secondary">
-                ⓘ The description must be between 100 and 5000 characters long.
-              </Typography.Text>
+        label={(
+          <div> Campaign Duration<div>
+            <Typography.Text type="secondary">
+                ⓘ Please select a future end date for the campaign.
+            </Typography.Text>
             </div>
           </div>
-        }
+        )}
         name="endDate"
       >
-        <DatePicker
-        />
+          <DatePicker
+            className='w-100'
+              disabledDate={(current) => current && current < dayjs().startOf('day')}
+              placeholder="Select campaign end date"
+              showNow={false}
+          />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" onClick={() => console.log(form.getFieldsValue())}>
