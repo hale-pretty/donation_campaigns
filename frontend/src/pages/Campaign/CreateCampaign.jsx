@@ -4,6 +4,8 @@ import { useState } from 'react';
 import dayjs from 'dayjs';
 import { CREATE_NEW_CAMPAIGN } from '~/graphql/mutations';
 import { useMutation } from '@apollo/client';
+import { campaignTags, categoriesCreateCampign } from '~/components/dummy';
+import { showNotify } from '~/utils/helper';
 
 const { TextArea } = Input;
 
@@ -30,7 +32,6 @@ const CampaignForm = () => {
   const [createCampaign, { loading, error }] = useMutation(CREATE_NEW_CAMPAIGN);
   const handleCreateCampaign = async (values) => {
     const { title, description, goalAmount, endDate } = values;
-    console.log(typeof(fileList))
     try {
       const { data } = await createCampaign({
         variables: {
@@ -47,11 +48,9 @@ const CampaignForm = () => {
         },
       });
 
-      console.log('Campaign created:', data.createCampaign);
-      message.success('Campaign created successfully!');
+      showNotify('Notification', 'Campaign created successfully')
     } catch (error) {
-      console.error('Error creating campaign:', error);
-      message.error('Failed to create campaign.');
+      showNotify('Notification', 'Failed to create campaign', 'error')
     }
   };
 
@@ -122,6 +121,52 @@ const CampaignForm = () => {
             </div>
           )}
         </Upload>
+      </Form.Item>
+
+      
+      <Form.Item
+        label="Location"
+        name="location"
+        tooltip="Select the location where you are running the campaign. This location will be visible on your campaign page for your audience to see."
+      >
+        <Input placeholder="Country" />
+      </Form.Item>
+
+      <Form.Item
+        label={<>Category <span style={{ color: '#ff4d4f' }}>*</span></>}
+        name="category"
+        required
+        help="To help backers find your campaign, select a category that best represents your project."
+      >
+        <Select placeholder="Select a category" style={{ marginBottom: '16px' }}>
+          {Object.entries(categoriesCreateCampign).flatMap(([c, items]) =>
+            items.map(item => (
+              <Select.Option key={c} value={item}>{item}</Select.Option>
+            ))
+          )}
+        </Select>
+      </Form.Item>
+
+      <Form.Item
+        label="Tags"
+        name="tags"
+        required
+        tooltip="Enter up to five keywords that best describe your campaign. These tags will help with organization and discoverability."
+      >
+        <Select
+          mode="tags"
+          placeholder="Enter tag"
+          style={{ width: '100%' }}
+          maxTagCount={5}
+          options={campaignTags}
+          showSearch
+          filterOption={(input, option) =>
+            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+          }
+        />
+        <Typography.Text type="secondary">
+          Tags must have at least 1 campaign tag
+        </Typography.Text>
       </Form.Item>
 
       <Modal open={previewOpen} footer={null} onCancel={handleCancel}>

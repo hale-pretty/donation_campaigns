@@ -9,6 +9,15 @@ export const categories = [
   { icon: "🏕️", text: "Travel & Outdoors" }
 ];
 
+export const menuItems = [
+  { key: 'campaigns', label: 'My Campaigns' },
+  { key: 'contributions', label: 'My Contributions' },
+  { key: 'profile', label: 'Profile' },
+  { key: 'edit_profile', label: 'Edit Profile' },
+  { key: 'settings', label: 'Settings' },
+  { key: 'logout', label: 'Log Out' }
+];
+
 export const popularSearches = [
   "Charger",
   "Pets",

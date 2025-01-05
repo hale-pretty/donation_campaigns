@@ -1,10 +1,11 @@
 import { Form, Input, Button, Card, Upload, Modal } from 'antd';
 import { useSelector } from 'react-redux';
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, VerticalRightOutlined } from "@ant-design/icons";
+
 const { TextArea } = Input;
 
 const EditProfileForm = (props) => {
-  const { fileList, handleChange, handlePreview, beforeUpload, previewOpen, previewImage, setPreviewOpen} = props
+  const { fileList, handleChange, handlePreview, beforeUpload, previewOpen, previewImage, setPreviewOpen, handleUpload} = props
     const [form] = Form.useForm();
     const user = useSelector((state) => state.user);
 
@@ -43,10 +44,14 @@ const EditProfileForm = (props) => {
                       onChange={handleChange}
                       onPreview={handlePreview}
                       beforeUpload={beforeUpload}
-                      customRequest={({ file, onSuccess }) => {
-                        setTimeout(() => {
-                          onSuccess("ok", file);
-                        }, 1000);
+                      customRequest={({ file, onSuccess, onError }) => {
+                        handleUpload(file)
+                          .then(() => {
+                            onSuccess("ok", file);
+                          })
+                          .catch((err) => {
+                            onError(err);
+                          });
                       }}
                     >
                       {fileList.length === 0 && (

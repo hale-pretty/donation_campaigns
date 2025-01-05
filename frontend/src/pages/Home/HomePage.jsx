@@ -14,13 +14,17 @@ import LogoLoading from "~/components/LogoLoading";
 const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { loading, error, data } = useQuery(GET_CAMPAIGNS);
-  const [datas, setDatas] = useState(
-    data?.campaigns.slice((currentPage - 1) * 4, currentPage * 4)
-  );
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const navigate = useNavigate();
+  const [datas, setDatas] = useState([]);
 
-  console.log(data);
+  // Handle data and page change
+  useEffect(() => {
+    if (data?.getAllCampaigns && Array.isArray(data.getAllCampaigns)) {
+      const campaigns = data.getAllCampaigns;
+      setDatas(campaigns.length > 4 ? campaigns.slice((currentPage - 1) * 4, currentPage * 4) : campaigns);
+    }
+  }, [data, currentPage]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,11 +39,11 @@ const HomePage = () => {
 
   useEffect(() => {
     if (isMobile) {
-      setDatas(data?.campaigns);
+      setDatas(data?.getAllCampaigns || []);
     } else {
-      setDatas(data?.campaigns.slice((currentPage - 1) * 4, currentPage * 4));
+      setDatas(data?.getAllCampaigns.slice((currentPage - 1) * 4, currentPage * 4) || []);
     }
-  }, [currentPage, isMobile]);
+  }, [currentPage, isMobile, data]);
 
   const getCampaignStatus = (startDate, endDate) => {
     const now = new Date();
@@ -78,7 +82,7 @@ const HomePage = () => {
               <Button
                 icon={<ArrowRightOutlined />}
                 onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={data?.campaigns.length / (4 * currentPage) < 1}
+                disabled={datas.length / (4 * currentPage) < 1}
               />
             </>
           )}
@@ -86,8 +90,10 @@ const HomePage = () => {
       </div>
 
       <div className={`campaign_cards ${isMobile ? "scrollable" : ""}`}>
-        {data?.campaigns && Array.isArray(data?.campaigns) ? (
-          data.campaigns.map((c) => {
+        {loading ? (
+          <LogoLoading />
+        ) : (
+          datas.map((c) => {
             const status = getCampaignStatus(c.startDate, c.endDate);
             return (
               <div key={c.id} className="campaign_item">
@@ -104,9 +110,7 @@ const HomePage = () => {
                   <div className="overlay">
                     <div
                       className={`head_campaign ${
-                        status
-                          ? "justify-content-between"
-                          : "justify-content-end"
+                        status ? "justify-content-between" : "justify-content-end"
                       }`}
                     >
                       {status && (
@@ -143,8 +147,6 @@ const HomePage = () => {
               </div>
             );
           })
-        ) : (
-          <LogoLoading />
         )}
       </div>
     </div>
