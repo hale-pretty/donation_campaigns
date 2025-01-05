@@ -11,7 +11,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { configContainer } from './storage/index.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
-import { authMiddleware } from './user/auth/middleware.js';
+import { authMiddleware } from './auth/authMiddleware.js';
 import './cronJob.js';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';

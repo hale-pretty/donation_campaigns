@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import { sequelize } from '../../db/sequelize.js';
+import { sequelize } from '../db/sequelize.js';
 
 const Donation = sequelize.define('Donation', {
   id: {

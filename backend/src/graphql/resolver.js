@@ -1,7 +1,7 @@
 import { uploadImage, deleteImage } from '../storage/index.js'
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs'
-import { createDonation, getDonationsByUser, getDonationsByCampaign } from "../donation/service/index.js"
-import { createUser, login, uploadAvatar, updateUser } from "../user/service/index.js";
+import { createDonation, getDonationsByUser, getDonationsByCampaign } from "../donation/donationService.js"
+import { createUser, login, uploadAvatar, updateUser } from "../user/userService.js";
 import { pubsub } from '../realtime/pubsub.js'
 import { withFilter } from "graphql-subscriptions";
 import { models } from '../db/models.js'

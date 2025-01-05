@@ -1,7 +1,7 @@
-import { sequelize } from '../../db/sequelize.js';
-import { Donation } from '../entity/donation.js'
-import { pubsub } from '../../realtime/pubsub.js'
-import { models } from '../../db/models.js'
+import { sequelize } from '../db/sequelize.js';
+import { Donation } from './donationModel.js'
+import { pubsub } from '../realtime/pubsub.js'
+import { models } from '../db/models.js'
 
 const Campaign = models.Campaign
 
