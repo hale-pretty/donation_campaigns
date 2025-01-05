@@ -21,16 +21,6 @@ export const User = (sequelize, DataTypes) => {
 				allowNull: false,
 				unique: true,
 			},
-			firstName: {
-				type: DataTypes.STRING,
-				allowNull: false,
-				field: 'first_name',
-			},
-			lastName: {
-				type: DataTypes.STRING,
-				allowNull: false,
-				field: 'last_name',
-			},
 			bio: {
 				type: DataTypes.STRING,
 			},
@@ -44,6 +34,17 @@ export const User = (sequelize, DataTypes) => {
 			timestamps: false,
 		}
 	)
+
+  User.associate = (models) => {
+    User.hasMany(models.Campaign, {
+      foreignKey: 'userId',
+      as: 'campaigns',
+    })
+    // User.hasMany(models.Donation, {
+    //   foreignKey: 'userId',
+    //   as: 'donations',
+    // })
+  }
 
 	return User
 }

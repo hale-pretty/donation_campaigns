@@ -51,7 +51,11 @@ const resolvers = {
 		},
 		getCurrentUser: async (_, __, { auth }) => {
 		  if (!auth) throw new Error('User not found');
-		  return await User.findByPk(auth.id);
+		  return await User.findByPk(auth.id, {
+        include: [
+					{ model: Campaign, as: 'campaigns' },
+				],
+      });
 		},
 	},
 	Mutation: {

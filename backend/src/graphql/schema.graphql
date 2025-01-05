@@ -49,10 +49,10 @@ type User {
 	id: Int!
 	username: String!
 	email: String!
-  firstName: String!
-  lastName: String!
   avatarUrl: String
   bio: String,
+  campaigns: [Campaign]
+  donations: [Donation]
 }
 
 input UserRegisterRequest {
