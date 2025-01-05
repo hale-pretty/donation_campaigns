@@ -52,3 +52,40 @@ export const CREATE_NEW_CAMPAIGN = gql`
     }
   }
 `;
+
+export const GET_CAMPAIGNS = gql`
+  query Campaigns {
+    campaigns {
+      id
+      title
+      description
+      goalAmount
+      raisedAmount
+      startDate
+      endDate
+      status
+      images {
+        imageUrl
+      }
+    }
+  }
+`;
+
+
+export const GET_CAMPAIGN_BY_ID = gql`
+  query Campaign($campaignId: Int!) {
+    campaign(id: $campaignId) {
+      id
+      title
+      description
+      goalAmount
+      raisedAmount
+      startDate
+      endDate
+      status
+      images {
+        imageUrl
+      }
+    }
+  }
+`;

@@ -154,4 +154,4 @@ const CampaignForm = () => {
   );
 };
 
-export default CampaignForm;
+export default CampaignForm
