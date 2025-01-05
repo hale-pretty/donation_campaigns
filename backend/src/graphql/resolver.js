@@ -1,10 +1,10 @@
-import { uploadImage, deleteImage } from '../storage/index.js'
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs'
 import { createDonation, getDonationsByUser, getDonationsByCampaign } from "../donation/donationService.js"
 import { createUser, login, uploadAvatar, updateUser } from "../user/userService.js";
 import { pubsub } from '../realtime/pubsub.js'
 import { withFilter } from "graphql-subscriptions";
 import { models } from '../db/models.js'
+import { createCampaign, updateCampaign, deleteCampaign } from '../campaign/campaignService.js';
 
 const User = models.User
 const Campaign = models.Campaign
@@ -76,92 +76,15 @@ const resolvers = {
 
 		createCampaign: async (_, { request }, { auth }) => {
 			if (!auth) throw new Error('Unauthorized')
-
-			const { images, ...createFields } = request
-			const campaign = await Campaign.create({
-				...createFields,
-        userId: auth.id,
-			})
-
-			if (images) {
-				for (const image of images) {
-					const imageUrl = await uploadImage(image)
-					await CampaignImage.create({
-						campaignId: campaign.id,
-						imageUrl,
-					})
-				}
-			}
-
-			return await Campaign.findByPk(campaign.id, {
-				include: [
-					{ model: User, as: 'user' },
-					{ model: CampaignImage, as: 'images' },
-				],
-			})
+      return await createCampaign(request, auth.id);
 		},
 		updateCampaign: async (_, { request }, { auth }) => {
 			if (!auth) throw new Error('Unauthorized')
-
-			const { id, images, ...updateFields } = request
-			const campaign = await Campaign.findByPk(id)
-
-			if (!campaign) {
-				throw new Error('Campaign not found')
-			}
-
-			if (campaign.userId !== auth.id) {
-			  throw new Error('You do not have permission to update this campaign');
-			}
-
-			await campaign.update(updateFields)
-
-			if (images) {
-				const existingImages = await CampaignImage.findAll({
-					where: { campaignId: campaign.id },
-				})
-				for (const image of existingImages) {
-					await deleteImage(image.imageUrl)
-				}
-
-				await CampaignImage.destroy({
-					where: { campaignId: campaign.id },
-				})
-
-				for (const image of images) {
-					const imageUrl = await uploadImage(image)
-					await CampaignImage.create({
-						campaignId: campaign.id,
-						imageUrl,
-					})
-				}
-			}
-
-			return campaign
+      return await updateCampaign(request, auth.id);
 		},
 		deleteCampaign: async (_, { id }, { auth }) => {
 			if (!auth) throw new Error('Unauthorized')
-
-			const campaign = await Campaign.findByPk(id)
-			if (!campaign) {
-				throw new Error('Campaign not found')
-			}
-
-			if (campaign.userId !== auth.id) {
-			  throw new Error('You do not have permission to delete this campaign');
-			}
-
-			const images = await CampaignImage.findAll({
-				where: { campaignId: id },
-			})
-			for (const image of images) {
-				await deleteImage(image.imageUrl)
-			}
-
-			await CampaignImage.destroy({ where: { campaignId: id } })
-			await campaign.destroy()
-
-			return true
+			return await deleteCampaign(id, auth.id);
 		},
     
     createDonation: async (_, { campaignId, amount }, {auth}) => {
