@@ -1,8 +1,8 @@
 import { sequelize } from './sequelize.js'
 import { DataTypes } from 'sequelize';
-import {Campaign} from '../campaign/entity/campaign.js'
+import {Campaign} from '../campaign/campaignModel.js'
 import {User} from '../user/userModel.js'
-import {CampaignImage} from '../campaign/entity/campaign_image.js'
+import {CampaignImage} from '../campaign_image/campaignImageModel.js'
 
 const models = {
   User: User(sequelize, DataTypes),

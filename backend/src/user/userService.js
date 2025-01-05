@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import { uploadImage } from '../../storage/index.js';
+import { uploadImage } from '../storage/index.js';
 import jwt from 'jsonwebtoken';
-import { models } from '../../db/models.js';
+import { models } from '../db/models.js';
 
 const User = models.User;
 
