@@ -2,6 +2,7 @@ import { Form, Input, Upload, Select, Typography, DatePicker, Button, Modal, mes
 import { UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import dayjs from 'dayjs';
+import { CREATE_NEW_CAMPAIGN } from '~/graphql/mutations';
 import { useMutation } from '@apollo/client';
 
 const { TextArea } = Input;
@@ -26,8 +27,32 @@ const CampaignForm = () => {
 
   const handleCancel = () => setPreviewOpen(false);
 
+  const [createCampaign, { loading, error }] = useMutation(CREATE_NEW_CAMPAIGN);
   const handleCreateCampaign = async (values) => {
-    
+    const { title, description, goalAmount, endDate } = values;
+    console.log(typeof(fileList))
+    try {
+      const { data } = await createCampaign({
+        variables: {
+          request: {
+            title,
+            description,
+            goalAmount: parseFloat(goalAmount),
+            endDate: endDate.format('YYYY-MM-DD'),
+            images: fileList.map((i) => i.originFileObj), 
+          },
+        },
+        context: {
+          hasUpload: true, // Ensure the context includes the upload flag
+        },
+      });
+
+      console.log('Campaign created:', data.createCampaign);
+      message.success('Campaign created successfully!');
+    } catch (error) {
+      console.error('Error creating campaign:', error);
+      message.error('Failed to create campaign.');
+    }
   };
 
   return (
@@ -121,7 +146,7 @@ const CampaignForm = () => {
         />
         </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" >
+        <Button type="primary" htmlType="submit" loading={loading}>
           Add Campaign
         </Button>
       </Form.Item>
