@@ -100,6 +100,7 @@
   display: flex;
   padding: 15px;
   width: 100%;
+  justify-content: space-between;
 }
 
 .campaign_item .prelaunch {
