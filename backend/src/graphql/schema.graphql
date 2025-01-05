@@ -33,7 +33,6 @@ input CreateCampaignRequest {
 	description: String!
 	goalAmount: Long!
 	endDate: String!
-	userId: Int!
 	images: [Upload!]!
 }
 
