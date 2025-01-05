@@ -1,6 +1,12 @@
 import jwt from 'jsonwebtoken';
 
 const authMiddleware = ({ req }) => {
+  const publicMutations = ['RegisterUser', 'LoginUser'];
+
+  if (publicMutations.includes(req.body.operationName)) {
+    return { auth: null };
+  }
+
   const authHeader = req.headers.authorization || '';
   const token = authHeader.split(' ')[1];
 
