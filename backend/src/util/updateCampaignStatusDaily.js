@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import { sequelize } from '../db/sequelize.js';
 
-const scheduleUpdateCampaignStatusJob = cron.schedule('59 23 * * *', async () => {
+const scheduleUpdateCampaignStatusJob = () => cron.schedule('59 23 * * *', async () => {
   try {
     console.log('Cron job scheduled to update campaign status daily at midnight.');
     console.log('[CRON] Start to update campaign status...');
