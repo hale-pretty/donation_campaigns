@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Avatar, Dropdown, Menu } from 'antd';
-import { showNotify } from '~/utils/helper';
+import { getFirstCharacter, showNotify } from '~/utils/helper';
 
 const UserDropdown = ({ user }) => {
     const [visible, setVisible] = useState(false);
@@ -55,12 +55,12 @@ const UserDropdown = ({ user }) => {
             onVisibleChange={(flag) => setVisible(flag)}
         >
             <div className="logger" style={{ cursor: 'pointer' }}>
-                {`${user.firstName} ${user.lastName}`}
+                {`${user.username}`}
                 <Avatar 
                     style={{ verticalAlign: 'middle', marginLeft: '8px' }} 
                     size="large"
                 >
-                    {user.firstName.charAt(0)}
+                    {getFirstCharacter(user.username)}
                 </Avatar>
             </div>
         </Dropdown>

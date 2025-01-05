@@ -7,10 +7,10 @@ import { Button, Divider, Input, Modal, Form } from 'antd';
 import shareIcon from '~/assets/images/campaign/shareIcon.png';
 import saveIcon from '~/assets/images/campaign/saveIcon.svg';
 import { useParams } from 'react-router-dom';
-import { GET_CAMPAIGN_BY_ID } from '~/graphql/mutations';
-import { useQuery } from '@apollo/client';
+import { CREATE_DONATION, GET_CAMPAIGN_BY_ID } from '~/graphql/mutations';
+import { useMutation, useQuery } from '@apollo/client';
 import LogoLoading from '~/components/LogoLoading';
-
+import { showNotify } from '~/utils/helper';
 const CampaignDetailsPage = () => {
   const [activeImage, setActiveImage] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -50,10 +50,41 @@ const CampaignDetailsPage = () => {
     form.resetFields();
   }, [form]);
 
-  const handleFormSubmit = useCallback((values) => {
-    console.log('Payment Details:', values);
-    setIsModalVisible(false);
-  }, []);
+  const [createDonation] = useMutation(CREATE_DONATION);
+
+  const handleFormSubmit = async (values) => {
+    const { amount } = values;
+  
+    try {
+      const token = localStorage.getItem('token');
+      const parsedAmount = parseInt(amount, 10);
+      const parsedId = parseInt(id, 10);
+  
+      if (isNaN(parsedAmount) || isNaN(parsedId)) {
+        showNotify('Error', 'Invalid input values');
+        return;
+      }
+  
+      const { data } = await createDonation({
+        variables: {
+          campaignId: parsedId,
+          amount: parsedAmount
+        },
+        context: {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          }
+        }
+      });
+  
+      showNotify('Notification', 'Donation successfully created');
+      setIsModalVisible(false); 
+    } catch (error) {
+      showNotify('Notification', 'Something went wrong', 'error');
+    }
+  };
+  
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -106,7 +137,6 @@ const CampaignDetailsPage = () => {
             </div>
 
             <div className="col-12 col-md-6">
-              <div className="indemand-badge">INDEMAND</div>
               <h1 className="h2 fw-bold mb-3 campaign_details_title">
                 {campaign?.title}
               </h1>
@@ -124,13 +154,11 @@ const CampaignDetailsPage = () => {
               </div>
               <div className="mb-4">
                 <h3 className="h4 fw-bold mb-2">
-                  {/* ${campaign?.raised.toLocaleString()}{' '} */}
                   <small className="fw-normal">
                     USD by {campaign?.backers} backers
                   </small>
                 </h3>
                 <div>
-                  {/* ${campaign?.pastRaised.toLocaleString()} USD by {campaign?.pastBackers} backers on {campaign?.pastDate} */}
                 </div>
               </div>
               <Button type="primary" className="pick-perk-btn w-100 mb-4" onClick={() => setIsModalVisible(true)}>
@@ -168,13 +196,6 @@ const CampaignDetailsPage = () => {
         >
           <Form form={form} onFinish={handleFormSubmit}>
             <Form.Item
-              label="Recipient"
-              name="recipient"
-              rules={[{ required: true, message: "Please enter the recipient's name!" }]}
-            >
-              <Input placeholder="Enter recipient's name" />
-            </Form.Item>
-            <Form.Item
               label="Amount"
               name="amount"
               initialValue={valuePerk}
@@ -186,16 +207,9 @@ const CampaignDetailsPage = () => {
                 addonAfter="VNĐ"
                 value={valuePerk}
                 onChange={handleInputChange}
-                min={1}
-                max={10000}
+                min={1000}
+                max={10000000}
               />
-            </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true, message: 'Please enter your password!' }]}
-            >
-              <Input.Password placeholder="Enter your password" />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" className="w-100">

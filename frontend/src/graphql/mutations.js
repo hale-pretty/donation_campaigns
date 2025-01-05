@@ -6,8 +6,6 @@ export const REGISTER_USER = gql`
       id
       username
       email
-      firstName
-      lastName
       avatarUrl
       bio
     }
@@ -26,8 +24,6 @@ export const GET_CURRENT_USER = gql`
   query GetCurrentUser {
     getCurrentUser {
       id
-      firstName
-      lastName
       username
       email
       avatarUrl
@@ -52,6 +48,19 @@ export const CREATE_NEW_CAMPAIGN = gql`
     }
   }
 `;
+
+export const CREATE_DONATION = gql`
+  mutation CreateDonation($campaignId: Int!, $amount: Long!) {
+    createDonation(campaignId: $campaignId, amount: $amount) {
+      id
+      userId
+      campaignId
+      createdAt
+      amount
+    }
+  }
+`;
+
 
 export const GET_CAMPAIGNS = gql`
   query Campaigns {
