@@ -9,10 +9,7 @@ import {
   Space,
 } from "antd";
 import { useSelector } from "react-redux";
-import {
-  UploadOutlined,
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
+import { UploadOutlined} from "@ant-design/icons";
 import EditProfileForm from "./EditProfileForm";
 import SettingsTab from "./SettingTab";
 
@@ -78,7 +75,7 @@ const Profile = () => {
             footer={null}
             onCancel={() => setPreviewOpen(false)}
           >
-            <img alt="Preview" style={{ width: "100%" }} src={previewImage} />
+            <img className="w-100" alt="Preview" src={previewImage} />
           </Modal>
 
         <div className="d-flex"
@@ -88,8 +85,7 @@ const Profile = () => {
             marginBottom: "24px",
           }}
         >
-          <Upload
-            style={{ width: "100%" }}
+          <Upload className="w-100"
             listType="picture-circle"
             fileList={fileList}
             onChange={handleChange}
@@ -119,17 +115,10 @@ const Profile = () => {
                   <Space>
                     <Text strong>0</Text>
                     <Text>Campaigns</Text>
-                    <QuestionCircleOutlined style={{ color: "#8c8c8c" }} />
-                  </Space>
-                  <Space>
-                    <Text strong>0</Text>
-                    <Text>Comments</Text>
-                    <QuestionCircleOutlined style={{ color: "#8c8c8c" }} />
                   </Space>
                   <Space>
                     <Text strong>0</Text>
                     <Text>Contributions</Text>
-                    <QuestionCircleOutlined style={{ color: "#8c8c8c" }} />
                   </Space>
                 </Space>
               </Card>

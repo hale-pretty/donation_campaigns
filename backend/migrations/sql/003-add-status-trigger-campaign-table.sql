@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION update_campaign_status()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF CURRENT_DATE >= NEW.end_date THEN
+  IF CURRENT_DATE > NEW.end_date THEN
     NEW.status := 'closed';
   ELSE
     NEW.status := 'open';

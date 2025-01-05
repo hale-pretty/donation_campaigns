@@ -32,7 +32,11 @@ const AuthPage = (props) => {
         showNotify("Success", "User login successfully!");
         localStorage.setItem("token", token);
         setTimeout(() => {
-          window.location.pathname = "/";
+          if (window.location.pathname === '/create_campaign'){
+            window.location.pathname = '/create_campaign'
+          } else {
+            window.location.pathname = "/";
+          }
         }, 500);
       }
     } catch (error) {

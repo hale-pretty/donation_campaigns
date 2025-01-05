@@ -1,8 +1,11 @@
 import { Button } from "antd";
-import { ArrowLeftOutlined, ArrowRightOutlined, BookOutlined } from '@ant-design/icons';
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  BookOutlined,
+} from "@ant-design/icons";
 import "./home.css";
 import { useEffect, useState } from "react";
-import { dummyCampaign } from "~/components/dummy";
 import { useNavigate } from "react-router-dom";
 import { GET_CAMPAIGNS } from "~/graphql/mutations";
 import { useQuery } from "@apollo/client";
@@ -10,12 +13,14 @@ import LogoLoading from "~/components/LogoLoading";
 
 const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [datas, setDatas] = useState(dummyCampaign.slice((currentPage - 1) * 4,currentPage * 4)); 
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const navigate = useNavigate()
   const { loading, error, data } = useQuery(GET_CAMPAIGNS);
+  const [datas, setDatas] = useState(
+    data?.campaigns.slice((currentPage - 1) * 4, currentPage * 4)
+  );
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const navigate = useNavigate();
 
-  console.log(data)
+  console.log(data);
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,9 +35,9 @@ const HomePage = () => {
 
   useEffect(() => {
     if (isMobile) {
-      setDatas(dummyCampaign); 
+      setDatas(data?.campaigns);
     } else {
-      setDatas(dummyCampaign.slice((currentPage - 1) * 4, currentPage * 4)); 
+      setDatas(data?.campaigns.slice((currentPage - 1) * 4, currentPage * 4));
     }
   }, [currentPage, isMobile]);
 
@@ -40,13 +45,13 @@ const HomePage = () => {
     const now = new Date();
     const start = new Date(startDate);
     const end = new Date(endDate);
-  
+
     if (isNaN(start) || isNaN(end)) {
       return "";
     }
-  
+
     const daysUntilEnd = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
-  
+
     if (now < start) {
       return "PRELAUNCH";
     } else if (now > end) {
@@ -73,7 +78,7 @@ const HomePage = () => {
               <Button
                 icon={<ArrowRightOutlined />}
                 onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={dummyCampaign.length / (4 * currentPage) < 1}
+                disabled={data?.campaigns.length / (4 * currentPage) < 1}
               />
             </>
           )}
@@ -81,65 +86,66 @@ const HomePage = () => {
       </div>
 
       <div className={`campaign_cards ${isMobile ? "scrollable" : ""}`}>
-      {data?.campaigns && Array.isArray(data?.campaigns) ?
-  data.campaigns.map((c) => {
-    console.log(c);
-    const status = getCampaignStatus(c.startDate, c.endDate);
-    return (
-      <div key={c.id} className="campaign_item">
-        <div className="card">
-          <img
-            src={c.images.length > 0 ? c.images[0].imageUrl : 'default-image-url'}
-            className="card_image"
-            alt={c.title}
-          />
-          <div className="overlay">
-            <div className={`head_campaign ${status ? 'justify-content-between' : 'justify-content-end'}`}>
-              {status && (
-                <Button className={`text-uppercase ${status.toLowerCase()}`}>
-                  {status}
-                </Button>
-              )}
-              <Button icon={<BookOutlined />} />
-            </div>
-            <div className="w-100 p-4 text-center">
-              <Button
-                className="view-details-btn text-uppercase"
-                onClick={() => navigate(`/campaign/${c.id}`)}
-              >
-                view campaign
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className="body_campaign">
-          <h5>{c.title}</h5>
-          <div className="campaign-info">
-            <p className="category">{c.category}</p>
-            <div className="price-info">
-              <span className="starting-at">Starting at {c.startDate}</span>
-              <div className="price">
-                {c.goalAmount} VND
-                {c.discount > 0 && (
-                  <>
-                    <span className="original-price">{c.originalPrice || ''}</span>
-                    <span className="discount">({c.discount}% OFF)</span>
-                  </>
-                )}
+        {data?.campaigns && Array.isArray(data?.campaigns) ? (
+          data.campaigns.map((c) => {
+            const status = getCampaignStatus(c.startDate, c.endDate);
+            return (
+              <div key={c.id} className="campaign_item">
+                <div className="card">
+                  <img
+                    src={
+                      c.images.length > 0
+                        ? c.images[0].imageUrl
+                        : "default-image-url"
+                    }
+                    className="card_image"
+                    alt={c.title}
+                  />
+                  <div className="overlay">
+                    <div
+                      className={`head_campaign ${
+                        status
+                          ? "justify-content-between"
+                          : "justify-content-end"
+                      }`}
+                    >
+                      {status && (
+                        <Button
+                          className={`text-uppercase ${status.toLowerCase()}`}
+                        >
+                          {status}
+                        </Button>
+                      )}
+                      <Button icon={<BookOutlined />} />
+                    </div>
+                    <div className="w-100 p-4 text-center">
+                      <Button
+                        className="view-details-btn text-uppercase"
+                        onClick={() => navigate(`/campaign/${c.id}`)}
+                      >
+                        view campaign
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <div className="body_campaign">
+                  <h5>{c.title}</h5>
+                  <div className="campaign-info">
+                    <p className="category">{c.category}</p>
+                    <div className="price-info">
+                      <span className="starting-at">
+                        Starting at {c.startDate}
+                      </span>
+                      <div className="price">{c.goalAmount} VND</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="campaign-stats">
-              <span>{c.raised || 0} raised</span>
-              <span>{c.funded || 0}% funded</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  })
-  :
-  <LogoLoading />
-}
+            );
+          })
+        ) : (
+          <LogoLoading />
+        )}
       </div>
     </div>
   );
