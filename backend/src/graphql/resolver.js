@@ -9,6 +9,7 @@ import { createCampaign, updateCampaign, deleteCampaign } from '../campaign/camp
 const User = models.User
 const Campaign = models.Campaign
 const CampaignImage = models.CampaignImage
+const Donation = models.Donation
 
 const resolvers = {
 	Upload: GraphQLUpload,
@@ -32,15 +33,6 @@ const resolvers = {
 			return campaign
 		},
 
-		getDonationsByUser: async () => {
-		  try {
-		    return await getDonationsByUser(1);
-		  } catch (error) {
-		    console.error('Error fetching donations by user:', error);
-		    throw new Error('Unable to fetch donations');
-		  }
-		},
-
 		getDonationsByCampaign: async (_, { campaignId }) => {
 		  try {
 		    return await getDonationsByCampaign(campaignId);
@@ -54,6 +46,7 @@ const resolvers = {
 		  return await User.findByPk(auth.id, {
         include: [
 					{ model: Campaign, as: 'campaigns' },
+          { model: Donation, as: 'donations' },
 				],
       });
 		},

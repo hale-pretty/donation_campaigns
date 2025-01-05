@@ -1,13 +1,38 @@
 scalar Long
 scalar Upload
 
-type Donation {
-  id: Int!
-  userId: Int!
-  campaignId: Int!
-  createdAt: String!
-  amount: Long!
+# =================== USER ===================
+
+type User {
+	id: Int!
+	username: String!
+	email: String!
+	avatarUrl: String
+	bio: String
+	campaigns: [Campaign]
+	donations: [Donation]
 }
+
+input UserRegisterRequest {
+	username: String!
+	email: String!
+	password: String!
+	firstName: String!
+	lastName: String!
+}
+
+input UpdateUserRequest {
+	firstName: String
+	lastName: String
+	bio: String
+	password: String
+}
+
+type LoginResponse {
+	token: String!
+}
+
+# =================== CAMPAIGN ===================
 
 type Campaign {
 	id: Int!
@@ -20,12 +45,6 @@ type Campaign {
 	status: String!
 	user: User!
 	images: [CampaignImage!]
-}
-
-type CampaignImage {
-	id: ID!
-	campaignId: ID!
-	imageUrl: String!
 }
 
 input CreateCampaignRequest {
@@ -45,63 +64,53 @@ input UpdateCampaignRequest {
 	images: [Upload]
 }
 
-type User {
+# =================== CAMPAIGN IMAGE ===================
+
+type CampaignImage {
+	id: ID!
+	campaignId: ID!
+	imageUrl: String!
+}
+
+# =================== DONATION ===================
+
+type Donation {
 	id: Int!
-	username: String!
-	email: String!
-  avatarUrl: String
-  bio: String,
-  campaigns: [Campaign]
-  donations: [Donation]
-}
-
-input UserRegisterRequest {
-  username: String!
-  email: String!
-  password: String!
-  firstName: String!
-  lastName: String!
-}
-
-input UpdateUserRequest {
-  firstName: String
-  lastName: String
-  bio: String
-  password: String
-}
-
-type LoginResponse {
-  token: String!
+	campaignId: Int!
+	createdAt: String!
+	amount: Long!
+	user: User!
 }
 
 type DonationUpdate {
-  newDonation: Donation
-  totalRaised: Long!
+	newDonation: Donation
+	totalRaised: Long!
 }
 
-type Subscription {
-  donationAdded(campaignId: Int!): DonationUpdate
-}
+# =================== QUERY, MUTATION AND SUBSCRIPTION ===================
 
 type Query {
-  getDonationsByUser: [Donation]
-  getDonationsByCampaign(campaignId: Int!): [Donation]
-  campaigns: [Campaign]
-  campaign(id: Int!): Campaign
-  getCurrentUser: User
+	getCurrentUser: User
+
+	campaigns: [Campaign]
+	campaign(id: Int!): Campaign
+
+	getDonationsByCampaign(campaignId: Int!): [Donation]
 }
 
 type Mutation {
+	register(request: UserRegisterRequest): User
+	login(username: String!, password: String!): LoginResponse
+	addAvatar(image: Upload!): User
+	updateUser(request: UpdateUserRequest): User
+
 	createCampaign(request: CreateCampaignRequest): Campaign
 	updateCampaign(request: UpdateCampaignRequest): Campaign
 	deleteCampaign(id: Int!): Boolean
 
 	createDonation(campaignId: Int!, amount: Long!): Donation!
-  register(request: UserRegisterRequest): User
+}
 
-  login(username: String!, password: String!): LoginResponse
-
-  addAvatar(image: Upload!): User
-
-  updateUser(request: UpdateUserRequest): User
+type Subscription {
+	donationAdded(campaignId: Int!): DonationUpdate
 }

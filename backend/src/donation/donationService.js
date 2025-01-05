@@ -1,9 +1,8 @@
 import { sequelize } from '../db/sequelize.js';
-import { Donation } from './donationModel.js'
 import { pubsub } from '../realtime/pubsub.js'
 import { models } from '../db/models.js'
 
-const Campaign = models.Campaign
+const Donation = models.Donation
 
 const createDonation = async (userId, campaignId, amount) => {
 

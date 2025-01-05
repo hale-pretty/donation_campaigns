@@ -115,6 +115,10 @@ export const Campaign = (sequelize, DataTypes) => {
 			foreignKey: 'campaignId',
 			as: 'images',
 		})
+		Campaign.hasMany(models.Donation, {
+			foreignKey: 'campaignId',
+			as: 'donations',
+		})
 	}
 
 	return Campaign
