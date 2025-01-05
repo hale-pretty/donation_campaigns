@@ -35,3 +35,57 @@ export const GET_CURRENT_USER = gql`
     }
   }
 `;
+
+export const CREATE_NEW_CAMPAIGN = gql`
+  mutation CreateCampaign($request: CreateCampaignRequest!) {
+    createCampaign(request: $request) {
+      id
+      title
+      user {
+        id
+        email
+      }
+      images {
+        id
+        imageUrl
+      }
+    }
+  }
+`;
+
+export const GET_CAMPAIGNS = gql`
+  query Campaigns {
+    campaigns {
+      id
+      title
+      description
+      goalAmount
+      raisedAmount
+      startDate
+      endDate
+      status
+      images {
+        imageUrl
+      }
+    }
+  }
+`;
+
+
+export const GET_CAMPAIGN_BY_ID = gql`
+  query Campaign($campaignId: Int!) {
+    campaign(id: $campaignId) {
+      id
+      title
+      description
+      goalAmount
+      raisedAmount
+      startDate
+      endDate
+      status
+      images {
+        imageUrl
+      }
+    }
+  }
+`;

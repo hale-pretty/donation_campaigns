@@ -6,14 +6,30 @@ import { RightOutlined, LeftOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, Modal, Form } from 'antd';
 import shareIcon from '~/assets/images/campaign/shareIcon.png';
 import saveIcon from '~/assets/images/campaign/saveIcon.svg';
-import { cardSliderImages, campaignDetails } from '~/components/dummy';
+import { useParams } from 'react-router-dom';
+import { GET_CAMPAIGN_BY_ID } from '~/graphql/mutations';
+import { useQuery } from '@apollo/client';
+import LogoLoading from '~/components/LogoLoading';
 
 const CampaignDetailsPage = () => {
-  const [activeImage, setActiveImage] = useState(cardSliderImages[0].url);
+  const [activeImage, setActiveImage] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [valuePerk, setValuePerk] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const { id } = useParams();
+  
+  const { loading, error, data } = useQuery(GET_CAMPAIGN_BY_ID, {
+    variables: { campaignId: parseInt(id) },
+  });
+
+  const campaign = data?.campaign;
+
+  useEffect(() => {
+    if (campaign?.images) {
+      setActiveImage(campaign.images[0].imageUrl);
+    }
+  }, [campaign]);
 
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
@@ -21,14 +37,12 @@ const CampaignDetailsPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const handleInputChange = (e) => {
-    if (e.target.value < 1 || e.target.value > 10000) return
-    const numericValue = e.target.value.replace(/[^0-9]/g, '');
-    setValuePerk(numericValue);
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    if (value < 1 || value > 10000) return;
+    setValuePerk(value);
   };
 
   const handleModalCancel = useCallback(() => {
@@ -36,13 +50,14 @@ const CampaignDetailsPage = () => {
     form.resetFields();
   }, [form]);
 
-  const handleFormSubmit = useCallback(
-    (values) => {
-      console.log('Payment Details:', values);
-      setIsModalVisible(false);
-    },
-    []
-  );
+  const handleFormSubmit = useCallback((values) => {
+    console.log('Payment Details:', values);
+    setIsModalVisible(false);
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  if (!campaign) return <LogoLoading />;
 
   return (
     <div className="campaign-details-page">
@@ -68,21 +83,16 @@ const CampaignDetailsPage = () => {
                     watchSlidesProgress
                     modules={[FreeMode, Navigation, Thumbs, Autoplay]}
                   >
-                    {cardSliderImages.map((item) => (
-                      <SwiperSlide
-                        key={item.id}
-                        onClick={() => setActiveImage(item.url)}
-                      >
+                    {campaign?.images.map((item) => (
+                      <SwiperSlide key={item.id} onClick={() => setActiveImage(item.imageUrl)}>
                         <div
-                          className={`swiper-slide-container ${
-                            activeImage === item.url ? 'active' : ''
-                          }`}
+                          className={`swiper-slide-container ${activeImage === item.imageUrl ? 'active' : ''}`}
                           style={{
-                            backgroundImage: `url(${item.url})`,
+                            backgroundImage: `url(${item.imageUrl})`,
                             height: '60px',
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                            border: activeImage === item.url ? '2px solid #cbff36' : 'none',
+                            border: activeImage === item.imageUrl ? '2px solid #cbff36' : 'none',
                           }}
                         />
                       </SwiperSlide>
@@ -98,37 +108,38 @@ const CampaignDetailsPage = () => {
             <div className="col-12 col-md-6">
               <div className="indemand-badge">INDEMAND</div>
               <h1 className="h2 fw-bold mb-3 campaign_details_title">
-                {campaignDetails.title}
+                {campaign?.title}
               </h1>
-              <p className=" mb-4">{campaignDetails.description}</p>
+              <p className="mb-4">{campaign?.description}</p>
               <div className="d-flex align-items-center mb-4">
                 <img
-                  src={campaignDetails.avatar}
+                  src={campaign?.avatar}
                   alt="Campaign Avatar"
                   className="campaign-avatar me-3"
                 />
                 <div>
-                  <div className="fw-semibold">{campaignDetails.owner}</div>
-                  <div className="">{campaignDetails.location}</div>
+                  <div className="fw-semibold">{campaign?.owner}</div>
+                  <div>{campaign?.location}</div>
                 </div>
               </div>
               <div className="mb-4">
                 <h3 className="h4 fw-bold mb-2">
-                  ${campaignDetails.raised.toLocaleString()}{' '}
+                  {/* ${campaign?.raised.toLocaleString()}{' '} */}
                   <small className="fw-normal">
-                    USD by {campaignDetails.backers} backers
+                    USD by {campaign?.backers} backers
                   </small>
                 </h3>
                 <div>
-                  ${campaignDetails.pastRaised.toLocaleString()} USD by {campaignDetails.pastBackers} backers on{' '}
-                  {campaignDetails.pastDate}
+                  {/* ${campaign?.pastRaised.toLocaleString()} USD by {campaign?.pastBackers} backers on {campaign?.pastDate} */}
                 </div>
               </div>
-              <Button type='primary' className="pick-perk-btn w-100 mb-4" onClick={() => setIsModalVisible(true)}>MAKE A CONTRIBUTION</Button>
+              <Button type="primary" className="pick-perk-btn w-100 mb-4" onClick={() => setIsModalVisible(true)}>
+                MAKE A CONTRIBUTION
+              </Button>
               <div className="row g-3">
                 <div className="col-6">
-                  <button className="w-100 action-btn"> 
-                    <img src={saveIcon} alt="Save"/>
+                  <button className="w-100 action-btn">
+                    <img src={saveIcon} alt="Save" />
                     SAVE FOR LATER
                   </button>
                 </div>
@@ -144,56 +155,56 @@ const CampaignDetailsPage = () => {
         </div>
       </div>
       <Divider />
-    <div className="container pb-4">
-      {showScrollTop && (
-        <Button className="scroll-top-btn" onClick={scrollToTop} icon={<UpOutlined  className='UpOutlined' />} />
-      )}
+      <div className="container pb-4">
+        {showScrollTop && (
+          <Button className="scroll-top-btn" onClick={scrollToTop} icon={<UpOutlined className="UpOutlined" />} />
+        )}
 
-      <Modal
-        title="Payment Details"
-        visible={isModalVisible}
-        onCancel={handleModalCancel}
-        footer={null}
-      >
-        <Form form={form} onFinish={handleFormSubmit}>
-          <Form.Item
-            label="Recipient"
-            name="recipient"
-            rules={[{ required: true, message: "Please enter the recipient's name!" }]}
-          >
-            <Input placeholder="Enter recipient's name" />
-          </Form.Item>
-          <Form.Item
-            label="Amount"
-            name="amount"
-            initialValue={valuePerk}
-            rules={[{ required: true, message: 'Please enter an amount!' }]}
-          >
-            <Input
-              type="number"
-              addonBefore="₫"
-              addonAfter="VNĐ"
-              value={valuePerk}
-              onChange={handleInputChange}
-              min={1}
-              max={10000}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please enter your password!' }]}
-          >
-            <Input.Password placeholder="Enter your password" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className="w-100">
-              Confirm Payment
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+        <Modal
+          title="Payment Details"
+          visible={isModalVisible}
+          onCancel={handleModalCancel}
+          footer={null}
+        >
+          <Form form={form} onFinish={handleFormSubmit}>
+            <Form.Item
+              label="Recipient"
+              name="recipient"
+              rules={[{ required: true, message: "Please enter the recipient's name!" }]}
+            >
+              <Input placeholder="Enter recipient's name" />
+            </Form.Item>
+            <Form.Item
+              label="Amount"
+              name="amount"
+              initialValue={valuePerk}
+              rules={[{ required: true, message: 'Please enter an amount!' }]}
+            >
+              <Input
+                type="number"
+                addonBefore="₫"
+                addonAfter="VNĐ"
+                value={valuePerk}
+                onChange={handleInputChange}
+                min={1}
+                max={10000}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Please enter your password!' }]}
+            >
+              <Input.Password placeholder="Enter your password" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="w-100">
+                Confirm Payment
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </div>
     </div>
   );
 };

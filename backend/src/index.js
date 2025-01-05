@@ -27,7 +27,9 @@ const __dirname = dirname(__filename);
 const typeDefs = readFileSync(join(__dirname, 'graphql', 'schema.graphql'), 'utf-8');
 
 const app = express();
-app.use(graphqlUploadExpress());
+
+app.use(graphqlUploadExpress({ maxFileSize: 50 * 1024 * 1024, maxFiles: 10 }));
+
 
 const httpServer = http.createServer(app);
 
@@ -49,7 +51,10 @@ const server = new ApolloServer({ schema, uploads: true });
     await server.start();
     app.use(
       '/graphql',
-      cors(), // Enable CORS
+      cors({
+        origin: process.env.REACT_CLIENT_URL,
+        credentials: true,
+      }), // Enable CORS
       bodyParser.json(), // Parse JSON
       expressMiddleware(server, {
         context: authMiddleware,
