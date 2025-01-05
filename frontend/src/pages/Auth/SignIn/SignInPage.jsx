@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 const AuthPage = (props) => {
   const [form] = Form.useForm();
   const { openAuthPopup } = props;
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(openAuthPopup);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [loginUser, { loading: loginLoading }] = useMutation(LOGIN_USER);
   const [registerUser, { loading: registerLoading }] =
@@ -46,9 +46,11 @@ const AuthPage = (props) => {
       const userData = {
         email: values.email,
         password: values.password,
+        firstName: values.email.split("@")[0],
+        lastName: "",
+        username: values.email.split("@")[0],
       };
 
-      userData.username = values.email.split("@")[0];
       await registerUser({ variables: { request: userData } });
       showNotify("Success", "User registered successfully!");
       switchMode()
@@ -63,8 +65,15 @@ const AuthPage = (props) => {
     form.resetFields()
   };
 
+  const handleClose = () => {
+    setOpen(false);
+    if (props.onClose) {
+      props.onClose(false);
+    }
+  };
+
   return (
-    <Modal open={open} footer={null} onCancel={() => setOpen(false)}>
+    <Modal open={open} footer={null}  onCancel={handleClose}>
       <div className="register-page-container">
         <img src={logo} alt="logo image" className="logo-register-page" />
         <div>
@@ -153,7 +162,7 @@ const AuthPage = (props) => {
             <Divider />
             <Form.Item style={{ textAlign: "center" }}>
               {`You ${isLoginMode ? "do not have" : "have"} an account? `}
-              <Button className="p-0" type="link" style={{ color: '#4caf50'}} onClick={switchMode}>{isLoginMode ? "Register" : "Log in" }</Button>
+              <Button className="p-0" type="link" onClick={switchMode}>{isLoginMode ? "Register" : "Log in" }</Button>
             </Form.Item>
           </Form>
         </div>

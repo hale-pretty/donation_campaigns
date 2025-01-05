@@ -18,18 +18,41 @@ type Campaign {
 	startDate: String!
 	endDate: String!
 	status: String!
-	image: String
-	userId: Int!
+	user: User!
+	images: [CampaignImage!]
+}
+
+type CampaignImage {
+	id: ID!
+	campaignId: ID!
+	imageUrl: String!
+}
+
+input CreateCampaignRequest {
+	title: String!
+	description: String!
+	goalAmount: Long!
+	endDate: String!
+	images: [Upload!]!
+}
+
+input UpdateCampaignRequest {
+	id: Int!
+	title: String
+	description: String
+	goalAmount: Long
+	endDate: String
+	images: [Upload]
 }
 
 type User {
 	id: Int!
 	username: String!
 	email: String!
-  firstName: String!
-  lastName: String!
   avatarUrl: String
   bio: String,
+  campaigns: [Campaign]
+  donations: [Donation]
 }
 
 input UserRegisterRequest {
@@ -69,23 +92,8 @@ type Query {
 }
 
 type Mutation {
-	createCampaign(
-		title: String!
-		description: String!
-		goalAmount: Long!
-		endDate: String!
-		image: Upload
-	): Campaign
-
-	updateCampaign(
-		id: Int!
-		title: String
-		description: String
-		goalAmount: Long
-		endDate: String
-		image: Upload
-	): Campaign
-
+	createCampaign(request: CreateCampaignRequest): Campaign
+	updateCampaign(request: UpdateCampaignRequest): Campaign
 	deleteCampaign(id: Int!): Boolean
 
 	createDonation(campaignId: Int!, amount: Long!): Donation!

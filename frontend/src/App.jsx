@@ -27,6 +27,9 @@ const App = () => {
             fontWeight: 700,
             defaultShadow: "none",
             primaryShadow: "none",
+            colorLink: "#4caf50",
+            linkHoverColor: "#388e3c", 
+            linkActiveColor: "#2e7d32", 
           },
           Input: {
             cursor: "pointer",

@@ -1,8 +1,7 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Avatar, Button, Divider, Input } from "antd";
 import logo from "~/assets/images/Logo-without-text.jpg";
 import { useEffect, useState } from "react";
-import { getFirstCharacter } from "~/utils/helper";
 import { MenuOutlined, CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
@@ -15,6 +14,7 @@ import { useLazyQuery } from "@apollo/client";
 import { useDispatch } from 'react-redux';
 import { setUser } from "~/redux/reducers/userSlice";
 import SignInPage from "~/pages/Auth/SignIn/SignInPage";
+import UserDropdown from "./UserDropdown";
 const AppBar = () => {
   const [activeBg, setActiveBg] = useState(cardSliderImages[2].url);
   const dispatch = useDispatch();
@@ -26,11 +26,14 @@ const AppBar = () => {
     fetchPolicy: 'network-only'
   });
   const [openAuthPopup, setOpenAuthPopup] = useState(false);
-
+  
   useEffect(() => {
     if(token) {
       getUser();
     } 
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname); 
+    }
   },[]);
 
   const getUser = async () => {
@@ -147,26 +150,17 @@ const AppBar = () => {
 
           <div className={`app-bar-title list ${navMenu ? "active" : ""}`}>
             {user.id ? (
-              <div className="logger">
-                {`${user.firstName} ${user.lastName}`}
-                <Link className="nav-logo" to="/profile">
-                  <Avatar style={{ verticalAlign: "middle" }} size="large">
-                    {getFirstCharacter(`${user.firstName} ${user.lastName}`)}
-                  </Avatar>
-                </Link>
-              </div>
+              <UserDropdown user={user} />
             ) : (
               <div>
-                <span onClick={() => setOpenAuthPopup(true)}
-                > 
+                <span onClick={() => setOpenAuthPopup(true)}> 
                   Login / Sign up
                 </span>
               </div>
             )}
 
-            <SignInPage openAuthPopup={openAuthPopup}/>
             <Button style={{ borderColor: "green", padding: "10px" }} onClick={() => 
-              console.log(window.location.pathname = '/create_campaign')
+              window.location.pathname = '/create_campaign'
             }>
               START A CAMPAIGN
             </Button>
@@ -226,6 +220,7 @@ const AppBar = () => {
           </div>
         )}
       </div>
+      <SignInPage openAuthPopup={openAuthPopup} onClose={(val) => setOpenAuthPopup(val)}/>
     </div>
   );
 };
