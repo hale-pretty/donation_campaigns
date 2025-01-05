@@ -1,3 +1,5 @@
+import { notification } from "antd";
+
 export function historyReplace(params = {}) {
   history.replace(window.location.pathname + '?' + queryString.stringify(params));
   return;
@@ -16,4 +18,32 @@ export function getFirstCharacter(str) {
   }
 
   return result ? result.toUpperCase() : "";
+}
+
+/**
+ * Show notify
+ * @param {String} message
+ * @param {String} description
+ * @param {String} type
+ * @param {Integer} duration
+ */
+export function showNotify(
+  message,
+  description,
+  type = "success",
+  duration = 5,
+  cb = null
+) {
+  const configs = {
+    message,
+    description,
+    duration,
+    className: `ant-alert-${type}`,
+    onClose: () => (typeof cb == "function" ? cb() : null),
+  };
+  if (typeof notification[type] == "function") {
+    return notification[type](configs);
+  } else {
+    return notification.open(configs);
+  }
 }

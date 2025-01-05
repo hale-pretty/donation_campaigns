@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { HeartOutlined, UpOutlined } from '@ant-design/icons';
 import './styles.scss';
-import { perks } from '~/components/dummy';
 import { Button, Input, Modal, Form } from 'antd';
 
-const PerkSelectionWithPayment = () => {
+const PerkSelectionWithPayment = (props) => {
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [valuePerk, setValuePerk] = useState(10);
+  const [valuePerk, setValuePerk] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
 
@@ -21,9 +20,14 @@ const PerkSelectionWithPayment = () => {
   };
 
   const handleInputChange = (e) => {
+    if (e.target.value < 1 || e.target.value > 10000) return
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
     setValuePerk(numericValue);
   };
+
+  useEffect(() => {
+    setIsModalVisible(props.isModalVisible);
+  }, [props.isModalVisible]);
 
   const handleContinueClick = useCallback(() => {
     setIsModalVisible(true);
@@ -42,77 +46,8 @@ const PerkSelectionWithPayment = () => {
     []
   );
 
-  const updatedPerks = [
-    ...perks,
-    {
-      id: 99992,
-      isContribution: true,
-      title: 'Make a Contribution',
-      description: 'Contributions are not associated with perks',
-      defaultContribution: 10,
-    },
-  ];
-
   return (
     <div className="container pb-4">
-      <h2 className="mb-4">Choose Your Perk</h2>
-
-      <div className="row g-4 mb-5">
-        {updatedPerks.map((perk) => (
-          <div className="contribution-container" key={perk.id}>
-            {perk.isContribution ? (
-              <div className="contribution-card">
-                <div className="text-center mb-4">
-                  <div className="contribution-icon">
-                    <HeartOutlined />
-                  </div>
-                  <h3>{perk.title}</h3>
-                  <p >{perk.description}</p>
-                </div>
-
-                <div className="input-group mb-4">
-                  <Input
-                    addonBefore="$"
-                    addonAfter="USD"
-                    value={valuePerk}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <Button onClick={handleContinueClick} className="w-100">
-                  CONTINUE
-                </Button>
-              </div>
-            ) : (
-              <div className="perk-card">
-                <span className="offer-badge">{perk.offer}</span>
-                <div className="text-center mb-4">
-                  <img src={perk.image} alt={perk.title} className="perk-image" />
-                </div>
-                <h3>{perk.title}</h3>
-                <div className="price-container">
-                  <span className="current-price">{perk.currentPrice}</span>
-                  <span className="original-price">{perk.originalPrice}</span>
-                </div>
-                <div className="shipping-info">
-                  <p className="mb-1">Est. Shipping</p>
-                  <p>{perk.shipping.estimate}</p>
-                </div>
-                <div className="claimed-info mb-4">
-                  <span>
-                    {perk.claimed.current} out of {perk.claimed.total}
-                  </span>{' '}
-                  of claimed
-                </div>
-                <Button type="primary" className="w-100">
-                  GET THIS PERK
-                </Button>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
       {showScrollTop && (
         <Button className="scroll-top-btn" onClick={scrollToTop} icon={<UpOutlined  className='UpOutlined' />} />
       )}
@@ -138,10 +73,13 @@ const PerkSelectionWithPayment = () => {
             rules={[{ required: true, message: 'Please enter an amount!' }]}
           >
             <Input
-              addonBefore="$"
-              addonAfter="USD"
+              type="number"
+              addonBefore="₫"
+              addonAfter="VNĐ"
               value={valuePerk}
               onChange={handleInputChange}
+              min={1}
+              max={10000}
             />
           </Form.Item>
           <Form.Item

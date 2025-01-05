@@ -176,3 +176,76 @@ export const dummyCampaign = [
     funded: 38
   }
 ];
+
+export const categoriesCreateCampign = {
+  'TECH & INNOVATION': [
+    'Audio',
+    'Camera Gear',
+    'Education',
+    'Energy & Green Tech',
+    'Fashion & Wearables',
+    'Food & Beverages',
+    'Health & Fitness',
+    'Home',
+    'Phones & Accessories',
+    'Productivity',
+    'Transportation',
+    'Travel & Outdoors',
+    'Other Innovative Products'
+  ],
+  'CREATIVE WORKS': [
+    'Art',
+    'Comics',
+    'Dance & Theater',
+    'Film',
+    'Music',
+    'Photography',
+    'Podcasts, Blogs & Vlogs',
+    'Tabletop Games',
+    'Video Games',
+    'Web Series & TV Shows',
+    'Writing & Publishing',
+    'Other Creations'
+  ],
+  'COMMUNITY PROJECTS': [
+    'Culture',
+    'Environment',
+    'Human Rights',
+    'Local Businesses',
+    'Wellness',
+    'Other Community Projects'
+  ]
+};
+
+export const campaignTags = [
+  { value: 'Fundraising', label: 'Fundraising' },
+  { value: 'Nonprofit', label: 'Nonprofit' },
+  { value: 'Charity', label: 'Charity' },
+  { value: 'Community', label: 'Community' },
+  { value: 'Emergency', label: 'Emergency' },
+  { value: 'Education', label: 'Education' },
+  { value: 'Healthcare', label: 'Healthcare' },
+  { value: 'Environment', label: 'Environment' },
+  { value: 'AnimalWelfare', label: 'Animal Welfare' },
+  { value: 'Humanitarian', label: 'Humanitarian' },
+  { value: 'MedicalBills', label: 'Medical Bills' },
+  { value: 'DisasterRelief', label: 'Disaster Relief' },
+  { value: 'Volunteer', label: 'Volunteer' },
+  { value: 'SocialImpact', label: 'Social Impact' },
+  { value: 'GlobalAid', label: 'Global Aid' },
+  { value: 'LocalCause', label: 'Local Cause' },
+  { value: 'YouthPrograms', label: 'Youth Programs' },
+  { value: 'ElderCare', label: 'Elder Care' },
+  { value: 'FoodBank', label: 'Food Bank' },
+  { value: 'Homeless', label: 'Homeless' },
+  { value: 'Veterans', label: 'Veterans' },
+  { value: 'MentalHealth', label: 'Mental Health' },
+  { value: 'ArtsFunding', label: 'Arts Funding' },
+  { value: 'SportsFunding', label: 'Sports Funding' },
+  { value: 'Technology', label: 'Technology' },
+  { value: 'Sustainability', label: 'Sustainability' },
+  { value: 'WomenEmpowerment', label: 'Women Empowerment' },
+  { value: 'ChildrenCause', label: "Children's Cause" },
+  { value: 'DisabilitySupport', label: 'Disability Support' },
+  { value: 'CommunityDevelopment', label: 'Community Development' }
+];

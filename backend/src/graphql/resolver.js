@@ -1,20 +1,9 @@
-// import { Campaign } from '../campaign/entity/campaign.js'
-// import { User } from '../user/entity/user.js'
-// import { handleResolverError } from '../util/handleResolverError.js'
 import { uploadImage, deleteImage } from '../storage/index.js'
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs'
-// import { CampaignImage } from '../campaign/entity/campaign_image.js'
-// import {
-// 	createDonation,
-// 	getDonationsByUser,
-// 	getDonationsByCampaign,
-// } from '../donation/service/index.js'
-// import {
-// 	createUser,
-// 	login,
-// 	uploadAvatar,
-// 	updateUser,
-// } from '../user/service/index.js'
+// import { createDonation, getDonationsByUser, getDonationsByCampaign } from "../donation/service/index.js"
+// import { createUser, login, uploadAvatar, updateUser } from "../user/service/index.js";
+import { pubsub } from '../realtime/pubsub.js'
+import { withFilter } from "graphql-subscriptions";
 import { models } from '../db/models.js'
 
 const User = models.User
@@ -205,6 +194,15 @@ const resolvers = {
 			return true
 		},
 	},
+  Subscription: {
+    donationAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterableIterator('DONATION_ADDED'),
+        (payload, variables) =>
+          payload.donationAdded.newDonation.campaignId === variables.campaignId
+      ),
+    },
+  }
 }
 
 export { resolvers }
