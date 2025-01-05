@@ -2,7 +2,7 @@ import { Form, Input, Upload, Select, Typography, DatePicker, Button, Modal, mes
 import { UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import dayjs from 'dayjs';
-import { CREATE_NEW_CAMPAIGN } from '~/graphql/mutations';
+// import { CREATE_NEW_CAMPAIGN } from '~/graphql/mutations';
 import { useMutation } from '@apollo/client';
 
 const { TextArea } = Input;
@@ -27,26 +27,57 @@ const CampaignForm = () => {
 
   const handleCancel = () => setPreviewOpen(false);
 
-  const [createCampaign, { loading, error }] = useMutation(CREATE_NEW_CAMPAIGN);
-  const handleCreateCampaign = async (values) => {
-    const { title, description, goalAmount, endDate } = values;
-    console.log(typeof(fileList))
+  // const [createCampaign, { data, loading, error }] = useMutation(CREATE_NEW_CAMPAIGN);
+  
+  
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+  
+  const handleCreateCampaign = async () => {
+    const hardcodedValues = {
+      title: "Hardcoded Campaign Title",
+      description: "This is a hardcoded campaign description.",
+      goalAmount: 1000,
+      endDate: dayjs().add(7, 'day').format('YYYY-MM-DD'), // 7 days from now
+    };
+  
+    // Hard code fileList với một file ảnh cụ thể
+    const hardcodedFileList = [
+      {
+        uid: '1',
+        name: 'test-image.jpg',
+        status: 'done',
+        originFileObj: new File([''], 'test-image.jpg', { type: 'image/jpeg' }),
+      },
+    ];
+  
     try {
+      // Chuyển đổi file thành base64
+      const imagesBase64 = await Promise.all(
+        hardcodedFileList.map(async (file) => {
+          const base64 = await getBase64(file.originFileObj);
+          return base64;
+        })
+      );
+  
       const { data } = await createCampaign({
         variables: {
           request: {
-            title,
-            description,
-            goalAmount: parseFloat(goalAmount),
-            endDate: endDate.format('YYYY-MM-DD'),
-            images: fileList.map((i) => i.originFileObj), 
+            title: hardcodedValues.title,
+            description: hardcodedValues.description,
+            goalAmount: hardcodedValues.goalAmount,
+            endDate: hardcodedValues.endDate,
+            images: imagesBase64, // Gửi dưới dạng base64
           },
         },
-        context: {
-          hasUpload: true, // Ensure the context includes the upload flag
-        },
       });
-
+  
       console.log('Campaign created:', data.createCampaign);
       message.success('Campaign created successfully!');
     } catch (error) {
@@ -54,7 +85,6 @@ const CampaignForm = () => {
       message.error('Failed to create campaign.');
     }
   };
-
   return (
     <Form
       form={form}
