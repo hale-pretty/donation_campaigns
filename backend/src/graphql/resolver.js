@@ -1,7 +1,7 @@
 // import { Campaign } from '../campaign/entity/campaign.js'
 // import { User } from '../user/entity/user.js'
 // import { handleResolverError } from '../util/handleResolverError.js'
-// import { uploadImage } from '../storage/index.js'
+import { uploadImage, deleteImage } from '../storage/index.js'
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs'
 // import { CampaignImage } from '../campaign/entity/campaign_image.js'
 // import {
@@ -17,27 +17,32 @@ import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs'
 // } from '../user/service/index.js'
 import { models } from '../db/models.js'
 
+
+const User = models.User
+const Campaign = models.Campaign
+const CampaignImage = models.CampaignImage
+
 const resolvers = {
 	Upload: GraphQLUpload,
 	Query: {
 		campaigns: async () => {
-			return await models.Campaign.findAll({
+			return await Campaign.findAll({
 				include: [
-					{ model: models.User, as: 'user' },
-					{ model: models.CampaignImage, as: 'images' },
+					{ model: User, as: 'user' },
+					{ model: CampaignImage, as: 'images' },
 				],
 			})
 		},
-		// campaign: handleResolverError(async (_, { id }) => {
-		// 	const campaign = await Campaign.findByPk(id, {
-		// 		include: [
-		// 			{ model: User, as: 'user' },
-		// 			{ model: CampaignImage, as: 'images' },
-		// 		],
-		// 	})
-		// 	if (!campaign) throw new Error('Campaign not found')
-		// 	return campaign
-		// }),
+		campaign: async (_, { id }) => {
+			const campaign = await Campaign.findByPk(id, {
+				include: [
+					{ model: User, as: 'user' },
+					{ model: CampaignImage, as: 'images' },
+				],
+			})
+			if (!campaign) throw new Error('Campaign not found')
+			return campaign
+		},
 
 		// getDonationsByUser: async () => {
 		//   try {
@@ -111,39 +116,87 @@ const resolvers = {
 		//   if (!auth) throw new Error('User not found');
 		//   return await updateUser(auth.id, request);
 		// }),
-		// 	createCampaign: handleResolverError(
-		// 		async (_, { images, ...createFields }) => {
-		// 			const campaign = await Campaign.create({
-		// 				...createFields,
-		// 			})
-		// 			if (images) {
-		// 				for (const image of images) {
-		// 					const imageUrl = await uploadImage(image)
-		// 					await CampaignImage.create({
-		// 						campaignId: campaign.id,
-		// 						imageUrl,
-		// 					})
-		// 				}
-		// 			}
-		// 			return campaign
-		// 		}
-		// 	),
-		// 	updateCampaign: handleResolverError(
-		// 		async (_, { id, ...updateFields }) => {
-		// 			const campaign = await Campaign.findByPk(id)
-		// 			if (!campaign) throw new Error('Campaign not found')
-		// 			if (updateFields.image) {
-		// 				const imageUrl = await uploadImage(updateFields.image)
-		// 				updateFields.image = imageUrl
-		// 			}
-		// 			return await campaign.update(updateFields)
-		// 		}
-		// 	),
-		// 	deleteCampaign: handleResolverError(async (_, { id }) => {
-		// 		const campaign = await Campaign.findByPk(id)
-		// 		if (!campaign) throw new Error('Campaign not found')
-		// 		return await campaign.destroy()
-		// 	}),
+			createCampaign: async (_, { request }) => {
+        const { images, ...createFields } = request
+					const campaign = await Campaign.create({
+						...createFields,
+					})
+
+					if (images) {
+						for (const image of images) {
+							const imageUrl = await uploadImage(image)
+							await CampaignImage.create({
+								campaignId: campaign.id,
+								imageUrl,
+							})
+						}
+					}
+
+          return await Campaign.findByPk(campaign.id, {
+            include: [
+              { model: User, as: 'user' },
+              { model: CampaignImage, as: 'images' },
+            ],
+          })
+				},
+			updateCampaign: 
+				async (_, { request }) => {
+          const { id, images, ...updateFields } = request;
+          const campaign = await Campaign.findByPk(id);
+    
+          if (!campaign) {
+            throw new Error('Campaign not found');
+          }
+    
+          // if (campaign.userId !== user.id) {
+          //   throw new UserInputError('You do not have permission to update this campaign');
+          // }
+    
+          await campaign.update(updateFields);
+    
+          if (images) {
+            const existingImages = await CampaignImage.findAll({ where: { campaignId: campaign.id } });
+            for (const image of existingImages) {
+              await deleteImage(image.imageUrl);
+            }
+
+            await CampaignImage.destroy({ where: { campaignId: campaign.id } });
+
+            for (const image of images) {
+              const imageUrl = await uploadImage(image);
+              await CampaignImage.create({
+                campaignId: campaign.id,
+                imageUrl,
+              });
+            }
+          }
+    
+          return campaign;
+				},
+			deleteCampaign: async (_, { id }) => {
+        // if (!user) {
+        //   throw new UserInputError('You must be logged in to delete a campaign');
+        // }
+  
+        const campaign = await Campaign.findByPk(id);
+        if (!campaign) {
+          throw new Error('Campaign not found');
+        }
+  
+        // if (campaign.userId !== user.id) {
+        //   throw new UserInputError('You do not have permission to delete this campaign');
+        // }
+
+        const images = await CampaignImage.findAll({ where: { campaignId: id } });
+        for (const image of images) {
+          await deleteImage(image.imageUrl);
+        }
+  
+        await CampaignImage.destroy({ where: { campaignId: id } });
+        await campaign.destroy();
+  
+        return true;
+			},
 	},
 }
 
