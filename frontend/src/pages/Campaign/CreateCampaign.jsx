@@ -30,7 +30,7 @@ const CampaignForm = () => {
   const [createCampaign, { loading, error }] = useMutation(CREATE_NEW_CAMPAIGN);
   const handleCreateCampaign = async (values) => {
     const { title, description, goalAmount, endDate } = values;
-console.log(fileList)
+    console.log(typeof(fileList))
     try {
       const { data } = await createCampaign({
         variables: {
@@ -39,9 +39,11 @@ console.log(fileList)
             description,
             goalAmount: parseFloat(goalAmount),
             endDate: endDate.format('YYYY-MM-DD'),
-            images: fileList.map((i) => i.originFileObj
-), 
+            images: fileList.map((i) => i.originFileObj), 
           },
+        },
+        context: {
+          hasUpload: true, // Ensure the context includes the upload flag
         },
       });
 
