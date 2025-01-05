@@ -52,7 +52,10 @@ const server = new ApolloServer({ schema, uploads: true });
     await server.start();
     app.use(
       '/graphql',
-      cors(), // Enable CORS
+      // cors({
+      //   origin: process.env.REACT_CLIENT_URL,
+      //   credentials: true
+      // }), // Enable CORS
       bodyParser.json(), // Parse JSON
       expressMiddleware(server, {
         context: authMiddleware,
