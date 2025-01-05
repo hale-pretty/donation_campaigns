@@ -1,7 +1,9 @@
-import { User } from '../entity/user.js';
 import bcrypt from 'bcrypt';
 import { uploadImage } from '../../storage/index.js';
 import jwt from 'jsonwebtoken';
+import { models } from '../../db/models.js';
+
+const User = models.User;
 
 const createUser = async (args) => {
   const { email, password, username, firstName, lastName } = args;

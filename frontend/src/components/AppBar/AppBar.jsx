@@ -1,20 +1,50 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Avatar, Button, Divider, Input } from "antd";
 import logo from "~/assets/images/Logo-without-text.jpg";
 import { useEffect, useState } from "react";
-import { getFirstCharacter } from "~/utils/helper";
 import { MenuOutlined, CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 import "./styles.scss";
 import SearchDropdown from "./SearchDropdown";
 import { cardSliderImages, categories, popularSearches, quickFilter } from "../dummy";
-
+import { useSelector } from "react-redux";
+import { GET_CURRENT_USER } from '~/graphql/mutations';
+import { useLazyQuery } from "@apollo/client";
+import { useDispatch } from 'react-redux';
+import { setUser } from "~/redux/reducers/userSlice";
+import SignInPage from "~/pages/Auth/SignIn/SignInPage";
+import UserDropdown from "./UserDropdown";
 const AppBar = () => {
   const [activeBg, setActiveBg] = useState(cardSliderImages[2].url);
+  const dispatch = useDispatch();
   const [search, setSearch] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation();
+  const token = localStorage.getItem('token');
+  const [getCurrentUser] = useLazyQuery(GET_CURRENT_USER, {
+    fetchPolicy: 'network-only'
+  });
+  const [openAuthPopup, setOpenAuthPopup] = useState(false);
+
+  useEffect(() => {
+    if(token) {
+      getUser();
+    } 
+  },[]);
+
+  const getUser = async () => {
+    if(localStorage.getItem('token')) {
+      const { data } = await getCurrentUser({
+        context: { headers: { Authorization: `Bearer ${token}` } }
+      });
+      if(data){
+        dispatch(setUser(data));
+      }
+    }
+  }
+
+  const user = useSelector((state) => state.user);
 
   const handleSlideChange = (swiper) => {
     const currentIndex = swiper.realIndex;
@@ -28,7 +58,6 @@ const AppBar = () => {
     window.location.pathname = "/";
   };
 
-  let logger = true;
 
   const isHomePage = location.pathname === "/";
 
@@ -117,26 +146,19 @@ const AppBar = () => {
           </div>
 
           <div className={`app-bar-title list ${navMenu ? "active" : ""}`}>
-            {logger ? (
-              <div className="logger">
-                Ngan Huynh
-                <Link className="nav-logo" to="/profile">
-                  <Avatar style={{ verticalAlign: "middle" }} size="large">
-                    {getFirstCharacter("Ngan Huynh")}
-                  </Avatar>
-                </Link>
-              </div>
+            {user.id ? (
+              <UserDropdown user={user} />
             ) : (
               <div>
-                <span
-                  onClick={() => window.location.pathname = "/login"}
-                >
+                <span onClick={() => setOpenAuthPopup(true)}> 
                   Login / Sign up
                 </span>
               </div>
             )}
+
+            <SignInPage openAuthPopup={openAuthPopup} onClose={(val) => setOpenAuthPopup(val)}/>
             <Button style={{ borderColor: "green", padding: "10px" }} onClick={() => 
-              console.log(window.location.pathname = '/create_campaign')
+              window.location.pathname = '/create_campaign'
             }>
               START A CAMPAIGN
             </Button>

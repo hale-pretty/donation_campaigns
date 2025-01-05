@@ -10,6 +10,18 @@
   transition: background-image 0.5s ease-in-out;
 }
 
+.ant-btn-link {
+  color: #4caf50 !important;
+}
+
+.ant-btn-link:hover {
+  color: #388e3c !important;
+}
+
+.ant-btn-link:active {
+  color: #2e7d32 !important;
+}
+
 .title-swiper{
   color: var(--white-body-color);
 }

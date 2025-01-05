@@ -1,6 +1,9 @@
 import { sequelize } from '../../db/sequelize.js';
 import { Donation } from '../entity/donation.js'
-import { Campaign } from '../../campaign/entity/campaign.js'; 
+import { pubsub } from '../../realtime/pubsub.js'
+import { models } from '../../db/models.js'
+
+const Campaign = models.Campaign
 
 const createDonation = async (userId, campaignId, amount) => {
 
@@ -44,6 +47,15 @@ const createDonation = async (userId, campaignId, amount) => {
         await transaction.commit()
         console.log("donation created successfully:", newDonation);
         console.log("campaign updated successfully:", campaign)
+        
+        // Publish the new donation and updated total to subscribers
+        pubsub.publish('DONATION_ADDED', {
+            donationAdded: {
+                newDonation,
+                totalRaised: campaign.raisedAmount
+            }
+        })
+        
         return newDonation
         
     } catch (error) {
@@ -85,7 +97,7 @@ const getDonationsByCampaign = async (campaignId) => {
 
 const getCampaign = async (campaignId) => {
     try {
-        const campaign = await Campaign.findByPk(campaignId)
+        const campaign = await models.Campaign.findByPk(campaignId)
         if (!campaign) {
             throw new Error(`Campaign with ID ${campaignId} does not exist.`)
         }
