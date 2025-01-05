@@ -29,6 +29,9 @@ const typeDefs = readFileSync(join(__dirname, 'graphql', 'schema.graphql'), 'utf
 const app = express();
 app.use(graphqlUploadExpress());
 
+app.use(graphqlUploadExpress({ maxFileSize: 50 * 1024 * 1024, maxFiles: 10 }));
+
+
 const httpServer = http.createServer(app);
 
 const port = Number.parseInt(process.env.PORT) || 4000;

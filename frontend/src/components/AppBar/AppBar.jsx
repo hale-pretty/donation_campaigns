@@ -26,11 +26,14 @@ const AppBar = () => {
     fetchPolicy: 'network-only'
   });
   const [openAuthPopup, setOpenAuthPopup] = useState(false);
-
+  
   useEffect(() => {
     if(token) {
       getUser();
     } 
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname); 
+    }
   },[]);
 
   const getUser = async () => {
@@ -156,7 +159,6 @@ const AppBar = () => {
               </div>
             )}
 
-            <SignInPage openAuthPopup={openAuthPopup} onClose={(val) => setOpenAuthPopup(val)}/>
             <Button style={{ borderColor: "green", padding: "10px" }} onClick={() => 
               window.location.pathname = '/create_campaign'
             }>
@@ -218,6 +220,7 @@ const AppBar = () => {
           </div>
         )}
       </div>
+      <SignInPage openAuthPopup={openAuthPopup} onClose={(val) => setOpenAuthPopup(val)}/>
     </div>
   );
 };

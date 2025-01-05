@@ -35,3 +35,20 @@ export const GET_CURRENT_USER = gql`
     }
   }
 `;
+
+export const CREATE_NEW_CAMPAIGN = gql`
+  mutation CreateCampaign($request: CreateCampaignRequest!) {
+    createCampaign(request: $request) {
+      id
+      title
+      user {
+        id
+        email
+      }
+      images {
+        id
+        imageUrl
+      }
+    }
+  }
+`;

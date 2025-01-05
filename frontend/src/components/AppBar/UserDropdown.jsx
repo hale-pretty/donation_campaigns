@@ -6,19 +6,24 @@ const UserDropdown = ({ user }) => {
     const [visible, setVisible] = useState(false);
 
     const handleMenuClick = ({ key }) => {
-        setVisible(false); // Đóng dropdown sau khi click
+        setVisible(false);
+           
         switch (key) {
             case 'profile':
                 window.location.href = '/profile';
                 break;
             case 'campaigns':
-                window.location.href = '/my-campaigns';
+                window.location.href = '/profile';
                 break;
             case 'contributions':
-                window.location.href = '/my-contributions';
+                window.location.href = '/profile';
                 break;
             case 'settings':
-                window.location.href = '/settings';
+                window.location.hash = 'settings';
+                break;
+            case 'edit_profile':
+                window.location.pathname = '/profile'; 
+                window.location.hash = 'edit_profile'; 
                 break;
             case 'logout':
                 showNotify('Success', 'User logged out successfully!');
@@ -35,6 +40,7 @@ const UserDropdown = ({ user }) => {
             <Menu.Item key="campaigns">My Campaigns</Menu.Item>
             <Menu.Item key="contributions">My Contributions</Menu.Item>
             <Menu.Item key="profile">Profile</Menu.Item>
+            <Menu.Item key="edit_profile">Edit Profile</Menu.Item>
             <Menu.Item key="settings">Settings</Menu.Item>
             <Menu.Divider />
             <Menu.Item key="logout">Log Out</Menu.Item>

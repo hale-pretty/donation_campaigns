@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Upload,
   Modal,
   message,
-  Avatar,
   Tabs,
   Card,
   Typography,
@@ -25,6 +24,19 @@ const Profile = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
+  const [activeTab, setActiveTab] = useState('profile');
+
+  const updateTabFromHash = () => {
+    const hash = window.location.hash.substring(1); // Bỏ dấu '#'
+    if (hash && ['profile', 'edit_profile', 'settings'].includes(hash)) {
+      setActiveTab(hash);
+    }
+  };
+
+  useEffect(() => {
+    updateTabFromHash(); 
+    window.addEventListener('hashchange', updateTabFromHash);
+  }, []);
 
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -99,7 +111,7 @@ const Profile = () => {
           <Title level={2}>{user.firstName}</Title>
         </div>
 
-        <Tabs defaultActiveKey="profile">
+        <Tabs defaultActiveKey="profile" activeKey={activeTab} onChange={(e) => setActiveTab(e)}>
           <TabPane tab="Profile" key="profile">
             <Space direction="vertical" size="large" style={{ width: "100%" }}>
               <Card title="About Me">
@@ -122,25 +134,14 @@ const Profile = () => {
                 </Space>
               </Card>
 
-              <Card title="Verifications">
-                <Space>
-                  <Avatar src="/api/placeholder/24/24" />
-                  <Text>1,910 friends</Text>
-                </Space>
-              </Card>
-            </Space>
-          </TabPane>
-
-          <TabPane tab="Campaigns" key="campaigns">
-            <Card>
+              <Card title="Campaigns">
               <Text>Campaigns Content</Text>
             </Card>
-          </TabPane>
 
-          <TabPane tab="Contributions" key="contributions">
-            <Card>
+            <Card title="Contributions">
               <Text>Contributions Content</Text>
             </Card>
+            </Space>
           </TabPane>
 
           <TabPane tab="Edit Profile" key="edit_profile">
