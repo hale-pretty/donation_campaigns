@@ -31,6 +31,9 @@ const AppBar = () => {
     if(token) {
       getUser();
     } 
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname); 
+    }
   },[]);
 
   const getUser = async () => {

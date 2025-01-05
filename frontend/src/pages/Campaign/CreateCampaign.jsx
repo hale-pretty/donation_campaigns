@@ -1,10 +1,10 @@
-import { Form, Input, Upload, Select, Typography, DatePicker, Button, Modal } from 'antd';
+import { Form, Input, Upload, Select, Typography, DatePicker, Button, Modal, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-
-const { TextArea } = Input;
-import { campaignTags, categoriesCreateCampign } from '~/components/dummy';
 import { useState } from 'react';
 import dayjs from 'dayjs';
+import { useMutation } from '@apollo/client';
+
+const { TextArea } = Input;
 
 const CampaignForm = () => {
   const [form] = Form.useForm();
@@ -26,10 +26,17 @@ const CampaignForm = () => {
 
   const handleCancel = () => setPreviewOpen(false);
 
+  const handleCreateCampaign = async (values) => {
+    
+  };
+
   return (
-    <Form form={form}
-      layout="vertical" scrollToFirstError 
+    <Form
+      form={form}
+      layout="vertical"
+      scrollToFirstError
       style={{ maxWidth: 800, margin: '0 auto', padding: '24px' }}
+      onFinish={handleCreateCampaign}
     >
       <Form.Item
         label="Campaign Title"
@@ -41,8 +48,8 @@ const CampaignForm = () => {
       </Form.Item>
 
       <Form.Item
-        label="Campaign Tagline"
-        name="tagline"
+        label="Campaign description"
+        name="description"
         required
         tooltip="Provide a short description that helps better describe your campaign to your audience."
       >
@@ -75,9 +82,12 @@ const CampaignForm = () => {
         <Upload
           listType="picture-card"
           fileList={fileList}
-          onChange={({ fileList }) => setFileList(fileList)}
+          onChange={({ fileList }) => setFileList([...fileList])}
           onPreview={handlePreview}
-          beforeUpload={() => false}
+          beforeUpload={(file) => {
+              setFileList((prev) => [...prev, file]);
+              return false;
+          }}
           multiple
         >
           {fileList.length < 5 && (
@@ -92,52 +102,6 @@ const CampaignForm = () => {
       <Modal open={previewOpen} footer={null} onCancel={handleCancel}>
         <img alt="Preview" style={{ width: '100%' }} src={previewImage} />
       </Modal>
-
-      <Form.Item
-        label="Location"
-        name="location"
-        tooltip="Select the location where you are running the campaign. This location will be visible on your campaign page for your audience to see."
-      >
-        <Input placeholder="Country" />
-      </Form.Item>
-
-      <Form.Item
-        label={<>Category <span style={{ color: '#ff4d4f' }}>*</span></>}
-        name="category"
-        required
-        help="To help backers find your campaign, select a category that best represents your project."
-      >
-        <Select placeholder="Select a category" style={{ marginBottom: '16px' }}>
-          {Object.entries(categoriesCreateCampign).flatMap(([category, items]) =>
-            items.map(item => (
-              <Select.Option key={item} value={item}>{item}</Select.Option>
-            ))
-          )}
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        label="Tags"
-        name="tags"
-        required
-        tooltip="Enter up to five keywords that best describe your campaign. These tags will help with organization and discoverability."
-      >
-        <Select
-          mode="tags"
-          placeholder="Enter tag"
-          style={{ width: '100%' }}
-          maxTagCount={5}
-          options={campaignTags}
-          showSearch
-          filterOption={(input, option) =>
-            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-          }
-        />
-        <Typography.Text type="secondary">
-          Tags must have at least 1 campaign tag
-        </Typography.Text>
-      </Form.Item>
-      
       <Form.Item
         label={(
           <div> Campaign Duration<div>
@@ -149,15 +113,15 @@ const CampaignForm = () => {
         )}
         name="endDate"
       >
-          <DatePicker
-            className='w-100'
-              disabledDate={(current) => current && current < dayjs().startOf('day')}
-              placeholder="Select campaign end date"
-              showNow={false}
-          />
-      </Form.Item>
+        <DatePicker
+          className='w-100'
+          disabledDate={(current) => current && current < dayjs().startOf('day')}
+          placeholder="Select campaign end date"
+          showNow={false}
+        />
+        </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" onClick={() => console.log(form.getFieldsValue())}>
+        <Button type="primary" htmlType="submit" >
           Add Campaign
         </Button>
       </Form.Item>
@@ -165,4 +129,4 @@ const CampaignForm = () => {
   );
 };
 
-export default CampaignForm;
+export default CampaignForm

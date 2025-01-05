@@ -23,16 +23,16 @@ const EditProfileForm = (props) => {
                     layout="vertical"
                     initialValues={user}
                 >
-                    <Form.Item name="username" label="Username" rules={[{ required: true }]}> 
+                    <Form.Item name="username" label="Username"> 
                         <Input placeholder="Username" />
                     </Form.Item>
-                    <Form.Item name="email" label="Email" rules={[{ type: 'email', required: true }]}> 
+                    <Form.Item name="email" label="Email" rules={[{ type: 'email'}]}> 
                         <Input placeholder="Email" />
                     </Form.Item>
-                    <Form.Item name="firstName" label="First Name" rules={[{ required: true }]}> 
+                    <Form.Item name="firstName" label="First Name"> 
                         <Input placeholder="First Name" />
                     </Form.Item>
-                    <Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}> 
+                    <Form.Item name="lastName" label="Last Name"> 
                         <Input placeholder="Last Name" />
                     </Form.Item>
                     <Form.Item name="avatarUrl" label="Avatar URL"> 
