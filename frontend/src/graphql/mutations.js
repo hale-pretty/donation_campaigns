@@ -61,6 +61,13 @@ export const CREATE_DONATION = gql`
   }
 `;
 
+export const ADD_AVATAR = gql`
+  mutation AddAvatar($image: Upload!) {
+    addAvatar(image: $image) {
+      id
+    }
+  }
+`;
 
 export const GET_CAMPAIGNS = gql`
   query Campaigns {
@@ -80,7 +87,6 @@ export const GET_CAMPAIGNS = gql`
   }
 `;
 
-
 export const GET_CAMPAIGN_BY_ID = gql`
   query Campaign($campaignId: Int!) {
     campaign(id: $campaignId) {
@@ -95,6 +101,18 @@ export const GET_CAMPAIGN_BY_ID = gql`
       images {
         imageUrl
       }
+    }
+  }
+`;
+
+export const GET_DONATIONS_BY_USER = gql`
+  query GetDonationsByUser {
+    getDonationsByUser {
+      id
+      userId
+      campaignId
+      createdAt
+      amount
     }
   }
 `;

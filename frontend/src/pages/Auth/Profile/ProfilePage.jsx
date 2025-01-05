@@ -7,11 +7,18 @@ import {
   Card,
   Typography,
   Space,
+  Table,
 } from "antd";
 import { useSelector } from "react-redux";
-import { UploadOutlined} from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import EditProfileForm from "./EditProfileForm";
 import SettingsTab from "./SettingTab";
+import { useQuery } from "@apollo/client";
+import { GET_DONATIONS_BY_USER } from "~/graphql/mutations";
+import DonationHistory from "./HistoryContribution";
+import { useMutation } from '@apollo/client';
+import { ADD_AVATAR } from '~/graphql/mutations';
+import { showNotify } from "~/utils/helper";
 
 const { TabPane } = Tabs;
 const { Title, Text } = Typography;
@@ -22,7 +29,8 @@ const Profile = () => {
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
   const [activeTab, setActiveTab] = useState('profile');
-
+  const [addAvatar] = useMutation(ADD_AVATAR);
+  
   const updateTabFromHash = () => {
     const hash = window.location.hash.substring(1); // Bỏ dấu '#'
     if (hash && ['profile', 'edit_profile', 'settings'].includes(hash)) {
@@ -67,6 +75,26 @@ const Profile = () => {
     setFileList(fileList);
   };
 
+  const handleUpload = async (file) => {
+    try {
+      const { data } = await addAvatar({
+        variables: { image: file },
+      });
+      console.log("object")
+      showNotify('Notification', 'Avatar uploaded successfully')
+    } catch (err) {
+      showNotify('Notification', 'Failed to upload avatar', 'error')
+    }
+  };
+
+  useEffect(() => {
+    if (user.avatarUrl) {
+      setFileList([{ uid: '-1', name: 'avatar', status: 'done', url: user.avatarUrl }]);
+    }
+  }, [user]);
+
+  const { loading, error, data } = useQuery(GET_DONATIONS_BY_USER);
+
   return (
     <div style={{ padding: "2rem" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "24px" }}>
@@ -78,23 +106,28 @@ const Profile = () => {
             <img className="w-100" alt="Preview" src={previewImage} />
           </Modal>
 
-        <div className="d-flex"
+        <div
+          className="d-flex"
           style={{
             alignItems: "center",
             gap: "16px",
             marginBottom: "24px",
           }}
         >
-          <Upload className="w-100"
+          <Upload
             listType="picture-circle"
             fileList={fileList}
             onChange={handleChange}
             onPreview={handlePreview}
             beforeUpload={beforeUpload}
-            customRequest={({ file, onSuccess }) => {
-              setTimeout(() => {
-                onSuccess("ok", file);
-              }, 1000);
+            customRequest={({ file, onSuccess, onError }) => {
+              handleUpload(file)
+                .then(() => {
+                  onSuccess("ok", file);
+                })
+                .catch((err) => {
+                  onError(err);
+                });
             }}
           >
             {fileList.length === 0 && (
@@ -104,7 +137,7 @@ const Profile = () => {
               </div>
             )}
           </Upload>
-          <Title level={2}>{user.firstName}</Title>
+          <Title level={2}>{user.username}</Title>
         </div>
 
         <Tabs defaultActiveKey="profile" activeKey={activeTab} onChange={(e) => setActiveTab(e)}>
@@ -124,17 +157,17 @@ const Profile = () => {
               </Card>
 
               <Card title="Campaigns">
-              <Text>Campaigns Content</Text>
-            </Card>
+                <Text>Campaigns Content</Text>
+              </Card>
 
-            <Card title="Contributions">
-              <Text>Contributions Content</Text>
-            </Card>
+              <Card title="Donation History">
+                <DonationHistory donations={data?.getDonationsByUser} />
+              </Card>
             </Space>
           </TabPane>
 
           <TabPane tab="Edit Profile" key="edit_profile">
-            <EditProfileForm 
+            <EditProfileForm
               fileList={fileList}
               handleChange={handleChange}
               handlePreview={handlePreview}
@@ -142,6 +175,7 @@ const Profile = () => {
               previewOpen={previewOpen}
               setPreviewOpen={(val) => setPreviewOpen(val)}
               previewImage={previewImage}
+              handleUpload={handleUpload}
             />
           </TabPane>
 
