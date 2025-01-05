@@ -14,7 +14,7 @@ const Donation = models.Donation
 const resolvers = {
 	Upload: GraphQLUpload,
 	Query: {
-		campaigns: async () => {
+		getAllCampaigns: async () => {
 			return await Campaign.findAll({
 				include: [
 					{ model: User, as: 'user' },
@@ -22,25 +22,18 @@ const resolvers = {
 				],
 			})
 		},
-		campaign: async (_, { id }) => {
+		getCampaignById: async (_, { id }) => {
 			const campaign = await Campaign.findByPk(id, {
 				include: [
 					{ model: User, as: 'user' },
 					{ model: CampaignImage, as: 'images' },
+          { model: Donation, as: 'donations' },
 				],
 			})
 			if (!campaign) throw new Error('Campaign not found')
 			return campaign
 		},
 
-		getDonationsByCampaign: async (_, { campaignId }) => {
-		  try {
-		    return await getDonationsByCampaign(campaignId);
-		  } catch (error) {
-		    console.error('Error fetching donations by campaign:', error);
-		    throw new Error('Unable to fetch donations');
-		  }
-		},
 		getCurrentUser: async (_, __, { auth }) => {
 		  if (!auth) throw new Error('User not found');
 		  return await User.findByPk(auth.id, {

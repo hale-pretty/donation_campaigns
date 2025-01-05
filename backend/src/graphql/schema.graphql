@@ -45,6 +45,7 @@ type Campaign {
 	status: String!
 	user: User!
 	images: [CampaignImage!]
+	donations: [Donation]
 }
 
 input CreateCampaignRequest {
@@ -80,6 +81,7 @@ type Donation {
 	createdAt: String!
 	amount: Long!
 	user: User!
+	campaign: Campaign!
 }
 
 type DonationUpdate {
@@ -91,11 +93,8 @@ type DonationUpdate {
 
 type Query {
 	getCurrentUser: User
-
-	campaigns: [Campaign]
-	campaign(id: Int!): Campaign
-
-	getDonationsByCampaign(campaignId: Int!): [Donation]
+	getAllCampaigns: [Campaign]
+	getCampaignById(id: Int!): Campaign
 }
 
 type Mutation {

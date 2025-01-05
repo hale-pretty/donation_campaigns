@@ -49,6 +49,10 @@ export const Donation = (sequelize, DataTypes) => {
 			foreignKey: 'userId',
 			as: 'user',
 		})
+		Donation.belongsTo(models.Campaign, {
+			foreignKey: 'campaignId',
+			as: 'campaign',
+		})
 	}
 
 	return Donation
