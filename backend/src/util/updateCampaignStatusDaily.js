@@ -1,9 +1,10 @@
 import cron from 'node-cron';
-import { sequelize } from './db/sequelize.js';
+import { sequelize } from '../db/sequelize.js';
 
-cron.schedule('* * * * *', async () => {
+cron.schedule('59 23 * * *', async () => {
   try {
-    console.log('Cron job started to update campaign status...');
+    console.log('Cron job scheduled to update campaign status daily at midnight.');
+    console.log('[CRON] Start to update campaign status...');
     
     const [updatedRows] = await sequelize.query(`
       UPDATE campaigns
@@ -17,10 +18,8 @@ cron.schedule('* * * * *', async () => {
       END
     `);
 
-    console.log(`${updatedRows} campaigns' status updated.`);
+    console.log(`[CRON] ${updatedRows.length} campaigns' status updated.`);
   } catch (err) {
     console.error('Error running cron job:', err);
   }
 });
-
-console.log('Cron job scheduled to update campaign status daily at midnight.');
