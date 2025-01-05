@@ -47,3 +47,9 @@ export function showNotify(
     return notification.open(configs);
   }
 }
+
+export const formatAmount = (amount) => {
+  return new Intl.NumberFormat('vi-VN', {
+    minimumFractionDigits: 0
+  }).format(amount);
+};

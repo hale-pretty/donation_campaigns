@@ -149,6 +149,12 @@ const AppBar = () => {
           </div>
 
           <div className={`app-bar-title list ${navMenu ? "active" : ""}`}>
+          <Button style={{ borderColor: "green", padding: "10px" }} onClick={() => 
+              window.location.pathname = '/create_campaign'
+            }>
+              START A CAMPAIGN
+            </Button>
+            
             {user.id ? (
               <UserDropdown user={user} />
             ) : (
@@ -159,11 +165,7 @@ const AppBar = () => {
               </div>
             )}
 
-            <Button style={{ borderColor: "green", padding: "10px" }} onClick={() => 
-              window.location.pathname = '/create_campaign'
-            }>
-              START A CAMPAIGN
-            </Button>
+            
             <CloseOutlined
               className="close-btn"
               onClick={() => setNavMenu(false)}
