@@ -80,7 +80,6 @@ const Profile = () => {
       const { data } = await addAvatar({
         variables: { image: file },
       });
-      console.log("object")
       showNotify('Notification', 'Avatar uploaded successfully')
     } catch (err) {
       showNotify('Notification', 'Failed to upload avatar', 'error')
