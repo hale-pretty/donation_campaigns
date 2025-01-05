@@ -11,6 +11,7 @@ import { CREATE_DONATION, GET_CAMPAIGN_BY_ID } from '~/graphql/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import LogoLoading from '~/components/LogoLoading';
 import { showNotify } from '~/utils/helper';
+import DonationUpdates from '~/components/DonationUpdates';
 const CampaignDetailsPage = () => {
   const [activeImage, setActiveImage] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -183,6 +184,7 @@ const CampaignDetailsPage = () => {
         </div>
       </div>
       <Divider />
+      <DonationUpdates campaignId={parseInt(id)} />
       <div className="container pb-4">
         {showScrollTop && (
           <Button className="scroll-top-btn" onClick={scrollToTop} icon={<UpOutlined className="UpOutlined" />} />
