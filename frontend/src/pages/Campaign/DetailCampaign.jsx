@@ -25,7 +25,7 @@ const CampaignDetailsPage = () => {
     variables: { campaignId: parseInt(id) },
   });
 
-  const campaign = data?.campaign;
+  const campaign = data?.getCampaignById;
 
   useEffect(() => {
     if (campaign?.images) {

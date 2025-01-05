@@ -70,8 +70,8 @@ export const ADD_AVATAR = gql`
 `;
 
 export const GET_CAMPAIGNS = gql`
-  query Campaigns {
-    campaigns {
+  query getAllCampaigns {
+    getAllCampaigns { 
       id
       title
       description
@@ -88,8 +88,8 @@ export const GET_CAMPAIGNS = gql`
 `;
 
 export const GET_CAMPAIGN_BY_ID = gql`
-  query Campaign($campaignId: Int!) {
-    campaign(id: $campaignId) {
+  query GetCampaignById($campaignId: Int!) {
+    getCampaignById(id: $campaignId) {
       id
       title
       description
@@ -109,6 +109,7 @@ export const GET_CAMPAIGN_BY_ID = gql`
     }
   }
 `;
+
 
 export const GET_DONATIONS_BY_USER = gql`
   query GetDonationsByUser {
