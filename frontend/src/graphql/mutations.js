@@ -101,6 +101,11 @@ export const GET_CAMPAIGN_BY_ID = gql`
       images {
         imageUrl
       }
+      user {
+        username
+        email
+        avatarUrl
+      }
     }
   }
 `;
