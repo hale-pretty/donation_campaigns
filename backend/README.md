@@ -16,3 +16,4 @@
 2. When merge PR, use `squash` commits to turn everything into 1 commit so that we can revert it more easily
 3. Use `import`
 4. Naming convention: Source code files will be placed under feature folder like the example `backend/src/user/entity/user.js`
+5. 
