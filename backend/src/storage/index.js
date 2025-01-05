@@ -36,10 +36,19 @@ const uploadImage = async (file) => {
     return blockBlobClient.url
 }
 
+const deleteImage = async (fileUrl) => {
+    const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME);
+    const blobName = fileUrl.split('/').pop();
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+    await blockBlobClient.delete();
+    console.log(`Image '${blobName}' deleted successfully.`);
+};
+
 const getUrl = (fileName) => {
     const containerClient = blobServiceClient.getContainerClient(IMAGE_CONTAINER_NAME);
     const blockBlobClient = containerClient.getBlockBlobClient(fileName)
     return blockBlobClient.url
 }
 
-export {configContainer, uploadImage, getUrl}
+export {configContainer, uploadImage, deleteImage, getUrl}
