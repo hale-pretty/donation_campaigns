@@ -99,6 +99,38 @@ export const Campaign = (sequelize, DataTypes) => {
 				onDelete: 'CASCADE',
 				field: 'user_id',
 			},
+			location: {
+				type: DataTypes.TEXT,
+				allowNull: false,
+				defaultValue: '',
+				validate: {
+					notEmpty: {
+						msg: 'Location cannot be empty.',
+					},
+				},
+			},
+			category: {
+				type: DataTypes.TEXT,
+				allowNull: false,
+				defaultValue: '',
+				validate: {
+					notEmpty: {
+						msg: 'Category cannot be empty.',
+					},
+				},
+			},
+			tags: {
+				type: DataTypes.ARRAY(DataTypes.TEXT),
+				allowNull: false,
+				defaultValue: [],
+				validate: {
+					isArray(value) {
+						if (!Array.isArray(value)) {
+							throw new Error('Tags must be an array of text.');
+						}
+					},
+				},
+			},
 		},
 		{
 			tableName: 'campaigns',
