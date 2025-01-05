@@ -84,7 +84,8 @@ const getDonationsByCampaign = async (campaignId) => {
         const donations = await Donation.findAll({
             where: {
                 campaignId: campaignId
-            }
+            },
+            include: [{ model: models.User, as: 'user' }]
         })
         console.log(`donations for campaign ${campaignId}:`, donations)
         return donations

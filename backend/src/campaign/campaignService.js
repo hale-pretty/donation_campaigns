@@ -4,6 +4,7 @@ import { createMultipleCampaignImages, deleteMultipleCampaignImages, updateMulti
 const User = models.User
 const Campaign = models.Campaign
 const CampaignImage = models.CampaignImage
+const Donation = models.Donation
 
 export const createCampaign = async (request, userId) => {
 	const { images, ...createFields } = request

@@ -27,11 +27,26 @@ const resolvers = {
 				include: [
 					{ model: User, as: 'user' },
 					{ model: CampaignImage, as: 'images' },
-          { model: Donation, as: 'donations' },
+          { 
+            model: Donation, 
+            as: 'donations',
+            include: [
+              { model: User, as: 'user' }
+            ]
+          },
 				],
 			})
 			if (!campaign) throw new Error('Campaign not found')
 			return campaign
+		},
+
+		getDonationsByCampaignId: async (_, { campaignId }) => {
+		  try {
+		    return await getDonationsByCampaign(campaignId);
+		  } catch (error) {
+		    console.error('Error fetching donations by campaign:', error);
+		    throw new Error('Unable to fetch donations');
+		  }
 		},
 
 		getCurrentUser: async (_, __, { auth }) => {
