@@ -1,6 +1,5 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import { sequelize } from '../../db/sequelize.js';
-import { User } from '../../user/entity/user.js';
 
 const Donation = sequelize.define('Donation', {
   id: {
@@ -12,7 +11,7 @@ const Donation = sequelize.define('Donation', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-        model: User,
+        model: 'User',
         key: 'id',
       },
     field: 'user_id',
