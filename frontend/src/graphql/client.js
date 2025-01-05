@@ -24,23 +24,37 @@ const client = new ApolloClient({
   link: uploadLink,
 });
 
+const DONATION_ADDED = gql`
+  subscription donationAdded($campaignId: Int!) {
+    donationAdded(campaignId: $campaignId) {
+      newDonation {
+        id
+        amount
+        createdAt
+      }
+      totalRaised
+    }
+  }
+`;
 
 const wsClient = new ApolloClient({
   link: wsLink,
   cache: new InMemoryCache(),
 });
 
-export { client, wsClient };
 
-// // Subscribe to the donation updates
-// wsClient.subscribe({
-//   query: DONATION_ADDED,
-//   variables: { campaignId: 1 },
-// }).subscribe({
-//   next(data) {
-//     console.log('New donation update:', data);
-//   },
-//   error(err) {
-//     console.error('Subscription error:', err);
-//   },
-// });
+// Subscribe to the donation updates
+wsClient.subscribe({
+  query: DONATION_ADDED,
+  variables: { campaignId: 22 },
+}).subscribe({
+  next(data) {
+    console.log('New donation update:', data);
+  },
+  error(err) {
+    console.error('Subscription error:', err);
+  },
+});
+
+
+export { client, wsClient };
