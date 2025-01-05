@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Badge, Card } from 'antd';
 import { useQuery } from '@apollo/client';
 import { GET_CAMPAIGNS } from '~/graphql/mutations';
+import { formatAmount } from '~/utils/helper';
 
 const DonationHistory = ({ donations = [] }) => {
    const { loading, error, data } = useQuery(GET_CAMPAIGNS);
@@ -16,12 +17,7 @@ const DonationHistory = ({ donations = [] }) => {
     });
   };
 
-  const formatAmount = (amount) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(amount);
-  };
+  
 
   const columns = [
     {

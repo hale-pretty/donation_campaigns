@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import './styles.scss';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs, Autoplay } from 'swiper/modules';
@@ -10,7 +10,9 @@ import { useParams } from 'react-router-dom';
 import { CREATE_DONATION, GET_CAMPAIGN_BY_ID } from '~/graphql/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import LogoLoading from '~/components/LogoLoading';
-import { showNotify } from '~/utils/helper';
+import { formatAmount, showNotify } from '~/utils/helper';
+import DonationUpdates from '~/components/DonationUpdates';
+import { useSelector } from 'react-redux';
 const CampaignDetailsPage = () => {
   const [activeImage, setActiveImage] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -18,12 +20,12 @@ const CampaignDetailsPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const { id } = useParams();
-  
+
   const { loading, error, data } = useQuery(GET_CAMPAIGN_BY_ID, {
     variables: { campaignId: parseInt(id) },
   });
 
-  const campaign = data?.campaign;
+  const campaign = data?.getCampaignById;
 
   useEffect(() => {
     if (campaign?.images) {
@@ -92,6 +94,7 @@ const CampaignDetailsPage = () => {
 
   return (
     <div className="campaign-details-page">
+      <DonationUpdates campaignId={parseInt(id)} />
       <div className="detail-campaign">
         <div className="container py-4">
           <div className="row g-4">
@@ -143,19 +146,19 @@ const CampaignDetailsPage = () => {
               <p className="mb-4">{campaign?.description}</p>
               <div className="d-flex align-items-center mb-4">
                 <img
-                  src={campaign?.avatar}
+                  src={campaign?.user.avatarUrl}
                   alt="Campaign Avatar"
                   className="campaign-avatar me-3"
                 />
                 <div>
-                  <div className="fw-semibold">{campaign?.owner}</div>
-                  <div>{campaign?.location}</div>
+                  <div className="fw-semibold">{campaign?.user.username}</div>
+                  <div>{campaign?.user?.location ?? campaign?.user?.email}</div>
                 </div>
               </div>
               <div className="mb-4">
                 <h3 className="h4 fw-bold mb-2">
                   <small className="fw-normal">
-                    USD by {campaign?.backers} backers
+                    {formatAmount(campaign?.raisedAmount)} VND by {campaign?.backers} backers
                   </small>
                 </h3>
                 <div>
