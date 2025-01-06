@@ -91,6 +91,7 @@ type Donation {
 type DonationUpdate {
 	newDonation: Donation
 	totalRaised: Long!
+	campaignUpdatedDonations: [Donation]
 }
 
 # =================== QUERY, MUTATION AND SUBSCRIPTION ===================

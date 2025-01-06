@@ -7,8 +7,20 @@ export const DONATION_ADDED = gql`
         id
         amount
         createdAt
+        user {
+          username
+          avatarUrl
+        }
       }
       totalRaised
+      campaignUpdatedDonations {
+        amount
+        createdAt
+        user {
+          username
+          avatarUrl
+        }
+      }
     }
   }
 `;
