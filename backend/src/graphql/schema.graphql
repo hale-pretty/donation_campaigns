@@ -104,6 +104,7 @@ type Query {
 	getAllCampaigns: [Campaign]
 	getCampaignById(id: Int!): Campaign
 	getDonationsByCampaignId(campaignId: Int!): [Donation]
+	getDonationsByUser: [Donation]
 }
 
 type Mutation {
