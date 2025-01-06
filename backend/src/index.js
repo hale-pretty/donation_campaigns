@@ -18,7 +18,7 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { pubsub } from './realtime/pubsub.js';
 import http from 'http'; // Import the http module
 import { makeExecutableSchema } from '@graphql-tools/schema'; // Import makeExecutableSchema
-
+import { scheduleUpdateCampaignStatusJob } from './util/updateCampaignStatusDaily.js'
 
 dotenv.config();
 
@@ -48,13 +48,14 @@ const server = new ApolloServer({ schema, uploads: true });
     await sequelize.authenticate();
     await configContainer();
     console.log('Database connected successfully.');
+    scheduleUpdateCampaignStatusJob();
     await server.start();
+    app.use(cors({
+      origin: process.env.REACT_CLIENT_URL,
+      credentials: true,
+    }))
     app.use(
       '/graphql',
-      cors({
-        origin: process.env.REACT_CLIENT_URL,
-        credentials: true,
-      }), // Enable CORS
       bodyParser.json(), // Parse JSON
       expressMiddleware(server, {
         context: authMiddleware,

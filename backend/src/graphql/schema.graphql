@@ -40,7 +40,7 @@ type Campaign {
 	endDate: String!
 	status: String!
 	user: User!
-  location: String!
+  	location: String!
 	category: String!
 	tags: [String!]!
 	images: [CampaignImage!]
@@ -52,7 +52,7 @@ input CreateCampaignRequest {
 	description: String!
 	goalAmount: Long!
 	endDate: String!
-  location: String!
+  	location: String!
 	category: String!
 	tags: [String!]!
 	images: [Upload!]!
@@ -64,7 +64,7 @@ input UpdateCampaignRequest {
 	description: String
 	goalAmount: Long
 	endDate: String
-  location: String
+  	location: String
 	category: String
 	tags: [String]
 	images: [Upload]
@@ -100,6 +100,7 @@ type Query {
 	getAllCampaigns: [Campaign]
 	getCampaignById(id: Int!): Campaign
 	getDonationsByCampaignId(campaignId: Int!): [Donation]
+	getDonationsByUser: [Donation]
 }
 
 type Mutation {

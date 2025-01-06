@@ -1,10 +1,12 @@
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs'
-import { createDonation, getDonationsByUser, getDonationsByCampaign } from "../donation/donationService.js"
+import { createDonation, getDonationsByCampaign, getDonationsByUser } from "../donation/donationService.js"
 import { createUser, login, uploadAvatar, updateUser } from "../user/userService.js";
 import { pubsub } from '../realtime/pubsub.js'
 import { withFilter } from "graphql-subscriptions";
 import { models } from '../db/models.js'
 import { createCampaign, updateCampaign, deleteCampaign } from '../campaign/campaignService.js';
+import { GraphQLLong } from 'graphql-scalars';
+
 
 const User = models.User
 const Campaign = models.Campaign
@@ -13,6 +15,7 @@ const Donation = models.Donation
 
 const resolvers = {
 	Upload: GraphQLUpload,
+	Long: GraphQLLong,
 	Query: {
 		getAllCampaigns: async () => {
 			return await Campaign.findAll({
@@ -21,6 +24,10 @@ const resolvers = {
 					{ model: CampaignImage, as: 'images' },
 				],
 			})
+		},
+		getDonationsByUser: async (_, __, { auth }) => {
+			if (!auth) throw new Error('User not found');
+			return getDonationsByUser(auth.id)
 		},
 		getCampaignById: async (_, { id }) => {
 			const campaign = await Campaign.findByPk(id, {
@@ -56,7 +63,7 @@ const resolvers = {
 					{ model: Campaign, as: 'campaigns' },
           { model: Donation, as: 'donations' },
 				],
-      });
+      	});
 		},
 	},
 	Mutation: {
@@ -88,7 +95,7 @@ const resolvers = {
 			return await deleteCampaign(id, auth.id);
 		},
     
-    createDonation: async (_, { campaignId, amount }, {auth}) => {
+    	createDonation: async (_, { campaignId, amount }, {auth}) => {
 		  if (!auth) throw new Error('User not found');
 		  try {
 		    const donation = await createDonation(auth.id, campaignId, amount);

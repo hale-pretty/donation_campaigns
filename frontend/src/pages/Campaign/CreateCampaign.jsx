@@ -1,4 +1,4 @@
-import { Form, Input, Upload, Select, Typography, DatePicker, Button, Modal, message } from 'antd';
+import { Form, Input, Upload, Select, Typography, DatePicker, Button, Modal, message, Space } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import dayjs from 'dayjs';
@@ -6,6 +6,7 @@ import { CREATE_NEW_CAMPAIGN } from '~/graphql/mutations';
 import { useMutation } from '@apollo/client';
 import { campaignTags, categoriesCreateCampign } from '~/components/dummy';
 import { showNotify } from '~/utils/helper';
+import LocationSearch from './LocationSearch';
 
 const { TextArea } = Input;
 
@@ -14,6 +15,8 @@ const CampaignForm = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState([]);
+  const [location, setLocation] = useState('')
+  const [tags, setTags] = useState([]);
 
   const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -31,7 +34,7 @@ const CampaignForm = () => {
 
   const [createCampaign, { loading, error }] = useMutation(CREATE_NEW_CAMPAIGN);
   const handleCreateCampaign = async (values) => {
-    const { title, description, goalAmount, endDate, location, category, tags } = values;
+    const { title, description, goalAmount, endDate, category } = values;
     try {
       console.log('values', values)
       const { data } = await createCampaign({
@@ -41,18 +44,18 @@ const CampaignForm = () => {
             description,
             goalAmount: parseFloat(goalAmount),
             endDate: endDate.format('YYYY-MM-DD'),
-            images: fileList.map((i) => i.originFileObj),
-            location,
-            category,
-            tags: ["tag1", "tag2"],
+            images: fileList.map((i) => i.originFileObj), 
+            tags: tags || [],
+            location: location || '',
+            category
           },
         },
         context: {
           hasUpload: true, // Ensure the context includes the upload flag
         },
       });
-
       showNotify('Notification', 'Campaign created successfully')
+      window.location.pathname = '/'
     } catch (error) {
       showNotify('Notification', 'Failed to create campaign', 'error')
     }
@@ -90,7 +93,6 @@ const CampaignForm = () => {
       <Form.Item
         label="Amount"
         name="goalAmount"
-        // rules={[{ required: true, message: 'Please enter an amount!' }]}
       >
         <Input
           type="number"
@@ -127,35 +129,31 @@ const CampaignForm = () => {
         </Upload>
       </Form.Item>
 
-      
+      <Space>
       <Form.Item
-        label="Location"
-        name="location"
-        tooltip="Select the location where you are running the campaign. This location will be visible on your campaign page for your audience to see."
-      >
-        <Input placeholder="Country" />
-      </Form.Item>
-
-      <Form.Item
-        label={<>Category <span style={{ color: '#ff4d4f' }}>*</span></>}
+        label='Category'
         name="category"
         required
         help="To help backers find your campaign, select a category that best represents your project."
       >
-        <Select placeholder="Select a category" style={{ marginBottom: '16px' }}>
+        <Select placeholder="Select a category" className='mb-3'>
           {Object.entries(categoriesCreateCampign).flatMap(([c, items]) =>
             items.map(item => (
-              <Select.Option key={c} value={item}>{item}</Select.Option>
+              <Select.Option key={`${c}-${item}`} value={item}>
+                {item}
+              </Select.Option>
             ))
           )}
         </Select>
       </Form.Item>
+      </Space>
 
       <Form.Item
         label="Tags"
         name="tags"
         required
         tooltip="Enter up to five keywords that best describe your campaign. These tags will help with organization and discoverability."
+        // rules={[{ required: true, message: 'Please enter at least one campaign tag!' }]}
       >
         <Select
           mode="tags"
@@ -167,10 +165,20 @@ const CampaignForm = () => {
           filterOption={(input, option) =>
             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
           }
+          onChange={(e) => setTags(e)}
         />
         <Typography.Text type="secondary">
           Tags must have at least 1 campaign tag
         </Typography.Text>
+      </Form.Item>
+
+      <Form.Item
+        label="Location"
+        name="location"
+        required
+        // rules={[{ required: true, message: 'Please enter a location!' }]}
+      >
+        <LocationSearch updateValue={(v) => setLocation(v)}/>
       </Form.Item>
 
       <Modal open={previewOpen} footer={null} onCancel={handleCancel}>

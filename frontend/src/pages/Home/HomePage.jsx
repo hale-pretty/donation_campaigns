@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { GET_CAMPAIGNS } from "~/graphql/mutations";
 import { useQuery } from "@apollo/client";
 import LogoLoading from "~/components/LogoLoading";
+import { formatAmount } from "~/utils/helper";
 
 const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -140,7 +141,7 @@ const HomePage = () => {
                       <span className="starting-at">
                         Starting at {c.startDate}
                       </span>
-                      <div className="price">{c.goalAmount} VND</div>
+                      <div className="price">{formatAmount(c.goalAmount)} VND</div>
                     </div>
                   </div>
                 </div>

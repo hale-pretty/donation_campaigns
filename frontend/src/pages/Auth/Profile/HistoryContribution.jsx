@@ -5,8 +5,7 @@ import { GET_CAMPAIGNS } from '~/graphql/mutations';
 import { formatAmount } from '~/utils/helper';
 
 const DonationHistory = ({ donations = [] }) => {
-   const { loading, error, data } = useQuery(GET_CAMPAIGNS);
-  console.log(data?.campaigns)
+  const { loading, error, data } = useQuery(GET_CAMPAIGNS);
   const formatDate = (timestamp) => {
     return new Date(parseInt(timestamp)).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -17,7 +16,6 @@ const DonationHistory = ({ donations = [] }) => {
     });
   };
 
-  
 
   const columns = [
     {
@@ -25,7 +23,7 @@ const DonationHistory = ({ donations = [] }) => {
       dataIndex: 'campaignId',
       key: 'campaignId',
       render: (r) => {
-        const campaign = data?.campaigns.find(c => c?.id == r);
+        const campaign = data?.getAllCampaigns?.find(c => c?.id == r);
     
         return campaign ? (
           <Badge variant="outline" className="font-normal">

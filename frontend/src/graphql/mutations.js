@@ -45,6 +45,9 @@ export const CREATE_NEW_CAMPAIGN = gql`
         id
         imageUrl
       }
+      location
+      category
+      tags
     }
   }
 `;
@@ -53,7 +56,11 @@ export const CREATE_DONATION = gql`
   mutation CreateDonation($campaignId: Int!, $amount: Long!) {
     createDonation(campaignId: $campaignId, amount: $amount) {
       id
-      userId
+      user {
+        username
+        email
+        avatarUrl
+      }
       campaignId
       createdAt
       amount
@@ -115,7 +122,11 @@ export const GET_DONATIONS_BY_USER = gql`
   query GetDonationsByUser {
     getDonationsByUser {
       id
-      userId
+      user {
+        username
+        email
+        avatarUrl
+      }
       campaignId
       createdAt
       amount
