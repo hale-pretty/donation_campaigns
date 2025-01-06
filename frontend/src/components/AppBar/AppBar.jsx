@@ -33,13 +33,13 @@ const AppBar = () => {
     if (data?.getAllCampaigns && Array.isArray(data.getAllCampaigns)) {
       const campaigns = data.getAllCampaigns;
       if (campaigns.length > 0 && campaigns[0]?.images?.length > 0) {
-          setActiveBg(campaigns[0].images[0].imageUrl);
+          setActiveBg(campaigns[0]?.images[0]?.imageUrl);
       }
       let campaign = [] 
       campaigns.forEach(c => {
         campaign.push({
-          title: c.title,
-          imageUrl: c.images[0]?.imageUrl || ""
+          title: c?.title,
+          imageUrl: c?.images[0]?.imageUrl || ""
         })
       })
       setCardSliderImages(campaign);
@@ -229,9 +229,9 @@ const AppBar = () => {
                   <div
                     className={`swiper-slide-container`}
                     style={{
-                      backgroundImage: `url(${item.imageUrl})`,
+                      backgroundImage: `url(${item?.imageUrl})`,
                       border:
-                        activeBg === item.imageUrl ? "2px solid #cbff36" : "none",
+                        activeBg === item?.imageUrl ? "2px solid #cbff36" : "none",
                     }}
                   ></div>
                 </SwiperSlide>

@@ -76,7 +76,7 @@ const HomePage = () => {
                   <img
                     src={
                       c.images.length > 0
-                        ? c.images[0].imageUrl
+                        ? c.images[0]?.imageUrl
                         : "default-image-url"
                     }
                     className="card_image"

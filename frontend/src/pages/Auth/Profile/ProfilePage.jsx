@@ -69,7 +69,7 @@ const Profile = () => {
   };
 
   const handlePreview = async (file) => {
-    setPreviewImage(file.url || URL.createObjectURL(file.originFileObj));
+    setPreviewImage(file?.url || URL.createObjectURL(file?.originFileObj));
     setPreviewOpen(true);
   };
 
@@ -147,32 +147,32 @@ const Profile = () => {
               <Card title="About Me">
                 <Space direction="vertical" size="large">
                   <Space>
-                    <Text strong>{user.campaigns.length || 0}</Text>
+                    <Text strong>{user?.campaigns?.length || 0}</Text>
                     <Text>Campaigns</Text>
                   </Space>
                   <Space>
-                    <Text strong>{user.donations.length || 0}</Text>
+                    <Text strong>{user?.donations?.length || 0}</Text>
                     <Text>Contributions</Text>
                   </Space>
                 </Space>
               </Card>
 
-              <Card title={<Title level={4}>{user.username}'s Campaigns</Title>}>
+              <Card title={<Title level={4}>{user?.username}'s Campaigns</Title>}>
               <List
                 itemLayout="vertical"
-                dataSource={user.campaigns}
+                dataSource={user?.campaigns}
                 renderItem={(campaign) => (
                     <Card
-                        key={campaign.id}
-                        title={campaign.title}
+                        key={campaign?.id}
+                        title={campaign?.title}
                         style={{ marginTop: '10px' }}
                     >
-                        <p><Text strong>Goal Amount:</Text> {formatAmount(campaign.goalAmount)} VND</p>
-                        <p><Text strong>Raised Amount:</Text> {formatAmount(campaign.raisedAmount)} VND</p>
+                        <p><Text strong>Goal Amount:</Text> {formatAmount(campaign?.goalAmount)} VND</p>
+                        <p><Text strong>Raised Amount:</Text> {formatAmount(campaign?.raisedAmount)} VND</p>
                         <div className="d-flex justify-content-between">
-                          <p><Text strong>Status:</Text> {campaign.status}</p>
-                          <p><Text strong>Start Date:</Text> {campaign.startDate}</p>
-                          <p><Text strong>End Date:</Text> {campaign.endDate}</p>
+                          <p><Text strong>Status:</Text> {campaign?.status}</p>
+                          <p><Text strong>Start Date:</Text> {campaign?.startDate}</p>
+                          <p><Text strong>End Date:</Text> {campaign?.endDate}</p>
 
                         </div>
                     </Card>

@@ -38,7 +38,7 @@ const CampaignDetailsPage = () => {
   useEffect(() => {
     if (!campaign) return;
     if (campaign?.images) {
-      setActiveImage(campaign.images[0].imageUrl);
+      setActiveImage(campaign?.images[0]?.imageUrl);
     }
     setProgressPercent(
       (
@@ -136,19 +136,19 @@ const CampaignDetailsPage = () => {
                     {campaign?.images.map((item) => (
                       <SwiperSlide
                         key={item.id}
-                        onClick={() => setActiveImage(item.imageUrl)}
+                        onClick={() => setActiveImage(item?.imageUrl)}
                       >
                         <div
                           className={`swiper-slide-container ${
-                            activeImage === item.imageUrl ? "active" : ""
+                            activeImage === item?.imageUrl ? "active" : ""
                           }`}
                           style={{
-                            backgroundImage: `url(${item.imageUrl})`,
+                            backgroundImage: `url(${item?.imageUrl})`,
                             height: "60px",
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                             border:
-                              activeImage === item.imageUrl
+                              activeImage === item?.imageUrl
                                 ? "2px solid #cbff36"
                                 : "none",
                           }}
