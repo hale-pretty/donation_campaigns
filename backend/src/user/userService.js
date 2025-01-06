@@ -20,16 +20,17 @@ const createUser = async (args) => {
   }
 };
 
-const login = async (username, password) => {
-  const user = await User.findOne({ where: { username } });
+const login = async (email, password) => {
+  const user = await User.findOne({ where: { email } });
   if (!user) {
     throw new Error('User not found');
   }
   const isValid = await bcrypt.compare(password, user.password);
+
   if (!isValid) {
     throw new Error('Invalid password');
   }
-  const payload = { id: user.id, username: user.username };
+  const payload = { id: user.id, email: user.email };
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: Number.parseInt(process.env.JWT_TOKEN_EXPIRATION_TIME_IN_SECONDS) });
   return {
     token
