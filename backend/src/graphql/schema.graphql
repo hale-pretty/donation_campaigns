@@ -17,13 +17,9 @@ input UserRegisterRequest {
 	username: String!
 	email: String!
 	password: String!
-	firstName: String!
-	lastName: String!
 }
 
 input UpdateUserRequest {
-	firstName: String
-	lastName: String
 	bio: String
 	password: String
 }
@@ -95,6 +91,7 @@ type Donation {
 type DonationUpdate {
 	newDonation: Donation
 	totalRaised: Long!
+	campaignUpdatedDonations: [Donation]
 }
 
 # =================== QUERY, MUTATION AND SUBSCRIPTION ===================

@@ -13,19 +13,17 @@ import LogoLoading from "~/components/LogoLoading";
 import { formatAmount } from "~/utils/helper";
 
 const HomePage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const { loading, error, data } = useQuery(GET_CAMPAIGNS);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
 
-  // Handle data and page change
   useEffect(() => {
     if (data?.getAllCampaigns && Array.isArray(data.getAllCampaigns)) {
       const campaigns = data.getAllCampaigns;
-      setDatas(campaigns.length > 4 ? campaigns.slice((currentPage - 1) * 4, currentPage * 4) : campaigns);
+      setDatas(campaigns);
     }
-  }, [data, currentPage]);
+  }, [data]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -37,14 +35,6 @@ const HomePage = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    if (isMobile) {
-      setDatas(data?.getAllCampaigns || []);
-    } else {
-      setDatas(data?.getAllCampaigns.slice((currentPage - 1) * 4, currentPage * 4) || []);
-    }
-  }, [currentPage, isMobile, data]);
 
   const getCampaignStatus = (startDate, endDate) => {
     const now = new Date();
@@ -72,22 +62,6 @@ const HomePage = () => {
     <div className="popular_campaign">
       <div className="heading_campaign">
         <h1 className="pb-3">Popular Campaigns</h1>
-        <div className="btn-heading">
-          {!isMobile && (
-            <>
-              <Button
-                icon={<ArrowLeftOutlined />}
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-              />
-              <Button
-                icon={<ArrowRightOutlined />}
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={datas.length / (4 * currentPage) < 1}
-              />
-            </>
-          )}
-        </div>
       </div>
 
       <div className={`campaign_cards ${isMobile ? "scrollable" : ""}`}>
@@ -102,7 +76,7 @@ const HomePage = () => {
                   <img
                     src={
                       c.images.length > 0
-                        ? c.images[0].imageUrl
+                        ? c.images[0]?.imageUrl
                         : "default-image-url"
                     }
                     className="card_image"
@@ -123,12 +97,12 @@ const HomePage = () => {
                       )}
                       <Button icon={<BookOutlined />} />
                     </div>
-                    <div className="w-100 p-4 text-center">
+                    <div className="w-100 p-2 text-center">
                       <Button
-                        className="view-details-btn text-uppercase"
+                        className="view-details-btn"
                         onClick={() => navigate(`/campaign/${c.id}`)}
                       >
-                        view campaign
+                        View campaign
                       </Button>
                     </div>
                   </div>

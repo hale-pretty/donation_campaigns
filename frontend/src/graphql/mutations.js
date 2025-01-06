@@ -22,13 +22,32 @@ export const LOGIN_USER = gql`
 
 export const GET_CURRENT_USER = gql`
   query GetCurrentUser {
-    getCurrentUser {
+  getCurrentUser {
+    id
+    username
+    email
+    avatarUrl
+    bio
+    campaigns {
       id
-      username
-      email
-      avatarUrl
-      bio
+      title
+      description
+      goalAmount
+      raisedAmount
+      startDate
+      endDate
+      status
+      location
+      category
+      tags
     }
+    donations {
+      id
+      campaignId
+      createdAt
+      amount
+    }
+  }
   }
 `;
 
@@ -113,10 +132,18 @@ export const GET_CAMPAIGN_BY_ID = gql`
         email
         avatarUrl
       }
+      location
+      category
+      tags
+      donations {
+        amount
+        user {
+          id
+        }
+      }
     }
   }
 `;
-
 
 export const GET_DONATIONS_BY_USER = gql`
   query GetDonationsByUser {
@@ -133,3 +160,19 @@ export const GET_DONATIONS_BY_USER = gql`
     }
   }
 `;
+
+export const GET_DONATION_BY_CAMPAIGN_ID = gql`
+query GetDonationsByCampaignId($campaignId: Int!) {
+  getDonationsByCampaignId(campaignId: $campaignId) {
+    id
+    campaignId
+    createdAt
+    amount
+    user {
+      id
+      username
+      email
+      avatarUrl
+    }
+  }
+}`;
