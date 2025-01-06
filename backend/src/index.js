@@ -50,12 +50,12 @@ const server = new ApolloServer({ schema, uploads: true });
     console.log('Database connected successfully.');
     scheduleUpdateCampaignStatusJob();
     await server.start();
+    app.use(cors({
+      origin: process.env.REACT_CLIENT_URL,
+      credentials: true,
+    }))
     app.use(
       '/graphql',
-      cors({
-        origin: process.env.REACT_CLIENT_URL,
-        credentials: true,
-      }), // Enable CORS
       bodyParser.json(), // Parse JSON
       expressMiddleware(server, {
         context: authMiddleware,

@@ -50,8 +50,6 @@ const AuthPage = (props) => {
       const userData = {
         email: values.email,
         password: values.password,
-        firstName: values.email.split("@")[0],
-        lastName: "",
         username: values.email.split("@")[0],
       };
 

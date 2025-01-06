@@ -2,7 +2,8 @@ import { sequelize } from '../db/sequelize.js';
 import { pubsub } from '../realtime/pubsub.js'
 import { models } from '../db/models.js'
 
-const Donation = models.Donation
+const Donation = models.Donation;
+const User = models.User;
 
 const createDonation = async (userId, campaignId, amount) => {
 
@@ -46,16 +47,22 @@ const createDonation = async (userId, campaignId, amount) => {
         await transaction.commit()
         console.log("donation created successfully:", newDonation);
         console.log("campaign updated successfully:", campaign)
+        const user = await User.findByPk(userId)
+        const donationResult = {
+            ...newDonation.dataValues,
+            user: user
+        }
         
         // Publish the new donation and updated total to subscribers
         pubsub.publish('DONATION_ADDED', {
             donationAdded: {
-                newDonation,
-                totalRaised: campaign.raisedAmount
+                newDonation: donationResult,
+                totalRaised: campaign.raisedAmount,
+                campaignUpdatedDonations: await getDonationsByCampaign(campaignId)
             }
         })
         
-        return newDonation
+        return donationResult
         
     } catch (error) {
         await transaction.rollback();
@@ -69,7 +76,8 @@ const getDonationsByUser = async (userId) => {
         const donations = await Donation.findAll({
             where: {
                 userId: userId
-            }
+            },
+            include: [{ model: models.User, as: 'user' }]
         })
         console.log(`donations for user ${userId}:`, donations)
         return donations

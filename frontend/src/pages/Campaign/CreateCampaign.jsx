@@ -36,6 +36,7 @@ const CampaignForm = () => {
   const handleCreateCampaign = async (values) => {
     const { title, description, goalAmount, endDate, category } = values;
     try {
+      console.log('values', values)
       const { data } = await createCampaign({
         variables: {
           request: {

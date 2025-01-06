@@ -6,30 +6,29 @@ import { models } from '../db/models.js';
 const User = models.User;
 
 const createUser = async (args) => {
-  const { email, password, username, firstName, lastName } = args;
+  const { email, password, username } = args;
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ email, password: hashedPassword, username, firstName, lastName });
+  const user = await User.create({ email, password: hashedPassword, username });
   return {
     id: user.id,
     email: user.email,
     username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
     bio: "",
     avatarUrl: "",
   }
 };
 
-const login = async (username, password) => {
-  const user = await User.findOne({ where: { username } });
+const login = async (email, password) => {
+  const user = await User.findOne({ where: { email } });
   if (!user) {
     throw new Error('User not found');
   }
   const isValid = await bcrypt.compare(password, user.password);
+
   if (!isValid) {
     throw new Error('Invalid password');
   }
-  const payload = { id: user.id, username: user.username };
+  const payload = { id: user.id, email: user.email };
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: Number.parseInt(process.env.JWT_TOKEN_EXPIRATION_TIME_IN_SECONDS) });
   return {
     token
@@ -45,8 +44,6 @@ const getUser = async (id) => {
     id: user.id,
     email: user.email,
     username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
     bio: user.bio,
     avatarUrl: user.avatarUrl,
   };
@@ -63,8 +60,6 @@ const updateUser = async (id, args) => {
   }
 
   const updateParams = {
-    firstName: args.firstName ?? user.firstName,
-    lastName: args.lastName ?? user.lastName,
     bio: args.bio ?? user.bio,
     password: newPassword ?? user.password,
   };
@@ -73,8 +68,6 @@ const updateUser = async (id, args) => {
     id: user.id,
     email: user.email,
     username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
     bio: user.bio,
     avatarUrl: user.avatarUrl,
   };
@@ -91,8 +84,6 @@ const uploadAvatar = async (id, file) => {
     id: user.id,
     email: user.email,
     username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
     bio: user.bio,
     avatarUrl,
   };
