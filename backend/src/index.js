@@ -53,7 +53,7 @@ const server = new ApolloServer({ schema, uploads: true });
     app.use(
       '/graphql',
       cors({
-        origin: process.env.REACT_CLIENT_URL,
+        origin: '*', // Allows all origins,
         credentials: true,
       }), // Enable CORS
       bodyParser.json(), // Parse JSON
