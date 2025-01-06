@@ -9,14 +9,15 @@ import "./styles.scss";
 import SearchDropdown from "./SearchDropdown";
 import { cardSliderImages, categories, popularSearches, quickFilter } from "../dummy";
 import { useSelector } from "react-redux";
-import { GET_CURRENT_USER } from '~/graphql/mutations';
-import { useLazyQuery } from "@apollo/client";
+import { GET_CAMPAIGNS, GET_CURRENT_USER } from '~/graphql/mutations';
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch } from 'react-redux';
 import { setUser } from "~/redux/reducers/userSlice";
 import SignInPage from "~/pages/Auth/SignIn/SignInPage";
 import UserDropdown from "./UserDropdown";
 const AppBar = () => {
-  const [activeBg, setActiveBg] = useState(cardSliderImages[2].url);
+  const [activeBg, setActiveBg] = useState(null);
+  const [cardSliderImages, setCardSliderImages] = useState([])
   const dispatch = useDispatch();
   const [search, setSearch] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -26,6 +27,25 @@ const AppBar = () => {
     fetchPolicy: 'network-only'
   });
   const [openAuthPopup, setOpenAuthPopup] = useState(false);
+  const { loading, error, data } = useQuery(GET_CAMPAIGNS);
+
+  useEffect(() => {
+    if (data?.getAllCampaigns && Array.isArray(data.getAllCampaigns)) {
+      const campaigns = data.getAllCampaigns;
+      if (campaigns.length > 0 && campaigns[0]?.images?.length > 0) {
+          setActiveBg(campaigns[0].images[0].imageUrl);
+      }
+      let campaign = [] 
+      campaigns.forEach(c => {
+        campaign.push({
+          title: c.title,
+          imageUrl: c.images[0]?.imageUrl || ""
+        })
+      })
+      setCardSliderImages(campaign);
+    }
+  }, [data]);
+
   
   useEffect(() => {
     if(token) {
@@ -51,7 +71,7 @@ const AppBar = () => {
 
   const handleSlideChange = (swiper) => {
     const currentIndex = swiper.realIndex;
-    const newBg = cardSliderImages[currentIndex]?.url;
+    const newBg = cardSliderImages[currentIndex]?.imageUrl;
     setActiveBg(newBg);
   };
 
@@ -60,7 +80,6 @@ const AppBar = () => {
   const handleLogoClick = () => {
     window.location.pathname = "/";
   };
-
 
   const isHomePage = location.pathname === "/";
 
@@ -164,7 +183,6 @@ const AppBar = () => {
                 </span>
               </div>
             )}
-
             
             <CloseOutlined
               className="close-btn"
@@ -176,7 +194,7 @@ const AppBar = () => {
         {isHomePage && (
           <div className="swiper-container">
             <h1 className="title-swiper">
-              {cardSliderImages.find((c) => c.url == activeBg)?.title}
+              {cardSliderImages.find((c) => c.imageUrl == activeBg)?.title}
             </h1>
             <div>
               <Button
@@ -205,15 +223,15 @@ const AppBar = () => {
             >
               {cardSliderImages.map((item) => (
                 <SwiperSlide
-                  key={item.url}
-                  onClick={() => setActiveBg(item.url)}
+                  key={item.imageUrl}
+                  onClick={() => setActiveBg(item.imageUrl)}
                 >
                   <div
                     className={`swiper-slide-container`}
                     style={{
-                      backgroundImage: `url(${item.url})`,
+                      backgroundImage: `url(${item.imageUrl})`,
                       border:
-                        activeBg === item.url ? "2px solid #cbff36" : "none",
+                        activeBg === item.imageUrl ? "2px solid #cbff36" : "none",
                     }}
                   ></div>
                 </SwiperSlide>

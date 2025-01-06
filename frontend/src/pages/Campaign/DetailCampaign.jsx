@@ -196,8 +196,9 @@ const CampaignDetailsPage = () => {
                   {formatAmount(campaign.goalAmount)} VND
                 </div>
                 <div>
-                  <strong style={{ fontSize: 20 }}>{dayLeft} </strong>
-                  days left
+                  {dayLeft > 0 ? <><strong style={{ fontSize: 20 }}>{dayLeft} </strong>
+                  days left</> : <strong>Ended</strong>}
+                  
                 </div>
               </div>
               <Button
