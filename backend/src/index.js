@@ -51,7 +51,7 @@ const server = new ApolloServer({ schema, uploads: true });
     scheduleUpdateCampaignStatusJob();
     await server.start();
     app.use(cors({
-      origin: '*', // Allows all origins,
+      origin: process.env.REACT_CLIENT_URL,
       credentials: true,
     }))
     app.use(
