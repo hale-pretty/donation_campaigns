@@ -81,7 +81,6 @@ type Donation {
 	createdAt: String!
 	amount: Long!
 	user: User!
-	campaign: Campaign!
 }
 
 type DonationUpdate {
@@ -95,6 +94,7 @@ type Query {
 	getCurrentUser: User
 	getAllCampaigns: [Campaign]
 	getCampaignById(id: Int!): Campaign
+	getDonationsByCampaignId(campaignId: Int!): [Donation]
 }
 
 type Mutation {
