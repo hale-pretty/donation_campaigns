@@ -1,12 +1,14 @@
-import { ApolloClient, InMemoryCache, HttpLink, split } from '@apollo/client';
+import { ApolloClient, InMemoryCache, split } from '@apollo/client';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { getMainDefinition } from '@apollo/client/utilities';
 
+const HTTP_BACKEND_URL = import.meta.env.VITE_HTTP_BACKEND_ENDPOINT || "http://localhost:4000"
+const WS_BACKEND_URL = import.meta.env.VITE_WS_BACKEND_ENDPOINT || "ws://localhost:4000"
 
 const uploadLink = createUploadLink({
-  uri: "http://localhost:4000/graphql",
+  uri: `${HTTP_BACKEND_URL}/graphql`,
   headers: {
     "Authorization": `Bearer ${localStorage.getItem('token')}`,
     "apollo-require-preflight": "true",
@@ -15,7 +17,7 @@ const uploadLink = createUploadLink({
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: `ws://localhost:4000/graphql`,
+  url: `${WS_BACKEND_URL}/graphql`,
   options: {
     reconnect: true,
   },
