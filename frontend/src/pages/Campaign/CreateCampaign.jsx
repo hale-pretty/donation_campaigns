@@ -31,8 +31,9 @@ const CampaignForm = () => {
 
   const [createCampaign, { loading, error }] = useMutation(CREATE_NEW_CAMPAIGN);
   const handleCreateCampaign = async (values) => {
-    const { title, description, goalAmount, endDate } = values;
+    const { title, description, goalAmount, endDate, location, category, tags } = values;
     try {
+      console.log('values', values)
       const { data } = await createCampaign({
         variables: {
           request: {
@@ -40,7 +41,10 @@ const CampaignForm = () => {
             description,
             goalAmount: parseFloat(goalAmount),
             endDate: endDate.format('YYYY-MM-DD'),
-            images: fileList.map((i) => i.originFileObj), 
+            images: fileList.map((i) => i.originFileObj),
+            location,
+            category,
+            tags: ["tag1", "tag2"],
           },
         },
         context: {
