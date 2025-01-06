@@ -45,6 +45,9 @@ export const CREATE_NEW_CAMPAIGN = gql`
         id
         imageUrl
       }
+      location
+      category
+      tags
     }
   }
 `;

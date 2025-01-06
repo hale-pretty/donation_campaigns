@@ -34,10 +34,7 @@ const CampaignForm = () => {
 
   const [createCampaign, { loading, error }] = useMutation(CREATE_NEW_CAMPAIGN);
   const handleCreateCampaign = async (values) => {
-    const { title, description, goalAmount, endDate } = values;
-    if(location) { values.location = location } 
-    if(tags) { values.location = tags } 
-
+    const { title, description, goalAmount, endDate, category } = values;
     try {
       const { data } = await createCampaign({
         variables: {
@@ -47,14 +44,17 @@ const CampaignForm = () => {
             goalAmount: parseFloat(goalAmount),
             endDate: endDate.format('YYYY-MM-DD'),
             images: fileList.map((i) => i.originFileObj), 
+            tags: tags || [],
+            location: location || '',
+            category
           },
         },
         context: {
           hasUpload: true, // Ensure the context includes the upload flag
         },
       });
-
       showNotify('Notification', 'Campaign created successfully')
+      window.location.pathname = '/'
     } catch (error) {
       showNotify('Notification', 'Failed to create campaign', 'error')
     }
@@ -138,7 +138,9 @@ const CampaignForm = () => {
         <Select placeholder="Select a category" className='mb-3'>
           {Object.entries(categoriesCreateCampign).flatMap(([c, items]) =>
             items.map(item => (
-              <Select.Option key={c} value={item}>{item}</Select.Option>
+              <Select.Option key={`${c}-${item}`} value={item}>
+                {item}
+              </Select.Option>
             ))
           )}
         </Select>
