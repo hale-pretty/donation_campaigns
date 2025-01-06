@@ -56,7 +56,7 @@ const createDonation = async (userId, campaignId, amount) => {
         // Publish the new donation and updated total to subscribers
         pubsub.publish('DONATION_ADDED', {
             donationAdded: {
-                donationResult,
+                newDonation: donationResult,
                 totalRaised: campaign.raisedAmount
             }
         })
