@@ -22,13 +22,32 @@ export const LOGIN_USER = gql`
 
 export const GET_CURRENT_USER = gql`
   query GetCurrentUser {
-    getCurrentUser {
+  getCurrentUser {
+    id
+    username
+    email
+    avatarUrl
+    bio
+    campaigns {
       id
-      username
-      email
-      avatarUrl
-      bio
+      title
+      description
+      goalAmount
+      raisedAmount
+      startDate
+      endDate
+      status
+      location
+      category
+      tags
     }
+    donations {
+      id
+      campaignId
+      createdAt
+      amount
+    }
+  }
   }
 `;
 

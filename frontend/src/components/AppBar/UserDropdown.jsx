@@ -58,14 +58,14 @@ const UserDropdown = ({ user }) => {
                             {getFirstCharacter(user.username)}
                         </Avatar>
                     </div>
-                {menuItems.map(item => (
-                    <div className='p-3'
-                        key={item.key} 
-                        onClick={() => handleMenuClick(item.key)}
-                    >
-                        {item.label}
-                    </div>
-                ))}
+                    {menuItems.map(item => (
+                        <div className='p-3'
+                            key={item.key} 
+                            onClick={() => handleMenuClick({ key: item.key })}
+                        >
+                            {item.label}
+                        </div>
+                    ))}
                 </div>
             ) : (
                 <Dropdown 
